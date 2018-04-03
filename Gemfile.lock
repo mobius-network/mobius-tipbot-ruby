@@ -1,0 +1,148 @@
+PATH
+  remote: ../mobius-client-ruby
+  specs:
+    mobius-client (0.1.0)
+      dry-initializer (~> 2.4)
+      faraday (~> 0.14)
+      faraday_middleware (~> 0.12, >= 0.12.2)
+      jwt (~> 1.5, >= 1.5.6)
+      stellar-sdk (~> 0.3)
+      thor (~> 0.20)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (5.1.6)
+      activesupport (= 5.1.6)
+    activesupport (5.1.6)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    ast (2.4.0)
+    base32 (0.3.2)
+    celluloid (0.17.3)
+      celluloid-essentials
+      celluloid-extras
+      celluloid-fsm
+      celluloid-pool
+      celluloid-supervision
+      timers (>= 4.1.1)
+    celluloid-essentials (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-extras (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-fsm (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-io (0.17.3)
+      celluloid (>= 0.17.2)
+      nio4r (>= 1.1)
+      timers (>= 4.1.1)
+    celluloid-pool (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-supervision (0.20.6)
+      timers (>= 4.1.1)
+    citrus (3.0.2)
+    concurrent-ruby (1.0.5)
+    contracts (0.16.0)
+    digest-crc (0.4.1)
+    dry-initializer (2.4.0)
+    excon (0.44.4)
+    faraday (0.14.0)
+      multipart-post (>= 1.2, < 3)
+    faraday-digestauth (0.3.0)
+      faraday (~> 0.7)
+      net-http-digest_auth (~> 1.4)
+    faraday_hal_middleware (0.1.0)
+      faraday_middleware (~> 0.9)
+    faraday_middleware (0.12.2)
+      faraday (>= 0.7.4, < 1.0)
+    ffi (1.9.23)
+    futuroscope (0.1.11)
+    gli (2.17.1)
+    hashie (3.5.7)
+    hitimes (1.2.6)
+    hyperclient (0.7.2)
+      faraday
+      faraday-digestauth
+      faraday_hal_middleware
+      faraday_middleware
+      futuroscope
+      net-http-digest_auth
+      uri_template
+    i18n (1.0.0)
+      concurrent-ruby (~> 1.0)
+    jwt (1.5.6)
+    minitest (5.11.3)
+    multipart-post (2.0.0)
+    net-http-digest_auth (1.4.1)
+    nio4r (2.3.0)
+    parallel (1.12.1)
+    parser (2.5.0.4)
+      ast (~> 2.4.0)
+    powerpack (0.1.1)
+    rainbow (3.0.0)
+    rbnacl (5.0.0)
+      ffi
+    rbnacl-libsodium (1.0.16)
+      rbnacl (>= 3.0.1)
+    redis (4.0.1)
+    rubocop (0.53.0)
+      parallel (~> 1.10)
+      parser (>= 2.5)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-progressbar (1.9.0)
+    slack-ruby-client (0.11.1)
+      activesupport
+      faraday (>= 0.9)
+      faraday_middleware
+      gli
+      hashie
+      websocket-driver
+    stellar-base (0.13.0)
+      activesupport (>= 4.2.7)
+      base32
+      digest-crc
+      rbnacl
+      rbnacl-libsodium (~> 1.0.3)
+      xdr (~> 2.0.0)
+    stellar-sdk (0.3.0)
+      activesupport (>= 4.2.7)
+      contracts (~> 0.7)
+      excon (~> 0.44.4)
+      hyperclient (~> 0.7.0)
+      stellar-base (~> 0.13.0)
+      toml-rb (~> 1.1.1)
+    thor (0.20.0)
+    thread_safe (0.3.6)
+    timers (4.1.2)
+      hitimes
+    toml-rb (1.1.1)
+      citrus (~> 3.0, > 3.0)
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
+    unicode-display_width (1.3.0)
+    uri_template (0.7.0)
+    websocket-driver (0.7.0)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.3)
+    xdr (2.0.0)
+      activemodel (>= 4.2.7)
+      activesupport (>= 4.2.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  celluloid-io
+  dry-initializer
+  mobius-client!
+  redis
+  rubocop
+  slack-ruby-client
+
+BUNDLED WITH
+   1.16.0
