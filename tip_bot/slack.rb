@@ -45,7 +45,7 @@ at https://#{client.team.domain}.slack.com."
     command = text.shift
 
     case command
-    when "balance" then balance(data)
+    when "awaiting" then awaiting(data)
     when "tip" then tip(text, data)
     when "withdraw" then withdraw(text, data)
     else
@@ -73,9 +73,9 @@ at https://#{client.team.domain}.slack.com."
     say(data, "<@#{nickname}>, Error sending tip!")
   end
 
-  def balance(data)
+  def awaiting(data)
     user = TipBot::User.new(data.user, dapp)
-    say(data, "Your balance is #{user.balance}, use @tipbot withdraw <address> to get your tips!")
+    say(data, "Your balance awaiting for withdraw is #{user.balance}, use @tipbot withdraw <address> to get your tips!")
   end
 
   def withdraw(text, data)
