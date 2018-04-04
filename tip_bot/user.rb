@@ -4,9 +4,9 @@ class TipBot::User
   param :nickname
   param :dapp
 
-  def tip
-    dapp.pay(TIP_AMOUNT, target_address: address)
-    increment unless address
+  def tip(value)
+    dapp.pay(value, target_address: address)
+    increment(value) unless address
   end
 
   def address
@@ -18,17 +18,16 @@ class TipBot::User
   end
 
   def withdraw(address)
-    dapp.transfer(TIP_AMOUNT, address)
+    dapp.transfer(balance, address)
     TipBot.redis.hset("#{REDIS_KEY}:address", nickname, address)
     TipBot.redis.hset("#{REDIS_KEY}:balance", nickname, 0)
   end
 
   private
 
-  def increment
-    TipBot.redis.hincrby("#{REDIS_KEY}:balance", nickname, TIP_AMOUNT)
+  def increment(value)
+    TipBot.redis.hincrbyfloat("#{REDIS_KEY}:balance", nickname, value)
   end
 
   REDIS_KEY = "mobius:tipbot".freeze
-  TIP_AMOUNT = 1
 end

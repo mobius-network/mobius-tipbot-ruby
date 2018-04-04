@@ -7,6 +7,7 @@ class TipBot::Slack
   def_delegator :TipBot, :logger
 
   param :token
+  param :rate
   param :dapp
 
   class << self
@@ -57,14 +58,14 @@ at https://#{client.team.domain}.slack.com."
     say(data, "Unknown command: #{command}")
   end
 
+  # rubocop:disable Metrics/AbcSize
   def tip(text, data)
     nickname = text.shift.to_s[2..-2]
     user = client.users[nickname]
 
     return say(data, "Unknown user: <@#{nickname}>") if user.nil?
 
-    tipbot_user = TipBot::User.new(nickname, dapp)
-    tipbot_user.tip
+    TipBot::User.new(nickname, dapp).tip(tip_value)
 
     say(data, "<@#{nickname}>, you've been tipped!")
   rescue Mobius::Client::Error::InsufficientFunds
@@ -72,6 +73,7 @@ at https://#{client.team.domain}.slack.com."
   rescue Mobius::Client::Error
     say(data, "<@#{nickname}>, Error sending tip!")
   end
+  # rubocop:enable Metrics/AbcSize
 
   def awaiting(data)
     user = TipBot::User.new(data.user, dapp)
@@ -80,9 +82,8 @@ at https://#{client.team.domain}.slack.com."
 
   def withdraw(text, data)
     address = text.shift
-    user = TipBot::User.new(data.user, dapp)
-    user.withdraw(address)
-    return say(data, "Provide target address to withdraw!") if address.nil? || address.empty?
+    TipBot::User.new(data.user, dapp).withdraw(address)
+    return say(data, "Provide target address to withdraw!") if address.nil?
     say(data, "Your tips has been successfully withdrawn to #{address}!")
   rescue Mobius::Client::Error::UnknownKeyPairType
     say(data, "Invalid target address: #{address}")
@@ -98,5 +99,9 @@ at https://#{client.team.domain}.slack.com."
 
   def app
     @app ||= TipBot::App.new(dapp)
+  end
+
+  def tip_value
+    1 * (rate || 1).to_f
   end
 end
