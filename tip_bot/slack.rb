@@ -35,21 +35,17 @@ class TipBot::Slack < TipBot::Base
     user == "<@#{client.self.id}>"
   end
 
-  def dispatch(text, data)
-    typing(data)
+  def dispatch(text, message)
+    typing(message)
     command = text.shift
 
     case command
-    when "awaiting" then awaiting(data)
-    when "tip" then tip(text, data)
-    when "withdraw" then withdraw(text, data)
+    when "awaiting" then awaiting(message, message.user)
+    when "tip" then tip(text, message)
+    when "withdraw" then withdraw(text, message)
     else
-      unknown(command, data)
+      unknown(command, message)
     end
-  end
-
-  def unknown(command, data)
-    say(data, "Unknown command: #{command}")
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -69,11 +65,6 @@ class TipBot::Slack < TipBot::Base
   end
   # rubocop:enable Metrics/AbcSize
 
-  def awaiting(data)
-    user = TipBot::User.new(data.user, dapp)
-    say(data, "Your balance awaiting for withdraw is #{user.balance}, use @tipbot withdraw <address> to get your tips!")
-  end
-
   def withdraw(text, data)
     address = text.shift
     TipBot::User.new(data.user, dapp).withdraw(address)
@@ -87,8 +78,8 @@ class TipBot::Slack < TipBot::Base
     @client ||= Slack::RealTime::Client.new(token: token)
   end
 
-  def say(data, text)
-    client.message(channel: data.channel, text: text)
+  def say(base_message, text)
+    client.message(channel: base_message.channel, text: text)
   end
 
   def typing(message)

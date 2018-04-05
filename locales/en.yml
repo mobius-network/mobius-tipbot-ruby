@@ -1,8 +1,14 @@
 en:
   telegram:
-    hello: Woho!
+    hello: Starting Mobius Telegram TipBot...
+    cmd:
+      unknown: "Unknown command: %{command}"
+      balance: "Your balance awaiting for withdraw is %{balance}, use @tipbot /withdraw <address> to get your tips!"
+
   slack:
     hello: Starting Mobius Slack TipBot...
     cmd:
       hello: "Successfully connected, welcome %{name} %{client_name} to the %{team_name} team
 at https://%{domain}.slack.com."
+      unknown: "Unknown command: %{command}"
+      balance: "Your balance awaiting for withdraw is %{balance}, use @tipbot withdraw <address> to get your tips!"

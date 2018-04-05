@@ -2,9 +2,7 @@ require "telegram/bot"
 
 class TipBot::Telegram < TipBot::Base
   def start!
-    client.run do |client|
-      client.listen { |message| message(message) }
-    end
+    client.run { |client| client.listen { |message| message(message) } }
   end
 
   private
@@ -16,8 +14,7 @@ class TipBot::Telegram < TipBot::Base
   end
 
   def dispatch(text, message)
-    logger.info "#{text}"
-    # command = text.shift
+    command = text.shift
     # # case message.text
     # # when '/start'
     # #   bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
@@ -25,17 +22,13 @@ class TipBot::Telegram < TipBot::Base
     # #   bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     # # end
     #
-    # case command
-    # when "awaiting" then awaiting(data)
+    case command
+    when "/awaiting" then awaiting(message, message.from.id.to_s)
     # when "tip" then tip(text, data)
     # when "withdraw" then withdraw(text, data)
-    # else
-    #   unknown(command, data)
-    # end
-  end
-
-  def unknown(command, data)
-    say(data, "Unknown command: #{command}")
+    else
+      unknown(command, data)
+    end
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -55,11 +48,6 @@ class TipBot::Telegram < TipBot::Base
   end
   # rubocop:enable Metrics/AbcSize
 
-  def awaiting(data)
-    user = TipBot::User.new(data.user, dapp)
-    say(data, "Your balance awaiting for withdraw is #{user.balance}, use @tipbot withdraw <address> to get your tips!")
-  end
-
   def withdraw(text, data)
     address = text.shift
     TipBot::User.new(data.user, dapp).withdraw(address)
@@ -73,8 +61,8 @@ class TipBot::Telegram < TipBot::Base
     @client ||= Telegram::Bot::Client.new(token, logger: logger)
   end
 
-  def say(data, text)
-    client.message(channel: data.channel, text: text)
+  def say(base_message, text)
+    client.api.send_message(chat_id: base_message.chat.id, text: text)
   end
 
   def app

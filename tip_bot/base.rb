@@ -29,6 +29,10 @@ class TipBot::Base
     raise NotImplementedError, "Replace with bot message parse command"
   end
 
+  def say(_base_message, _text)
+    raise NotImplementedError, "Replace with bot message send method"
+  end
+
   def typing(_message); end
 
   def i18n_scope
@@ -45,5 +49,14 @@ class TipBot::Base
 
   def tip_value
     (rate || 1).to_f
-  end  
+  end
+
+  def unknown(command, message)
+    say(message, t(:"cmd.unknown", command: command))
+  end
+
+  def awaiting(message, nickname)
+    user = TipBot::User.new(nickname, dapp)
+    say(message, t(:"cmd.balance", balance: user.balance))
+  end
 end
