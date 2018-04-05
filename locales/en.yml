@@ -1,0 +1,8 @@
+en:
+  telegram:
+    hello: Woho!
+  slack:
+    hello: Starting Mobius Slack TipBot...
+    cmd:
+      hello: "Successfully connected, welcome %{name} %{client_name} to the %{team_name} team
+at https://%{domain}.slack.com."

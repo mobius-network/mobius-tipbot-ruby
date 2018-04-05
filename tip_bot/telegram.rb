@@ -1,47 +1,37 @@
-require "slack-ruby-client"
+require "telegram/bot"
 
-class TipBot::Slack < TipBot::Base
+class TipBot::Telegram < TipBot::Base
   def start!
-    super
-
-    client.on :hello, &method(:hello)
-    client.on :message, &method(:message)
-
-    client.start_async
-
-    loop { Thread.pass }
+    client.run do |client|
+      client.listen { |message| message(message) }
+    end
   end
 
   private
 
-  def hello(_data)
-    logger.info t(
-      :"cmd.hello",
-      name: client.self.id,
-      client_name: client.self.name,
-      team_name: client.team.name,
-      domain: client.team.domain
-    )
+  def message(message)
+    return if message.text.empty?
+    text = message.text.split(" ")
+    dispatch(text, message)
   end
 
-  def message(data)
-    return if data.text.empty?
-    text = data.text.split(" ")
-    user = text.shift
-    dispatch(text, data) if user == "<@#{client.self.id}>"
-  end
-
-  def dispatch(text, data)
-    client.typing channel: data.channel
-    command = text.shift
-
-    case command
-    when "awaiting" then awaiting(data)
-    when "tip" then tip(text, data)
-    when "withdraw" then withdraw(text, data)
-    else
-      unknown(command, data)
-    end
+  def dispatch(text, message)
+    logger.info "#{text}"
+    # command = text.shift
+    # # case message.text
+    # # when '/start'
+    # #   bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
+    # # when '/stop'
+    # #   bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
+    # # end
+    #
+    # case command
+    # when "awaiting" then awaiting(data)
+    # when "tip" then tip(text, data)
+    # when "withdraw" then withdraw(text, data)
+    # else
+    #   unknown(command, data)
+    # end
   end
 
   def unknown(command, data)
@@ -80,7 +70,7 @@ class TipBot::Slack < TipBot::Base
   end
 
   def client
-    @client ||= Slack::RealTime::Client.new(token: token)
+    @client ||= Telegram::Bot::Client.new(token, logger: logger)
   end
 
   def say(data, text)
