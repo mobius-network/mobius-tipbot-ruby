@@ -55,8 +55,20 @@ class TipBot::Base
     say(message, t(:"cmd.unknown", command: command))
   end
 
-  def awaiting(message, nickname)
+  def awaiting_cmd(message, nickname)
     user = TipBot::User.new(nickname, dapp)
     say(message, t(:"cmd.balance", balance: user.balance))
+  end
+
+  def tip_cmd(message, nickname, known)
+    return say(message, t(:"cmd.tip.unknown_user", nickname: nickname)) unless known
+
+    TipBot::User.new(nickname, dapp).tip(tip_value)
+
+    say(message, t(:"cmd.tip.done", nickname: nickname))
+  rescue Mobius::Client::Error::InsufficientFunds
+    say(message, t(:"cmd.tip.insufficient_funds", nickname: nickname))
+  rescue Mobius::Client::Error
+    say(message, t(:"cmd.tip.error", nickname: nickname))
   end
 end

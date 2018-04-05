@@ -23,30 +23,19 @@ class TipBot::Telegram < TipBot::Base
     # # end
     #
     case command
-    when "/awaiting" then awaiting(message, message.from.id.to_s)
-    # when "tip" then tip(text, data)
+    when "/awaiting" then awaiting_cmd(message, message.from.username)
+    when "/tip" then tip(text, message)
     # when "withdraw" then withdraw(text, data)
     else
-      unknown(command, data)
+      unknown(command, message)
     end
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def tip(text, data)
-    nickname = text.shift.to_s[2..-2]
-    user = client.users[nickname]
-
-    return say(data, "Unknown user: <@#{nickname}>") if user.nil?
-
-    TipBot::User.new(nickname, dapp).tip(tip_value)
-
-    say(data, "<@#{nickname}>, you've been tipped!")
-  rescue Mobius::Client::Error::InsufficientFunds
-    say(data, "<@#{nickname}>, TipBot have not sufficient balance to send tips!")
-  rescue Mobius::Client::Error
-    say(data, "<@#{nickname}>, Error sending tip!")
+  def tip(text, message)
+    nickname = text.shift.to_s[1..-1]
+    m = message.entities[1]
+    tip_cmd(message, nickname, m && m.type == "mention")
   end
-  # rubocop:enable Metrics/AbcSize
 
   def withdraw(text, data)
     address = text.shift

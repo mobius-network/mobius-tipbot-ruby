@@ -4,6 +4,11 @@ en:
     cmd:
       unknown: "Unknown command: %{command}"
       balance: "Your balance awaiting for withdraw is %{balance}, use @tipbot /withdraw <address> to get your tips!"
+      tip:
+        unknown_user: "Unknown user: @%{nickname}"
+        done: "@%{nickname}, you've been tipped!"
+        insufficient_funds: "@%{nickname}, TipBot have not sufficient balance to send tips!"
+        error: "@%{nickname}, Error sending tip!"
 
   slack:
     hello: Starting Mobius Slack TipBot...

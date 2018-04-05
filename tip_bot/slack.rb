@@ -40,7 +40,7 @@ class TipBot::Slack < TipBot::Base
     command = text.shift
 
     case command
-    when "awaiting" then awaiting(message, message.user)
+    when "awaiting" then awaiting_cmd(message, message.user)
     when "tip" then tip(text, message)
     when "withdraw" then withdraw(text, message)
     else
