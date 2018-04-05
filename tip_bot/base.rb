@@ -61,7 +61,7 @@ class TipBot::Base
   end
 
   def tip_cmd(message, nickname, known)
-    return say(message, t(:"cmd.tip.unknown_user", nickname: nickname)) unless known
+    return say(message, t(:"cmd.tip.unknown_user")) unless known
 
     TipBot::User.new(nickname, dapp).tip(tip_value)
 
@@ -71,4 +71,17 @@ class TipBot::Base
   rescue Mobius::Client::Error
     say(message, t(:"cmd.tip.error", nickname: nickname))
   end
+
+  # rubocop:disable Metrics/AbcSize
+  def withdraw_cmd(text, message, nickname)
+    address = text.shift
+    user = TipBot::User.new(nickname, dapp)
+    return say(message, t(:"cmd.withdraw.address_missing")) if address.nil?
+    return say(message, t(:"cmd.withdraw.nothing")) if user.balance.zero?
+    user.withdraw(address)
+    say(message, t(:"cmd.withdraw.done", address: address))
+  rescue Mobius::Client::Error::UnknownKeyPairType
+    say(message, t(:"cmd.withdraw.invalid_address", address: address))
+  end
+  # rubocop:enable Metrics/AbcSize
 end

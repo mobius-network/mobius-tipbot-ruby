@@ -42,36 +42,16 @@ class TipBot::Slack < TipBot::Base
     case command
     when "awaiting" then awaiting_cmd(message, message.user)
     when "tip" then tip(text, message)
-    when "withdraw" then withdraw(text, message)
+    when "withdraw" then withdraw_cmd(text, message, message.user)
     else
       unknown(command, message)
     end
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def tip(text, data)
+  def tip(text, message)
     nickname = text.shift.to_s[2..-2]
     user = client.users[nickname]
-
-    return say(data, "Unknown user: <@#{nickname}>") if user.nil?
-
-    TipBot::User.new(nickname, dapp).tip(tip_value)
-
-    say(data, "<@#{nickname}>, you've been tipped!")
-  rescue Mobius::Client::Error::InsufficientFunds
-    say(data, "<@#{nickname}>, TipBot have not sufficient balance to send tips!")
-  rescue Mobius::Client::Error
-    say(data, "<@#{nickname}>, Error sending tip!")
-  end
-  # rubocop:enable Metrics/AbcSize
-
-  def withdraw(text, data)
-    address = text.shift
-    TipBot::User.new(data.user, dapp).withdraw(address)
-    return say(data, "Provide target address to withdraw!") if address.nil?
-    say(data, "Your tips has been successfully withdrawn to #{address}!")
-  rescue Mobius::Client::Error::UnknownKeyPairType
-    say(data, "Invalid target address: #{address}")
+    tip_cmd(message, nickname, !user.nil?)
   end
 
   def client

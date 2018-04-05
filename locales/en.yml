@@ -5,10 +5,15 @@ en:
       unknown: "Unknown command: %{command}"
       balance: "Your balance awaiting for withdraw is %{balance}, use @tipbot /withdraw <address> to get your tips!"
       tip:
-        unknown_user: "Unknown user: @%{nickname}"
+        unknown_user: "Unknown user: @%{nickname}!"
         done: "@%{nickname}, you've been tipped!"
         insufficient_funds: "@%{nickname}, TipBot have not sufficient balance to send tips!"
         error: "@%{nickname}, Error sending tip!"
+      withdraw:
+        address_missing: "Provide target address to withdraw!"
+        done: "Your tips has been successfully withdrawn to %{address}!"
+        invalid_address: "Invalid target address: %{address}!"
+        nothing: "Nothing to withdraw!"
 
   slack:
     hello: Starting Mobius Slack TipBot...
@@ -17,3 +22,13 @@ en:
 at https://%{domain}.slack.com."
       unknown: "Unknown command: %{command}"
       balance: "Your balance awaiting for withdraw is %{balance}, use @tipbot withdraw <address> to get your tips!"
+      tip:
+        unknown_user: "Unknown user!"
+        done: "<@%{nickname}>, you've been tipped!"
+        insufficient_funds: "<@%{nickname}>, TipBot have not sufficient balance to send tips!"
+        error: say(data, "<@%{nickname}>, Error sending tip!")
+      withdraw:
+        address_missing: "Provide target address to withdraw!"
+        done: "Your tips has been successfully withdrawn to %{address}!"
+        invalid_address: "Invalid target address: %{address}!"
+        nothing: "Nothing to withdraw!"

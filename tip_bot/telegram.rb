@@ -15,17 +15,11 @@ class TipBot::Telegram < TipBot::Base
 
   def dispatch(text, message)
     command = text.shift
-    # # case message.text
-    # # when '/start'
-    # #   bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
-    # # when '/stop'
-    # #   bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
-    # # end
-    #
+
     case command
     when "/awaiting" then awaiting_cmd(message, message.from.username)
     when "/tip" then tip(text, message)
-    # when "withdraw" then withdraw(text, data)
+    when "withdraw" then withdraw_cmd(text, message, message.from.username)
     else
       unknown(command, message)
     end
@@ -34,16 +28,8 @@ class TipBot::Telegram < TipBot::Base
   def tip(text, message)
     nickname = text.shift.to_s[1..-1]
     m = message.entities[1]
-    tip_cmd(message, nickname, m && m.type == "mention")
-  end
 
-  def withdraw(text, data)
-    address = text.shift
-    TipBot::User.new(data.user, dapp).withdraw(address)
-    return say(data, "Provide target address to withdraw!") if address.nil?
-    say(data, "Your tips has been successfully withdrawn to #{address}!")
-  rescue Mobius::Client::Error::UnknownKeyPairType
-    say(data, "Invalid target address: #{address}")
+    tip_cmd(message, nickname, m && m.type == "mention")
   end
 
   def client
