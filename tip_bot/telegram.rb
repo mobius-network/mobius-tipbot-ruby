@@ -19,7 +19,7 @@ class TipBot::Telegram < TipBot::Base
     case command
     when "/awaiting" then awaiting_cmd(message, message.from.username)
     when "/tip" then tip(text, message)
-    when "withdraw" then withdraw_cmd(text, message, message.from.username)
+    when "/withdraw" then withdraw_cmd(text, message, message.from.username)
     else
       unknown(command, message)
     end
