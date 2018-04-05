@@ -102,6 +102,6 @@ at https://#{client.team.domain}.slack.com."
   end
 
   def tip_value
-    1 * (rate || 1).to_f
+    (rate || 1).to_f
   end
 end
