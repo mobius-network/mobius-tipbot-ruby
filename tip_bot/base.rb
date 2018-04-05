@@ -25,9 +25,11 @@ class TipBot::Base
     raise NotImplementedError, "Replace with bot client instance constructor"
   end
 
-  def message(_message)
+  def receive(_message)
     raise NotImplementedError, "Replace with bot message parse command"
   end
+
+  def typing(_message); end
 
   def i18n_scope
     @i18n_scope ||= self.class.name.split("::").last.downcase
@@ -36,4 +38,12 @@ class TipBot::Base
   def t(*args, **kwargs)
     I18n.t(*args, { scope: i18n_scope }.merge(kwargs))
   end
+
+  def app
+    @app ||= TipBot::App.new(dapp)
+  end
+
+  def tip_value
+    (rate || 1).to_f
+  end  
 end

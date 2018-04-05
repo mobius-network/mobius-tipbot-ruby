@@ -5,7 +5,7 @@ class TipBot::Slack < TipBot::Base
     super
 
     client.on :hello, &method(:hello)
-    client.on :message, &method(:message)
+    client.on :message, &method(:receive)
 
     client.start_async
 
@@ -24,15 +24,19 @@ class TipBot::Slack < TipBot::Base
     )
   end
 
-  def message(data)
-    return if data.text.empty?
-    text = data.text.split(" ")
+  def receive(message)
+    return if message.text.empty?
+    text = message.text.split(" ")
     user = text.shift
-    dispatch(text, data) if user == "<@#{client.self.id}>"
+    dispatch(text, message) if mentioned?(user)
+  end
+
+  def mentioned?(user)
+    user == "<@#{client.self.id}>"
   end
 
   def dispatch(text, data)
-    client.typing channel: data.channel
+    typing(data)
     command = text.shift
 
     case command
@@ -87,11 +91,7 @@ class TipBot::Slack < TipBot::Base
     client.message(channel: data.channel, text: text)
   end
 
-  def app
-    @app ||= TipBot::App.new(dapp)
-  end
-
-  def tip_value
-    (rate || 1).to_f
+  def typing(message)
+    client.typing channel: message.channel
   end
 end
