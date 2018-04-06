@@ -39,3 +39,4 @@ spec:
             secretKeyRef:
               name: mobius-tipbot-ruby-secret-testnet
               key: redis-url
+              
