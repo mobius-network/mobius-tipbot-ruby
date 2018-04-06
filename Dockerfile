@@ -1,5 +1,6 @@
 FROM ruby:alpine
 
+# Provide private github token
 ARG BUNDLE_GITHUB__COM
 
 ENV MOBIUS_TIPBOT_REDIS_URL "redis://localhost:6379/8"
@@ -22,4 +23,5 @@ COPY locales /root/locales
 
 RUN bundle install --without=development
 
+# Slack is default
 CMD bundle exec ruby slack.rb
