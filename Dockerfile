@@ -10,7 +10,7 @@ ENV MOBIUS_TIPBOT_APP_PRIVATE_KEY ""
 ENV MOBIUS_TIPBOT_CREDIT_ADDRESS ""
 ENV MOBIUS_TIPBOT_RATE "1"
 
-RUN apk add --no-cache git openssh g++ musl-dev make
+RUN apk add --no-cache git openssh g++ musl-dev make bash
 
 WORKDIR /root
 
