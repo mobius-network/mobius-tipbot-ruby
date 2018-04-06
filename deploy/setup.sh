@@ -3,9 +3,6 @@
 set -euo pipefail
 
 main() {
-	# TODO: replace the project with your project ID
-	local project=poised-shift-193815
-
 	# Pre-req for gcloud install
 	sudo apt-get update
 	sudo apt-get install -y apt-transport-https
@@ -23,14 +20,14 @@ main() {
 	echo "Authenticating gcloud service account"
 	gcloud auth activate-service-account \
 		--key-file "${GOOGLE_APPLICATION_CREDENTIALS}" \
-		--project "${project}"
+		--project "${GOOGLE_PROJECT}"
 
 	echo "Authenticating to GCR"
-	gcloud docker --authorize-only --project "${project}"
+	gcloud docker --authorize-only --project "${GOOGLE_PROJECT}"
 
 	echo "Configuring kubectl"
 	gcloud container clusters get-credentials mobius \
-		--project "${project}" \
+		--project "${GOOGLE_PROJECT}" \
 		--zone us-central1-b
 }
 
