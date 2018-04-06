@@ -4,6 +4,7 @@ metadata:
   name: tipbot-slack
   labels:
     app: tipbot-slack
+    revision: __REVISION__    
 spec:
   replicas: 1
   strategy:
