@@ -11,7 +11,7 @@ main() {
 	sudo apt-get install -y apt-transport-https
 
 	# Copied from the official install instructions on https://cloud.google.com/sdk/downloads#apt-get
-	export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+	export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release --client -s)"
 	echo "deb https://packages.cloud.google.com/apt ${CLOUD_SDK_REPO} main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 	sudo apt-get update
