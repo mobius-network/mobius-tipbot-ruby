@@ -4,7 +4,7 @@ gem "dry-initializer"
 gem "celluloid-io"
 gem "slack-ruby-client"
 gem "telegram-bot-ruby"
-gem "mobius-client", path: "../mobius-client-ruby"
+gem "mobius-client", git: "git@github.com:mobius-network/mobius-client"
 gem "redis"
 gem "i18n"
 

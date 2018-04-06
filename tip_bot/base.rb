@@ -15,7 +15,7 @@ class TipBot::Base
   end
 
   def start!
-    raise ArgumentError, "Provide #{self.class.name} token!" if token.empty?
+    raise ArgumentError, "Provide #{self.class.name} token!" if token.nil? || token.empty?
     logger.info t(:hello)
   end
 
