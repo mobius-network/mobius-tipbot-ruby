@@ -4,7 +4,7 @@ set -euo pipefail
 
 main() {
 	# TODO: replace the project with your project ID
-	local project=mobius-network
+	local project=poised-shift-193815
 
 	# Pre-req for gcloud install
 	sudo apt-get update
