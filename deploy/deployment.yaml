@@ -3,17 +3,19 @@ kind: Deployment
 metadata:
   name: tipbot-slack
   labels:
-    app: tipbot-slack
+    app: tipbot
     revision: __REVISION__    
 spec:
   replicas: 1
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      app: tipbot
   template:
     metadata:
       labels:
-        app: tipbot-slack
-        revision: __REVISION__
+        app: tipbot
     spec:
       containers:
       - name: mobius-tipbot-ruby
