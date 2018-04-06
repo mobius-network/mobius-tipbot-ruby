@@ -15,7 +15,7 @@ spec:
         revision: __REVISION__
     spec:
       containers:
-      - name: hello-app
-        image: gcr.io/mobius-network/mobius-tipbot-ruby:__REVISION__
+      - name: mobius-tipbot-ruby
+        image: gcr.io/poised-shift-193815/mobius-tipbot-ruby:__REVISION__
         imagePullPolicy: Always
         command: "bundle exec ruby slack.rb"
