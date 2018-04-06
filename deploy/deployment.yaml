@@ -19,3 +19,23 @@ spec:
         image: gcr.io/poised-shift-193815/mobius-tipbot-ruby:__REVISION__
         imagePullPolicy: Always
         command: ["bundle", "exec", "ruby", "slack.rb"]
+        - name: MOBIUS_TIPBOT_SLACK_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: slack-api-token
+        - name: MOBIUS_TIPBOT_APP_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: app-private-key
+        - name: MOBIUS_TIPBOT_CREDIT_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: credit-address
+        - name: MOBIUS_TIPBOT_REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: redis-url
