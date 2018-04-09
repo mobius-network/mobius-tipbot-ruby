@@ -1,0 +1,45 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: tipbot-slack
+  labels:
+    app: tipbot
+    revision: __REVISION__
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tipbot
+  template:
+    metadata:
+      labels:
+        app: tipbot
+    spec:
+      containers:
+      - name: mobius-tipbot-ruby
+        image: gcr.io/poised-shift-193815/mobius-tipbot-ruby:__REVISION__
+        imagePullPolicy: Always
+        command: ["bundle", "exec", "ruby", "telegram.rb"]
+        env:
+        - name: MOBIUS_TIPBOT_TELEGRAM_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: telegram-api-token
+        - name: MOBIUS_TIPBOT_APP_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: app-private-key
+        - name: MOBIUS_TIPBOT_CREDIT_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: credit-address
+        - name: MOBIUS_TIPBOT_REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: mobius-tipbot-ruby-secret-testnet
+              key: redis-url

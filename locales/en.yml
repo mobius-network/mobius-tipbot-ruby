@@ -3,7 +3,7 @@ en:
     hello: Starting Mobius Telegram TipBot...
     cmd:
       unknown: "Unknown command: %{command}"
-      balance: "Your balance awaiting for withdraw is %{balance}, use @tipbot /withdraw <address> to get your tips!"
+      balance: "Your balance awaiting for withdraw is %{balance}, use /withdraw <address> to get your tips!"
       tip:
         unknown_user: "Unknown user: @%{nickname}!"
         done: "@%{nickname}, you've been tipped!"
