@@ -27,8 +27,12 @@ class TipBot::Slack < TipBot::Base
   def receive(message)
     return if message.text.empty?
     text = message.text.split(" ")
-    user = text.shift
-    dispatch(text, message) if mentioned?(user)
+    user = text.shift unless dm?(message)
+    dispatch(text, message) if mentioned?(user) || dm?(message)
+  end
+
+  def dm?(message)
+    client.ims[message.channel]
   end
 
   def mentioned?(user)
