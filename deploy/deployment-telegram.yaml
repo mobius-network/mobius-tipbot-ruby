@@ -4,6 +4,7 @@ metadata:
   name: tipbot-telegram
   labels:
     app: tipbot
+    bot: telegram
     revision: __REVISION__
 spec:
   replicas: 1
@@ -12,10 +13,12 @@ spec:
   selector:
     matchLabels:
       app: tipbot
+      bot: telegram
   template:
     metadata:
       labels:
         app: tipbot
+        bot: telegram
     spec:
       containers:
       - name: mobius-tipbot-ruby
