@@ -17,6 +17,7 @@ WORKDIR /root
 COPY Gemfile /root
 COPY Gemfile.lock /root
 COPY slack.rb /root
+COPY telegram.rb /root
 COPY tip_bot.rb /root
 COPY tip_bot /root/tip_bot
 COPY locales /root/locales
