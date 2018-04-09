@@ -8,8 +8,9 @@ class TipBot::Telegram < TipBot::Base
   private
 
   def message(message)
-    return if message.text.empty?
-    text = message.text.split(" ")
+    text = message.text
+    return if text.nil?
+    text = text.split(" ")
     dispatch(text, message)
   end
 
