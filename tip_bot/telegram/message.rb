@@ -14,8 +14,14 @@ class TipBot::Telegram::Message
   def_delegators :@message, :from, :chat, :text
 
   def call
+    callback if message.is_a?(Telegram::Bot::Types::CallbackQuery)
     return unless message.is_a?(Telegram::Bot::Types::Message)
+    dispatch
+  end
 
+  private
+
+  def dispatch
     case text
     when "/start" then start
     when "/balance" then balance
@@ -23,8 +29,6 @@ class TipBot::Telegram::Message
     when %r(^\/withdraw) then withdraw
     end
   end
-
-  private
 
   def start
     type = chat.id == from.id ? :private : :public
@@ -59,12 +63,11 @@ class TipBot::Telegram::Message
 
   def show_tip
     return if tip_not_allowed?
-    markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: tip_kb)
     bot.api.send_message(
       chat_id: chat.id,
-      text: "@#{from.username} highly appreciates this message:",
+      text: t(:tip_heading, username: from.username, amount: 0),
       reply_to_message_id: message.message_id,
-      reply_markup: markup
+      reply_markup: tip_kb_markup
     )
   end
 
@@ -72,7 +75,7 @@ class TipBot::Telegram::Message
   def tip_not_allowed?
     message.reply_to_message.nil? ||
       message.reply_to_message.from.id == from.id ||
-      false#from.is_bot
+      false # from.is_bot DEBUG
   end
 
   def tip_kb
@@ -81,13 +84,25 @@ class TipBot::Telegram::Message
     end
   end
 
-  def notify_cheater
-    bot.api.send_chat_action(chat_id: chat.id, action: "Test")
+  def tip_kb_markup
+    @tip_kb_markup ||= Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: tip_kb)
   end
 
-  def tip
-    return if message.reply_to_message.nil?
-    # bot.api.edit_message_text(message_id: message.message_id, text: "GIVE MORE TIPS", chat_id: chat.id)
+  def callback
+    # Little weird, message.message, but it's because message is ::CallbackQuery
+    m = message.message
+    text = t(:tip_heading, username: m.from.username, amount: message.data)
+
+    bot.api.edit_message_text(
+      message_id: m.message_id,
+      chat_id: m.chat.id,
+      text: text,
+      reply_markup: tip_kb_markup
+    )
+    # # Here you can handle your callbacks from inline buttons
+    # if message.data == 'touch'
+    #   bot.api.send_message(chat_id: message.from.id, text: "Don't touch me!")
+    # end
   end
 
   def t(*path, **options)

@@ -4,10 +4,11 @@ require "constructor_shortcut"
 require "mobius/client"
 
 module TipBot
+  REDIS_KEY = "mobius:tipbot".freeze
+
   autoload :User, "./tip_bot/user"
   # autoload :Base,     "./tip_bot/base"
   # autoload :Slack,    "./tip_bot/slack"
-  # autoload :Telegram, "./tip_bot/telegram"
   module Telegram
     autoload :Message, "./tip_bot/telegram/message"
     autoload :WebhookRouter, "./tip_bot/telegram/webhook_router"
