@@ -2,6 +2,7 @@
 class TipBot::Telegram::Message
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
+  extend Forwardable
 
   # @!method initialize(seed)
   # @param bot [Telegram::Bot] Bot instance
@@ -10,27 +11,30 @@ class TipBot::Telegram::Message
   param :bot
   param :message
 
+  def_delegators :@message, :from, :chat, :text
+
   def call
     return unless message.is_a?(Telegram::Bot::Types::Message)
 
-    case message.text
+    case text
     when "/start" then start
     when "/balance" then balance
     when "/tip" then show_tip
     when %r(^\/withdraw) then withdraw
     end
-
-    # return balance if message.text == "/balance"
-    # return withdraw if message.text =~ %r(^\/withdraw)
-    # return start if message.text == "/start"
-    # show_tip if message.text == "/tip"
   end
 
   private
 
+  def start
+    type = chat.id == from.id ? :private : :public
+    text = t(:cmd, :start, type, username: from.username)
+    bot.api.send_message(chat_id: from.id, text: text, parse_mode: "Markdown")
+  end
+
   def balance
     return unless direct_message?
-    bot.api.send_message(chat_id: message.from.id, text: balance_reply)
+    bot.api.send_message(chat_id: from.id, text: balance_reply)
   end
 
   def balance_reply
@@ -40,8 +44,8 @@ class TipBot::Telegram::Message
 
   def withdraw
     return unless direct_message?
-    address = message.text.split(" ").last
-    bot.api.send_message(chat_id: message.from.id, text: withdraw_reply(address))
+    address = text.split(" ").last
+    bot.api.send_message(chat_id: from.id, text: withdraw_reply(address))
   end
 
   def withdraw_reply(address)
@@ -55,17 +59,10 @@ class TipBot::Telegram::Message
 
   def show_tip
     return if tip_not_allowed?
-
-    kb = [
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '5', callback_data: '5'),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '10', callback_data: '10'),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '15', callback_data: '15')
-    ]
-    markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-
+    markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: tip_kb)
     bot.api.send_message(
-      chat_id: message.chat.id,
-      text: "@#{message.from.username} highly appreciates this message:",
+      chat_id: chat.id,
+      text: "@#{from.username} highly appreciates this message:",
       reply_to_message_id: message.message_id,
       reply_markup: markup
     )
@@ -74,17 +71,23 @@ class TipBot::Telegram::Message
   # We can not tip bots, man himself and show standalone tipping menu.
   def tip_not_allowed?
     message.reply_to_message.nil? ||
-      message.reply_to_message.from.id == message.from.id ||
-      message.from.is_bot
+      message.reply_to_message.from.id == from.id ||
+      false#from.is_bot
+  end
+
+  def tip_kb
+    @tip_kb ||= AMOUNTS.map do |value|
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:kb_value, value: value), callback_data: value)
+    end
   end
 
   def notify_cheater
-    bot.api.send_chat_action(chat_id: message.chat.id, action: "Test")
+    bot.api.send_chat_action(chat_id: chat.id, action: "Test")
   end
 
   def tip
     return if message.reply_to_message.nil?
-    # bot.api.edit_message_text(message_id: message.message_id, text: "GIVE MORE TIPS", chat_id: message.chat.id)
+    # bot.api.edit_message_text(message_id: message.message_id, text: "GIVE MORE TIPS", chat_id: chat.id)
   end
 
   def t(*path, **options)
@@ -92,10 +95,12 @@ class TipBot::Telegram::Message
   end
 
   def direct_message?
-    message.from.id == message.chat.id
+    from.id == chat.id
   end
 
   def user
-    @user ||= TipBot::User.new(message.from.username)
+    @user ||= TipBot::User.new(from.username)
   end
+
+  AMOUNTS = [5, 10, 100, 1000].freeze
 end

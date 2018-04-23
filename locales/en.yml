@@ -3,6 +3,23 @@ en:
     hello: Starting Mobius Telegram TipBot...
     cmd:
       unknown: "Unknown command: %{command}"
+      start:
+        private: >
+          Hi, @%{username}, I am Mobius TipBot!
+
+
+          /balance will show your earned tips amount.
+
+
+          /withdraw <address> will withdraw accumulated tips to your Stellar account.
+
+
+          Use http://stellarterm.com to create one if you do not have it yet!
+        public: >
+          Hi, @%{username}, I am Mobius TipBot!
+
+
+          Reply any message with /tip command to create tip menu!
       balance:
         linked: "Your do not have any awaiting tips, all tips are instantly sent to %{address}!"
         value: "Your balance awaiting for withdraw is %{balance}, use /withdraw <address> to get your tips!"
@@ -16,7 +33,7 @@ en:
         done: "Your tips has been successfully withdrawn to %{address}!"
         invalid_address: "Invalid target address: %{address}!"
         nothing: "Nothing to withdraw!"
-
+    kb_value: "%{value} tips"
   slack:
     hello: Starting Mobius Slack TipBot...
     cmd:
