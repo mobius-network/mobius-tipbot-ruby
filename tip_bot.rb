@@ -1,5 +1,6 @@
 require "redis"
 require "dry-initializer"
+require "constructor_shortcut"
 require "mobius/client"
 
 module TipBot

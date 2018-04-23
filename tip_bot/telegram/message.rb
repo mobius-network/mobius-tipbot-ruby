@@ -11,20 +11,26 @@ class TipBot::Telegram::Message
   param :message
 
   def call
-    # Telegram::Bot::Types::CallbackQuery
-    # start
     return unless message.is_a?(Telegram::Bot::Types::Message)
-    return balance if message.text == "/balance"
-    return withdraw if message.text =~ %r(^\/withdraw)
-    return tip if message.text == "/tip"
+
+    case message.text
+    when "/start" then start
+    when "/balance" then balance
+    when "/tip" then show_tip
+    when %r(^\/withdraw) then withdraw
+    end
+
+    # return balance if message.text == "/balance"
+    # return withdraw if message.text =~ %r(^\/withdraw)
+    # return start if message.text == "/start"
+    # show_tip if message.text == "/tip"
   end
 
   private
 
   def balance
-    # return unless direct_message?
+    return unless direct_message?
     bot.api.send_message(chat_id: message.from.id, text: balance_reply)
-    bot.api.send_message(chat_id: message.chat.id, text: balance_reply)
   end
 
   def balance_reply
@@ -47,19 +53,38 @@ class TipBot::Telegram::Message
     t(:cmd, :withdraw, :invalid_address, address: address)
   end
 
-  def tip
-    return if message.reply_to_message.nil?
+  def show_tip
+    return if tip_not_allowed?
+
     kb = [
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: '1', callback_data: '1'),
       Telegram::Bot::Types::InlineKeyboardButton.new(text: '5', callback_data: '5'),
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: '10', callback_data: '10'),
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: '15', callback_data: '15')
     ]
     markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+
     bot.api.send_message(
       chat_id: message.chat.id,
-      text: "How much to tip?",
-      reply_to_message_id: message.reply_to_message.message_id,
+      text: "@#{message.from.username} highly appreciates this message:",
+      reply_to_message_id: message.message_id,
       reply_markup: markup
     )
+  end
+
+  # We can not tip bots, man himself and show standalone tipping menu.
+  def tip_not_allowed?
+    message.reply_to_message.nil? ||
+      message.reply_to_message.from.id == message.from.id ||
+      message.from.is_bot
+  end
+
+  def notify_cheater
+    bot.api.send_chat_action(chat_id: message.chat.id, action: "Test")
+  end
+
+  def tip
+    return if message.reply_to_message.nil?
+    # bot.api.edit_message_text(message_id: message.message_id, text: "GIVE MORE TIPS", chat_id: message.chat.id)
   end
 
   def t(*path, **options)
