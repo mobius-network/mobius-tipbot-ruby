@@ -3,10 +3,10 @@ class TipBot::Message
 
   param :message_id
 
-  def tipper
+  def originator
   end
 
-  def tipper=(value)
+  def originator=(value)
   end
 
   def balance
@@ -15,6 +15,9 @@ class TipBot::Message
   def balance=
   end
 
-  def tipped?(user_id)
+  def tipped?(nickname)
+  end
+
+  def record(nickname)
   end
 end
