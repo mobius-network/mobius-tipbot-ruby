@@ -99,10 +99,6 @@ class TipBot::Telegram::Message
       text: text,
       reply_markup: tip_kb_markup
     )
-    # # Here you can handle your callbacks from inline buttons
-    # if message.data == 'touch'
-    #   bot.api.send_message(chat_id: message.from.id, text: "Don't touch me!")
-    # end
   end
 
   def t(*path, **options)

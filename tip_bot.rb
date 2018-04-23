@@ -6,8 +6,8 @@ require "mobius/client"
 module TipBot
   REDIS_KEY = "mobius:tipbot".freeze
 
-  autoload :User, "./tip_bot/user"
-  # autoload :Base,     "./tip_bot/base"
+  autoload :User,    "./tip_bot/user"
+  autoload :Message, "./tip_bot/message"
   # autoload :Slack,    "./tip_bot/slack"
   module Telegram
     autoload :Message, "./tip_bot/telegram/message"
