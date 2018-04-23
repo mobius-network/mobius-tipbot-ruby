@@ -1,3 +1,4 @@
+# Telegram message processor
 class TipBot::Telegram::Message
   extend Dry::Initializer
   extend ConstructorShortcut[:call]

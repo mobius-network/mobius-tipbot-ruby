@@ -26,7 +26,7 @@ spec:
         imagePullPolicy: Always
         command: ["bundle", "exec", "ruby", "slack.rb"]
         env:
-        - name: MOBIUS_TIPBOT_SLACK_API_TOKEN
+        - name: MOBIUS_TIPBOT_TOKEN
           valueFrom:
             secretKeyRef:
               name: mobius-tipbot-ruby-secret-testnet

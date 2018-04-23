@@ -24,9 +24,9 @@ spec:
       - name: mobius-tipbot-ruby
         image: gcr.io/poised-shift-193815/mobius-tipbot-ruby:__REVISION__
         imagePullPolicy: Always
-        command: ["bundle", "exec", "ruby", "telegram.rb"]
+        command: ["bin/telegram"]
         env:
-        - name: MOBIUS_TIPBOT_TELEGRAM_API_TOKEN
+        - name: MOBIUS_TIPBOT_TOKEN
           valueFrom:
             secretKeyRef:
               name: mobius-tipbot-ruby-secret-testnet

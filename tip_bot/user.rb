@@ -10,6 +10,7 @@ class TipBot::User
   param :dapp, default: -> { TipBot.dapp }
 
   # Tips user for given value
+  # @param value [Float] Value in selected currency
   def tip(value)
     dapp.pay(value, target_address: address)
     increment(value) unless address
