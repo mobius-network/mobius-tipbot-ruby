@@ -44,8 +44,4 @@ class TipBot::Telegram < TipBot::Base
   def app
     @app ||= TipBot::App.new(dapp)
   end
-
-  def tip_value
-    (rate || 1).to_f
-  end
 end

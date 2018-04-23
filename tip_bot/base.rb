@@ -84,4 +84,8 @@ class TipBot::Base
     say(message, t(:"cmd.withdraw.invalid_address", address: address))
   end
   # rubocop:enable Metrics/AbcSize
+
+  def tip_value
+    (rate || 1).to_f
+  end  
 end

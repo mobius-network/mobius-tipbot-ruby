@@ -1,11 +1,8 @@
 FROM ruby:alpine
 
-# Provide private github token
-ARG BUNDLE_GITHUB__COM
-
-ENV MOBIUS_TIPBOT_REDIS_URL "redis://localhost:6379/8"
 ENV MOBIUS_TIPBOT_SLACK_API_TOKEN ""
 ENV MOBIUS_TIPBOT_TELEGRAM_API_TOKEN ""
+ENV MOBIUS_TIPBOT_REDIS_URL "redis://localhost:6379/8"
 ENV MOBIUS_TIPBOT_APP_PRIVATE_KEY ""
 ENV MOBIUS_TIPBOT_CREDIT_ADDRESS ""
 ENV MOBIUS_TIPBOT_RATE "1"
@@ -24,5 +21,4 @@ COPY locales /root/locales
 
 RUN bundle install --without=development
 
-# Slack is default
-CMD bundle exec ruby slack.rb
+CMD bundle exec ruby telegram.rb
