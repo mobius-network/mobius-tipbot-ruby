@@ -2,7 +2,7 @@ class TipBot::User
   extend Dry::Initializer
 
   param :nickname
-  param :dapp
+  param :dapp, default: -> { TipBot.dapp }
 
   def tip(value)
     dapp.pay(value, target_address: address)

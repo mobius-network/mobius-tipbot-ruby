@@ -1,8 +1,16 @@
 require "./tip_bot"
 require "mobius/client"
+require "telegram/bot"
 
 TipBot.configure!
-TipBot.redis = Redis.new(url: ENV["MOBIUS_TIPBOT_REDIS_URL"])
+
+Telegram::Bot::Client.run(TipBot.token, logger: TipBot.logger) do |bot|
+  bot.listen do |message|
+    TipBot::Telegram::Message.call(bot, message)
+  end
+end
+
+=begin
 TipBot::Telegram.start!(
   ENV["MOBIUS_TIPBOT_TELEGRAM_API_TOKEN"],
   ENV["MOBIUS_TIPBOT_RATE"] || 1,
@@ -11,5 +19,5 @@ TipBot::Telegram.start!(
     ENV["MOBIUS_TIPBOT_CREDIT_ADDRESS"]
   )
 )
-
+=end
 # 592205386:AAHjcGbTHyT_ernoV41ayTmKFF4kLTrwsw4
