@@ -9,6 +9,7 @@ module TipBot
   # autoload :Telegram, "./tip_bot/telegram"
   module Telegram
     autoload :Message, "./tip_bot/telegram/message"
+    autoload :WebhookRouter, "./tip_bot/telegram/webhook_router"
   end
 
   class << self

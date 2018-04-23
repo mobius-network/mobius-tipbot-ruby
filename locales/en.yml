@@ -35,7 +35,7 @@ at https://%{domain}.slack.com."
         invalid_address: "Invalid target address: %{address}!"
         nothing: "Nothing to withdraw!"
 
-errors:
-  token_missing: Provide TipBot token in MOBIUS_TIPBOT_TOKEN
-  redis_missing: Provide Redis URL in MOBIUS_TIPBOT_REDIS_URL
-  dapp_missing: Provide mobius-client app creds in MOBIUS_TIPBOT_APP_PRIVATE_KEY and MOBIUS_TIPBOT_CREDIT_ADDRESS
+  errors:
+    token_missing: Provide TipBot token in MOBIUS_TIPBOT_TOKEN
+    redis_missing: Provide Redis URL in MOBIUS_TIPBOT_REDIS_URL
+    dapp_missing: Provide mobius-client app creds in MOBIUS_TIPBOT_APP_PRIVATE_KEY and MOBIUS_TIPBOT_CREDIT_ADDRESS
