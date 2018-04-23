@@ -1,5 +1,8 @@
-require "./tip_bot"
+#!/usr/bin/env ruby
+
+require "bundler/setup"
 require "telegram/bot"
+require "./tip_bot"
 
 TipBot.configure!
 

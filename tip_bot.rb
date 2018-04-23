@@ -1,5 +1,6 @@
 require "redis"
 require "dry-initializer"
+require "mobius/client"
 
 module TipBot
   autoload :User, "./tip_bot/user"

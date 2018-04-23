@@ -7,6 +7,7 @@ gem "telegram-bot-ruby"
 gem "mobius-client"
 gem "redis"
 gem "i18n"
+gem "constructor_shortcut"
 
 group :development do
   gem "rubocop"

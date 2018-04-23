@@ -1,11 +1,13 @@
 class TipBot::Telegram::Message
   extend Dry::Initializer
+  extend ConstructorShortcut[:call]
 
   param :bot
   param :message
 
   def call
     # Telegram::Bot::Types::CallbackQuery
+    # start
     return unless message.is_a?(Telegram::Bot::Types::Message)
     return balance if message.text == "/balance"
     return withdraw if message.text =~ %r(^\/withdraw)
@@ -65,11 +67,5 @@ class TipBot::Telegram::Message
 
   def user
     @user ||= TipBot::User.new(message.from.username)
-  end
-
-  class << self
-    def call(*args)
-      new(*args).call
-    end
   end
 end
