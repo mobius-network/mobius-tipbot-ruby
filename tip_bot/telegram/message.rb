@@ -2,6 +2,10 @@ class TipBot::Telegram::Message
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
 
+  # @!method initialize(seed)
+  # @param bot [Telegram::Bot] Bot instance
+  # @param message [Telegram::Bot::Types::Message] Message
+  # @!scope instance
   param :bot
   param :message
 

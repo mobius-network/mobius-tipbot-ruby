@@ -29,7 +29,7 @@ Done!
 First account contains tips (in MOBI by default). Second account is used to accumulate tips which are not yet withdrawn to users.
 
 2. Setup Redis.
-3. Obtain bot token in Slack (https://my.slack.com/services/new/bot)
+3. Obtain Telegram or Slack bot token.
 
 ## Run
 
@@ -52,5 +52,5 @@ MOBIUS_TIPBOT_TELEGRAM_API_TOKEN="592205381:AAHjcGbTHyT_ernoV41ayTmKFF4kLTrwsw4"
 MOBIUS_TIPBOT_APP_PRIVATE_KEY="SBTDFELTI4IK22U7XOPVSD7A3BAZI2U3MD2CROSZW4DMML6WVH5OUOYS" \
 MOBIUS_TIPBOT_CREDIT_ADDRESS="GDF2AY44IYXRLNOZ2BPGM6YWMOFTIJ3M7Y2BD6YGLTY2UWXK3JNTG6F2" \
 MOBIUS_TIPBOT_RATE="0.5" \
-bundle exec ruby telegram.rb
+bin/telegram
 ```

@@ -1,6 +1,7 @@
 require "rack"
 require "multi_json"
 
+# Rack router for Telegram webhooks
 class TipBot::Telegram::WebhookRouter
   def call(env)
     request = Rack::Request.new(env)
