@@ -11,7 +11,7 @@ class TipBot::User
 
   # Tips user for given value
   # @param value [Float] Value in selected currency
-  def tip(value)
+  def tip(value = TipBot.tip_rate)
     dapp.pay(value, target_address: address)
     increment(value) unless address
   end

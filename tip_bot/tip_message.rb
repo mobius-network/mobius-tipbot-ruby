@@ -7,7 +7,7 @@ class TipBot::TipMessage
     TipBot.redis.get(redis_balance_key).to_f
   end
 
-  def tip(nickname, value)
+  def tip(nickname, value = TipBot.tip_rate)
     TipBot.redis.incrbyfloat(redis_balance_key, value)
     TipBot.redis.sadd(redis_lock_key, nickname)
   end

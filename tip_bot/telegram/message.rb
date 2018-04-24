@@ -1,4 +1,5 @@
 # Telegram message processor
+# rubocop:disable Metrics/ClassLength
 class TipBot::Telegram::Message
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
@@ -96,27 +97,39 @@ class TipBot::Telegram::Message
   end
 
   def callback
-    if tip_message.tipped?(message.from.username)
-      return bot.api.answer_callback_query(
-        callback_query_id: subject.id, text: t(:cmd, :tip, :can_not_tip_twice)
-      )
-    end
+    return can_not_tip_twice if tip_message.tipped?(from.username)
 
-    user.tip(TipBot.tip_rate)
-    tip_message.tip(message.from.username, TipBot.tip_rate)
+    user.tip
+    tip_message.tip(from.username)
 
+    update_tip_menu
+  rescue Mobius::Client::Error::InsufficientFunds
+    error_insufficient_funds
+  rescue Mobius::Client::Error => e
+    error_mobius_client(e)
+  end
+
+  def can_not_tip_twice
+    bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:cmd, :tip, :can_not_tip_twice))
+  end
+
+  def update_tip_menu
     bot.api.edit_message_text(
       message_id: message_id,
       chat_id: chat.id,
       text: tip_heading,
       reply_markup: tip_kb_markup
     )
-  rescue Mobius::Client::Error::InsufficientFunds
+  end
+
+  def error_insufficient_funds
     bot.api.answer_callback_query(
       callback_query_id: subject.id, text: t(:cmd, :tip, :insufficient_funds)
     )
-  rescue Mobius::Client::Error => e
-    bot.logger.error e.message
+  end
+
+  def error_mobius_client(err)
+    bot.logger.error err.message
     bot.api.answer_callback_query(
       callback_query_id: subject.id, text: t(:cmd, :tip, :error)
     )
@@ -142,3 +155,4 @@ class TipBot::Telegram::Message
     @tip_message ||= TipBot::TipMessage.new(message_id)
   end
 end
+# rubocop:enable Metrics/ClassLength
