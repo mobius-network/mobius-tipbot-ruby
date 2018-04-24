@@ -39,7 +39,7 @@ class TipBot::Telegram::Message
   def start
     type = chat.id == from.id ? :private : :public
     text = t(:cmd, :start, type, username: from.username)
-    bot.api.send_message(chat_id: from.id, text: text, parse_mode: "Markdown")
+    bot.api.send_message(chat_id: from.id, text: text)
   end
 
   def balance
