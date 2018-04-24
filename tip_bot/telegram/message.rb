@@ -65,7 +65,7 @@ class TipBot::Telegram::Message
     return if tip_not_allowed?
     bot.api.send_message(
       chat_id: chat.id,
-      text: t(:tip_heading, username: from.username, amount: 0),
+      text: t(:tip, :heading, username: from.username, amount: 0),
       reply_to_message_id: message.message_id,
       reply_markup: tip_kb_markup
     )
@@ -79,9 +79,10 @@ class TipBot::Telegram::Message
   end
 
   def tip_kb
-    @tip_kb ||= AMOUNTS.map do |value|
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:kb_value, value: value), callback_data: value)
-    end
+    @tip_kb ||= [
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:tip, :tip, value: value), callback_data: "tip"),
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:tip, :skip, value: value), callback_data: "skip")
+    ]
   end
 
   def tip_kb_markup

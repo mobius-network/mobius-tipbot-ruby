@@ -6,7 +6,7 @@ class TipBot::Message
   def originator
   end
 
-  def originator=(value)
+  def originator=(nickname)
   end
 
   def balance

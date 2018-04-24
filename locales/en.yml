@@ -34,7 +34,10 @@ en:
         invalid_address: "Invalid target address: %{address}!"
         nothing: "Nothing to withdraw!"
     kb_value: "%{value} tips"
-    tip_heading: "@%{username} highly appreciates this message. Tip it! %{amount} tips collected so far."
+    tip:
+      heading: "@%{username} highly appreciates this message. Tip it! %{amount} tips collected so far."
+      tip: "%{value} for this geneleman!"
+      skip: "It does not worth it!"
 
   slack:
     hello: Starting Mobius Slack TipBot...
