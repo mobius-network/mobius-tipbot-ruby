@@ -26,7 +26,7 @@ en:
       tip:
         insufficient_funds: "TipBot have not sufficient balance to send tips!"
         error: "Error sending tip!"
-        can_not_tip_twice: "Can not tip twice the same message!"
+        can_not_tip_twice: "You can not tip twice the same message!"
       withdraw:
         address_missing: "Provide target address to withdraw!"
         done: "Your tips has been successfully withdrawn to %{address}!"

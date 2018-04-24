@@ -96,7 +96,7 @@ class TipBot::Telegram::Message
   end
 
   def callback
-    if tim_message.tipped?(message.from.username)
+    if tip_message.tipped?(message.from.username)
       return bot.api.answer_callback_query(
         callback_query_id: subject.id, text: t(:cmd, :tip, :can_not_tip_twice)
       )
