@@ -8,7 +8,6 @@ gem "mobius-client"
 gem "multi_json"
 gem "rack"
 gem "redis"
-gem "slack-ruby-client"
 gem "telegram-bot-ruby"
 
 group :development do
