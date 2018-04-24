@@ -1,5 +1,6 @@
 # Telegram message processor
 # rubocop:disable Metrics/ClassLength
+# TODO: Refator #t, split to shorter classes
 class TipBot::Telegram::Message
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
