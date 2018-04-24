@@ -6,16 +6,20 @@ class TipBot::Telegram::Message
 
   # @!method initialize(seed)
   # @param bot [Telegram::Bot] Bot instance
-  # @param message [Telegram::Bot::Types::Message] Message
+  # @param subject [Telegram::Bot::Types::*] Subject
   # @!scope instance
   param :bot
-  param :message
+  param :subject
 
-  def_delegators :@message, :from, :chat, :text
+  def message
+    @message ||= subject.is_a?(Telegram::Bot::Types::CallbackQuery) ? subject.message : subject
+  end
+
+  def_delegators :message, :from, :chat, :text, :message_id
 
   def call
-    callback if message.is_a?(Telegram::Bot::Types::CallbackQuery)
-    return unless message.is_a?(Telegram::Bot::Types::Message)
+    callback if subject.is_a?(Telegram::Bot::Types::CallbackQuery)
+    return unless subject.is_a?(Telegram::Bot::Types::Message)
     dispatch
   end
 
@@ -65,8 +69,8 @@ class TipBot::Telegram::Message
     return if tip_not_allowed?
     bot.api.send_message(
       chat_id: chat.id,
-      text: t(:tip, :heading, username: from.username, amount: 0),
-      reply_to_message_id: message.message_id,
+      text: tip_heading,
+      reply_to_message_id: message_id,
       reply_markup: tip_kb_markup
     )
   end
@@ -80,8 +84,10 @@ class TipBot::Telegram::Message
 
   def tip_kb
     @tip_kb ||= [
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:tip, :tip, value: value), callback_data: "tip"),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:tip, :skip, value: value), callback_data: "skip")
+      Telegram::Bot::Types::InlineKeyboardButton.new(
+        text: t(:tip, :tip, count: tip_message.count), callback_data: "tip"
+      ),
+      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:tip, :skip), callback_data: "skip")
     ]
   end
 
@@ -90,16 +96,34 @@ class TipBot::Telegram::Message
   end
 
   def callback
-    # Little weird, message.message, but it's because message is ::CallbackQuery
-    m = message.message
-    text = t(:tip_heading, username: m.from.username, amount: message.data)
+    if tim_message.tipped?(message.from.username)
+      return bot.api.answer_callback_query(
+        callback_query_id: subject.id, text: t(:cmd, :tip, :can_not_tip_twice)
+      )
+    end
+
+    user.tip(TipBot.tip_rate)
+    tip_message.tip(message.from.username, TipBot.tip_rate)
 
     bot.api.edit_message_text(
-      message_id: m.message_id,
-      chat_id: m.chat.id,
-      text: text,
+      message_id: message_id,
+      chat_id: chat.id,
+      text: tip_heading,
       reply_markup: tip_kb_markup
     )
+  rescue Mobius::Client::Error::InsufficientFunds
+    bot.api.answer_callback_query(
+      callback_query_id: subject.id, text: t(:cmd, :tip, :insufficient_funds)
+    )
+  rescue Mobius::Client::Error => e
+    bot.logger.error e.message
+    bot.api.answer_callback_query(
+      callback_query_id: subject.id, text: t(:cmd, :tip, :error)
+    )
+  end
+
+  def tip_heading
+    t(:tip, :heading, username: message.reply_to_message.from.username, amount: tip_message.balance)
   end
 
   def t(*path, **options)
@@ -114,5 +138,7 @@ class TipBot::Telegram::Message
     @user ||= TipBot::User.new(from.username)
   end
 
-  AMOUNTS = [5, 10, 100, 1000].freeze
+  def tip_message
+    @tip_message ||= TipBot::TipMessage.new(message_id)
+  end
 end

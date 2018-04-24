@@ -1,15 +1,15 @@
 source "https://rubygems.org"
 
-gem "dry-initializer"
 gem "celluloid-io"
+gem "constructor_shortcut"
+gem "dry-initializer"
+gem "i18n"
+gem "mobius-client"
+gem "multi_json"
+gem "rack"
+gem "redis"
 gem "slack-ruby-client"
 gem "telegram-bot-ruby"
-gem "mobius-client"
-gem "redis"
-gem "i18n"
-gem "constructor_shortcut"
-gem "rack"
-gem "multi_json"
 
 group :development do
   gem "rubocop"

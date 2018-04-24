@@ -8,6 +8,10 @@ TipBot.configure!
 
 Telegram::Bot::Client.run(TipBot.token, logger: TipBot.logger) do |bot|
   bot.listen do |message|
-    TipBot::Telegram::Message.call(bot, message)
+    begin
+      TipBot::Telegram::Message.call(bot, message)
+    rescue Telegram::Bot::Exceptions::ResponseError => e
+      bot.logger.error e.message
+    end
   end
 end

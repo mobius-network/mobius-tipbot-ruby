@@ -24,10 +24,9 @@ en:
         linked: "Your do not have any awaiting tips, all tips are instantly sent to %{address}!"
         value: "Your balance awaiting for withdraw is %{balance}, use /withdraw <address> to get your tips!"
       tip:
-        unknown_user: "Unknown user: @%{nickname}!"
-        done: "@%{nickname}, you've been tipped!"
-        insufficient_funds: "@%{nickname}, TipBot have not sufficient balance to send tips!"
-        error: "@%{nickname}, Error sending tip!"
+        insufficient_funds: "TipBot have not sufficient balance to send tips!"
+        error: "Error sending tip!"
+        can_not_tip_twice: "Can not tip twice the same message!"
       withdraw:
         address_missing: "Provide target address to withdraw!"
         done: "Your tips has been successfully withdrawn to %{address}!"
@@ -36,7 +35,7 @@ en:
     kb_value: "%{value} tips"
     tip:
       heading: "@%{username} highly appreciates this message. Tip it! %{amount} tips collected so far."
-      tip: "%{value} for this geneleman!"
+      tip: "Tip this geneleman! (%{count})"
       skip: "It does not worth it!"
 
   slack:
@@ -50,7 +49,7 @@ at https://%{domain}.slack.com."
         unknown_user: "Unknown user!"
         done: "<@%{nickname}>, you've been tipped!"
         insufficient_funds: "<@%{nickname}>, TipBot have not sufficient balance to send tips!"
-        error: say(data, "<@%{nickname}>, Error sending tip!")
+        error: say(data, "<@%{nickname}>, error sending tip!")
       withdraw:
         address_missing: "Provide target address to withdraw!"
         done: "Your tips has been successfully withdrawn to %{address}!"
