@@ -7,28 +7,28 @@ Easily transfer small amount of MOBI between team members of your Telegram group
 
 1. Setup Stellar accounts.
 
-  TipBot needs two accounts:
+   TipBot needs two accounts:
 
-  * Source pool containing tips to be spent.
-  * TipBot account holding tips awaiting for withdrawal.
+   * Source pool containing tips to be spent.
+   * TipBot account holding tips awaiting for withdrawal.
 
-  TipBot account must be added as cosigner to source pool. It must be able to make payments from source address.
+   TipBot account must be added as cosigner to source pool. It must be able to make payments from source address.
 
-  You can setup test network accounts using `mobius-cli` tool from [mobius-client-ruby](https://github.com/mobius-network/mobius-client-ruby) or [Stellar Laboratory](https://stellar.org/laboratory).
+   You can setup test network accounts using `mobius-cli` tool from [mobius-client-ruby](https://github.com/mobius-network/mobius-client-ruby) or [Stellar Laboratory](https://stellar.org/laboratory).
 
 2. Setup Telegram bot.
 
-  * Obtain token using BotFather.
-  * Setup or get Redis credentials.
-  * Deploy it somewhere (take a look on [sample K8s deployment](deploy/deployment.yaml)
+   * Obtain token using BotFather.
+   * Setup or get Redis credentials.
+   * Deploy it somewhere (take a look on [sample K8s deployment](deploy/deployment.yaml)
 
-  Environment variables are:
+   Environment variables are:
 
-  * `MOBIUS_TIPBOT_REDIS_URL` - Redis URL
-  * `MOBIUS_TIPBOT_TOKEN` - Telegram token.
-  * `MOBIUS_TIPBOT_CREDIT_ADDRESS` - Stellar address of source pool.
-  * `MOBIUS_TIPBOT_APP_PRIVATE_KEY` - Private key of TipBot account.
-  * `MOBIUS_TIPBOT_RATE` - Tip amount.
+   * `MOBIUS_TIPBOT_REDIS_URL` - Redis URL
+   * `MOBIUS_TIPBOT_TOKEN` - Telegram token.
+   * `MOBIUS_TIPBOT_CREDIT_ADDRESS` - Stellar address of source pool.
+   * `MOBIUS_TIPBOT_APP_PRIVATE_KEY` - Private key of TipBot account.
+   * `MOBIUS_TIPBOT_RATE` - Tip amount.
 
 ## Usage
 
