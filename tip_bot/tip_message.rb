@@ -45,6 +45,6 @@ class TipBot::TipMessage
   end
 
   BASE_KEY = "message".freeze
-  REDIS_BALANCE_KEY = "#{BASE_KEY}:balance".freeze
-  REDIS_LOCK_KEY = "#{BASE_KEY}:lock".freeze
+  REDIS_BALANCE_KEY = "#{BASE_KEY}:#{message_id}:balance".freeze
+  REDIS_LOCK_KEY = "#{BASE_KEY}:#{message_id}:lock".freeze
 end
