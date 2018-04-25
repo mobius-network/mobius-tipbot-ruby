@@ -20,7 +20,7 @@ Easily transfer small amount of MOBI between team members of your Telegram group
 
    * Obtain token using BotFather.
    * Setup or get Redis credentials.
-   * Deploy it somewhere (take a look on [sample K8s deployment](deploy/deployment.yaml)
+   * Deploy it somewhere (take a look on [sample K8s deployment](deploy/deployment.yaml), and [Dockerfile](Dockerfile))
 
    Environment variables are:
 
