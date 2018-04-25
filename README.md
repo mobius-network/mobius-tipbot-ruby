@@ -37,4 +37,4 @@ Add TipBot to your Telegram group.
 TipBot supports following commands:
 * `/tip` - reply to any message in your chat. This will display keyboard and current tip stats.
 * `/balance` - this will show your tip balance (works in DM only).
-* `/withdraw <address>` - this will send your collected tips to following Stellar address. All following tips will be send directly there, bypassing TipBot account.
+* `/withdraw <address>` - this will send your collected tips to following Stellar address. All following tips will be send directly there, bypassing TipBot account (works in DM only).
