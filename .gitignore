@@ -1,2 +1,4 @@
-coverage/*
 .rspec_status
+.yardoc
+/coverage/
+/doc/

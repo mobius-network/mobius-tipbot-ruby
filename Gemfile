@@ -15,6 +15,11 @@ group :development, :test do
   gem "pry-byebug"
 end
 
+group :development do
+  gem "yard", "~> 0.9", ">= 0.9.12"
+  gem "rake", "~> 12.0"
+end
+
 group :test do
   gem "rspec", "~> 3.0"
   gem "rubocop-rspec", "~> 1.23"
