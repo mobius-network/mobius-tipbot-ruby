@@ -57,6 +57,8 @@ module TipBot
       I18n.load_path = Dir.glob(File.join(File.dirname(__FILE__), "locales/*.yml"))
       I18n.locale = ENV["MOBIUS_TIPBOT_LOCALE"] || :en
 
+      Mobius::Client.network = ENV["MOBIUS_TIPBOT_NETWORK"] == "public" ? :public : :test
+
       validate!
     end
 

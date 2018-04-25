@@ -29,6 +29,7 @@ Easily transfer small amount of MOBI between team members of your Telegram group
    * `MOBIUS_TIPBOT_CREDIT_ADDRESS` - Stellar address of source pool.
    * `MOBIUS_TIPBOT_APP_PRIVATE_KEY` - Private key of TipBot account.
    * `MOBIUS_TIPBOT_RATE` - Tip amount.
+   * `MOBIUS_TIPBOT_NETWORK` - "public" or "test", Stellar network to use.
 
 ## Usage
 

@@ -5,6 +5,7 @@ ENV MOBIUS_TIPBOT_REDIS_URL "redis://localhost:6379/8"
 ENV MOBIUS_TIPBOT_APP_PRIVATE_KEY ""
 ENV MOBIUS_TIPBOT_CREDIT_ADDRESS ""
 ENV MOBIUS_TIPBOT_RATE "0.1"
+ENV MOBIUS_TIPBOT_NETWORK "test"
 
 RUN apk add --no-cache git openssh g++ musl-dev make bash
 
