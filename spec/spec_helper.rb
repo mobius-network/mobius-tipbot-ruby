@@ -15,6 +15,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require "bundler/setup"
 require "telegram/bot"
+require "redis-namespace"
 require "simplecov"
 require "simplecov-console"
 require "./tip_bot"
@@ -22,7 +23,7 @@ require "./tip_bot"
 I18n.load_path = Dir.glob(File.join(File.dirname(__FILE__), "../locales/*.yml"))
 I18n.locale = :en
 
-TipBot.redis = Redis.new
+TipBot.redis = Redis::Namespace.new(:tipbot_test, redis: Redis.new(db: 8))
 
 SimpleCov.formatter = SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
 SimpleCov.start
@@ -59,7 +60,7 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   config.before do
-    Redis.current.flushdb
+    TipBot.redis.redis.flushdb
   end
 
 # The settings below are suggested to provide a good initial experience
