@@ -1,6 +1,7 @@
 require "redis"
 require "dry-initializer"
 require "constructor_shortcut"
+require "redis-namespace"
 require "mobius/client"
 
 module TipBot
@@ -8,7 +9,7 @@ module TipBot
 
   autoload :User,       "./tip_bot/user"
   autoload :TipMessage, "./tip_bot/tip_message"
-  # autoload :Slack,    "./tip_bot/slack"
+
   module Telegram
     autoload :Message, "./tip_bot/telegram/message"
     autoload :WebhookRouter, "./tip_bot/telegram/webhook_router"
@@ -20,7 +21,9 @@ module TipBot
 
     # Redis instance getter
     def redis
-      @redis ||= ENV["MOBIUS_TIPBOT_REDIS_URL"] && Redis.new(url: ENV["MOBIUS_TIPBOT_REDIS_URL"])
+      @redis ||=
+        ENV["MOBIUS_TIPBOT_REDIS_URL"] &&
+        Redis::Namespace.new(:tipbot, redis: Redis.new(url: ENV["MOBIUS_TIPBOT_REDIS_URL"]))
     end
 
     # Logger instance setter
