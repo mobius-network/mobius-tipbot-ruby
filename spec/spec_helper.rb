@@ -3,15 +3,19 @@ require "telegram/bot"
 require "redis-namespace"
 require "simplecov"
 require "simplecov-console"
+
+SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
+SimpleCov.start do
+  add_filter "spec"
+  track_files "{.,tip_bot}/**/*.rb"
+end
+
 require "./tip_bot"
 
 I18n.load_path = Dir.glob(File.join(File.dirname(__FILE__), "../locales/*.yml"))
 I18n.locale = :en
 
 TipBot.redis = Redis::Namespace.new(:tipbot_test, redis: Redis.new)
-
-SimpleCov.formatter = SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
-SimpleCov.start
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"
