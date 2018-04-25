@@ -10,10 +10,13 @@ gem "rack"
 gem "redis"
 gem "telegram-bot-ruby"
 
-group :development do
-  gem "rubocop"
+group :development, :test do
+  gem "rubocop", "~> 0.53"
+  gem "pry-byebug"
 end
 
 group :test do
-  gem "rspec"
+  gem "rspec", "~> 3.0"
+  gem "rubocop-rspec", "~> 1.23"
+  gem "webmock", "~> 3.3"
 end
