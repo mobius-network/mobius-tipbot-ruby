@@ -1,56 +1,40 @@
-# DApp Store TipBot
+# Mobius TipBot
+===============
 
-# Usage:
+Easily transfer small amount of MOBI between team members of your Telegram group.
 
-## Test network
+## Installation
 
-1. Setup TipBot accounts:
+1. Setup Stellar accounts.
 
-```
-$ gem install mobius-client
-$ mobius-cli create dapp_account
+TipBot needs two accounts:
 
-Calling Mobius FriendBot...
- * Public Key: GDF2AY44IYXRLNOZ2BPGM6YWMOFTIJ3M7Y2BD6YGLTY2UWXK3JNTG6F2
- * Private Key: SBWODOL62Y3ALAXJJHA2EEK4GYFYXDLX23AIFJXMQY4V3PTJXEIT47YK
- * MOBI balance: 1000.0
-Done!
+* Source pool containing tips to be spent.
+* TipBot account holding tips awaiting for withdrawal.
 
-$ mobius-cli create dapp_account -a GDF2AY44IYXRLNOZ2BPGM6YWMOFTIJ3M7Y2BD6YGLTY2UWXK3JNTG6F2
+TipBot account must be added as cosigner to source pool. It must be able to make payments from source address.
 
-Calling Mobius FriendBot...
- * Public Key: GC5Z2TW36D5R5HTV57K66P6KNQG4CMCRXPWSLU2EPR5MUNNHQJUYZTPU
- * Private Key: SBTDFELTI4IK22U7XOPVSD7A3BAZI2U3MD2CROSZW4DMML6WVH5OUOYS
- * MOBI balance: 1000.0
-Adding cosigner...
-Done!
-```
+You can setup test network accounts using `mobius-cli` tool from [mobius-client-ruby](https://github.com/mobius-network/mobius-client-ruby) or [Stellar Laboratory](https://stellar.org/laboratory).
 
-First account contains tips (in MOBI by default). Second account is used to accumulate tips which are not yet withdrawn to users.
+2. Setup Telegram bot.
 
-2. Setup Redis.
-3. Obtain Telegram or Slack bot token.
+* Obtain token using BotFather.
+* Setup or get Redis credentials.
+* Deploy it somewhere (take a look on [sample K8s deployment](deploy/deployment.yaml)
 
-## Run
+Environment variables are:
 
-```
-MOBIUS_TIPBOT_REDIS_URL="redis://localhost:6379/8" \
-MOBIUS_TIPBOT_SLACK_API_TOKEN="xoxb-340072536034-YnD3U819uiROw1vtdrg3LjQg" \
-MOBIUS_TIPBOT_APP_PRIVATE_KEY="SBTDFELTI4IK22U7XOPVSD7A3BAZI2U3MD2CROSZW4DMML6WVH5OUOYS" \
-MOBIUS_TIPBOT_CREDIT_ADDRESS="GDF2AY44IYXRLNOZ2BPGM6YWMOFTIJ3M7Y2BD6YGLTY2UWXK3JNTG6F2" \
-MOBIUS_TIPBOT_RATE="0.5" \
-bundle exec ruby slack.rb
-```
+* `MOBIUS_TIPBOT_REDIS_URL` - Redis URL
+* `MOBIUS_TIPBOT_TOKEN` - Telegram token.
+* `MOBIUS_TIPBOT_CREDIT_ADDRESS` - Stellar address of source pool.
+* `MOBIUS_TIPBOT_APP_PRIVATE_KEY` - Private key of TipBot account.
+* `MOBIUS_TIPBOT_RATE` - Tip amount.
 
-`MOBIUS_TIPBOT_RATE` represents the price of a tip.
+## Usage
 
-Same for Telegram:
+Add TipBot to your Telegram group.
 
-```
-MOBIUS_TIPBOT_REDIS_URL="redis://localhost:6379/8" \
-MOBIUS_TIPBOT_TELEGRAM_API_TOKEN="592205381:AAHjcGbTHyT_ernoV41ayTmKFF4kLTrwsw4" \
-MOBIUS_TIPBOT_APP_PRIVATE_KEY="SBTDFELTI4IK22U7XOPVSD7A3BAZI2U3MD2CROSZW4DMML6WVH5OUOYS" \
-MOBIUS_TIPBOT_CREDIT_ADDRESS="GDF2AY44IYXRLNOZ2BPGM6YWMOFTIJ3M7Y2BD6YGLTY2UWXK3JNTG6F2" \
-MOBIUS_TIPBOT_RATE="0.5" \
-bin/telegram
-```
+TipBot supports following commands:
+* `/tip` - reply to any message in your chat. This will display keyboard and current tip stats.
+* `/balance` - this will show your tip balance (works in DM only).
+* `/withdraw <address>` - this will send your collected tips to following Stellar address. All following tips will be send directly there, bypassing TipBot account.
