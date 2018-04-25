@@ -15,12 +15,17 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require "bundler/setup"
 require "telegram/bot"
+require "simplecov"
+require "simplecov-console"
 require "./tip_bot"
 
 I18n.load_path = Dir.glob(File.join(File.dirname(__FILE__), "../locales/*.yml"))
 I18n.locale = :en
 
 TipBot.redis = Redis.new
+
+SimpleCov.formatter = SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
+SimpleCov.start
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

@@ -10,6 +10,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    ansi (1.5.0)
     ast (2.4.0)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -51,6 +52,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.3)
     digest-crc (0.4.1)
+    docile (1.3.0)
     dry-initializer (2.4.0)
     equalizer (0.0.11)
     excon (0.44.4)
@@ -66,6 +68,7 @@ GEM
     ffi (1.9.23)
     futuroscope (0.1.11)
     hashdiff (0.3.7)
+    hirb (0.7.3)
     hitimes (1.2.6)
     hyperclient (0.7.2)
       faraday
@@ -79,6 +82,7 @@ GEM
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     inflecto (0.0.2)
+    json (2.1.0)
     jwt (1.5.6)
     method_source (0.9.0)
     minitest (5.11.3)
@@ -136,6 +140,15 @@ GEM
       rubocop (>= 0.53.0)
     ruby-progressbar (1.9.0)
     safe_yaml (1.0.4)
+    simplecov (0.16.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-console (0.4.2)
+      ansi
+      hirb
+      simplecov
+    simplecov-html (0.10.2)
     stellar-base (0.13.0)
       activesupport (>= 4.2.7)
       base32
@@ -193,6 +206,8 @@ DEPENDENCIES
   rspec (~> 3.0)
   rubocop (~> 0.53)
   rubocop-rspec (~> 1.23)
+  simplecov
+  simplecov-console
   telegram-bot-ruby
   webmock (~> 3.3)
 
