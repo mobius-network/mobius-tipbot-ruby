@@ -1,4 +1,4 @@
-RSpec.describe TipBot::Telegram::Message do
+RSpec.describe TipBot::Telegram::Request do
   let(:bot) { instance_double("Telegram::Bot::Client") }
 
   subject { described_class.new(bot, message) }

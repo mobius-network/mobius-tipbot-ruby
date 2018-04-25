@@ -1,6 +1,5 @@
 # Telegram message processor
-# TODO: Refator #t, split to shorter classes
-class TipBot::Telegram::Message
+class TipBot::Telegram::Request
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
   extend Forwardable
@@ -38,23 +37,6 @@ class TipBot::Telegram::Message
 
   def command(klass)
     "TipBot::Telegram::Command::#{klass}".constantize.call(bot, message, subject)
-  end
-
-  def show_tip
-    return if tip_not_allowed?
-    bot.api.send_message(
-      chat_id: chat.id,
-      text: tip_heading,
-      reply_to_message_id: message_id,
-      reply_markup: tip_kb_markup
-    )
-  end
-
-  # We can not tip bots, man himself and show standalone tipping menu.
-  def tip_not_allowed?
-    message.reply_to_message.nil? ||
-      message.reply_to_message.from.id == from.id ||
-      false # from.is_bot DEBUG
   end
 
   def callback

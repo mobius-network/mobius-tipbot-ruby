@@ -1,7 +1,7 @@
 require "rack"
 require "multi_json"
 
-# Rack router for Telegram webhooks
+# Rack router for Telegram webhooks. NOTE: Untested yet.
 class TipBot::Telegram::WebhookRouter
   def call(env)
     request = Rack::Request.new(env)
@@ -25,7 +25,7 @@ class TipBot::Telegram::WebhookRouter
       update = Telegram::Bot::Types::Update.new(data)
       message = update.message
 
-      TipBot::Telegram::Message.call(bot, message)
+      TipBot::Telegram::Request.call(bot, message)
 
       [200, {}, []]
     else

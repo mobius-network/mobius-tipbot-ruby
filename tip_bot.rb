@@ -17,7 +17,7 @@ module TipBot
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end
 
-    autoload :Message,       "./tip_bot/telegram/message"
+    autoload :Request,       "./tip_bot/telegram/request"
     autoload :TipKbMarkup,   "./tip_bot/telegram/tip_kb_markup"
     autoload :WebhookRouter, "./tip_bot/telegram/webhook_router"
   end
