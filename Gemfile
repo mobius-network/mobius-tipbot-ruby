@@ -11,15 +11,15 @@ gem "redis"
 gem "telegram-bot-ruby"
 
 group :development, :test do
-  gem "rubocop", "~> 0.53"
   gem "pry-byebug"
+  gem "rubocop", "~> 0.53"
 end
 
 group :test do
+  gem "redis-namespace", "~> 1.6"
   gem "rspec", "~> 3.0"
   gem "rubocop-rspec", "~> 1.23"
-  gem "webmock", "~> 3.3"
-  gem "redis-namespace", "~> 1.6"
   gem "simplecov", "~> 0.16.1"
   gem "simplecov-console", "~> 0.4.2"
+  gem "webmock", "~> 3.3"
 end
