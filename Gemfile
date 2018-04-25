@@ -13,3 +13,7 @@ gem "telegram-bot-ruby"
 group :development do
   gem "rubocop"
 end
+
+group :test do
+  gem "rspec"
+end
