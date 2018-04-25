@@ -206,8 +206,8 @@ DEPENDENCIES
   rspec (~> 3.0)
   rubocop (~> 0.53)
   rubocop-rspec (~> 1.23)
-  simplecov
-  simplecov-console
+  simplecov (~> 0.16.1)
+  simplecov-console (~> 0.4.2)
   telegram-bot-ruby
   webmock (~> 3.3)
 
