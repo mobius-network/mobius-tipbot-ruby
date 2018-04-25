@@ -5,8 +5,6 @@ require "redis-namespace"
 require "mobius/client"
 
 module TipBot
-  REDIS_KEY = "mobius:tipbot".freeze
-
   autoload :User,       "./tip_bot/user"
   autoload :TipMessage, "./tip_bot/tip_message"
 

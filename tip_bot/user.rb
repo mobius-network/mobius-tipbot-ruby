@@ -42,6 +42,6 @@ class TipBot::User
     TipBot.redis.hincrbyfloat(REDIS_BALANCE_KEY, nickname, value)
   end
 
-  REDIS_ADDRESS_KEY = "#{TipBot::REDIS_KEY}:address".freeze
-  REDIS_BALANCE_KEY = "#{TipBot::REDIS_KEY}:balance".freeze
+  REDIS_ADDRESS_KEY = "address".freeze
+  REDIS_BALANCE_KEY = "balance".freeze
 end
