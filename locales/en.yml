@@ -21,12 +21,12 @@ en:
 
           Reply any message with /tip command to create tip menu!
       balance:
-        linked: "Your do not have any awaiting tips, all tips are instantly sent to %{address}!"
+        linked: "You do not have any awaiting tips, all tips are instantly sent to %{address}!"
         value: "Your balance awaiting for withdraw is %{balance}, use /withdraw <address> to get your tips!"
       tip:
-        insufficient_funds: "TipBot have not sufficient balance to send tips!"
+        insufficient_funds: "TipBot has not sufficient balance to send tips!"
         error: "Error sending tip!"
-        can_not_tip_twice: "You can not tip twice the same message!"
+        can_not_tip_twice: "You cannot tip twice the same message!"
       withdraw:
         address_missing: "Provide target address to withdraw!"
         done: "Your tips has been successfully withdrawn to %{address}!"
@@ -35,7 +35,7 @@ en:
     kb_value: "%{value} tips"
     tip:
       heading: "@%{username} highly appreciates this message. Tip it! %{amount} tips collected so far."
-      tip: "Tip this geneleman! (%{count})"
+      tip: "Tip this gentleman! (%{count})"
       skip: "It does not worth it!"
 
   slack:

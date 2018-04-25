@@ -54,7 +54,7 @@ class TipBot::Telegram::Message
 
   def withdraw
     return unless direct_message?
-    address = text.split(" ").last
+    address = text.split(" ")[1]
     bot.api.send_message(chat_id: from.id, text: withdraw_reply(address))
   end
 
