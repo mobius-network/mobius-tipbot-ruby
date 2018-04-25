@@ -15,6 +15,6 @@ RSpec.describe TipBot::User do
     TipBot.redis.hset("#{TipBot::REDIS_KEY}:address", nickname, "addr")
     expect(dapp).to receive(:pay).with(rate, target_address: "addr").and_return(true)
     user.tip
-    expect(user.balance).to eq(rate)
+    expect(user.balance).to eq(0)
   end
 end
