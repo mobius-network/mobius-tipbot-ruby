@@ -9,6 +9,12 @@ module TipBot
   autoload :TipMessage, "./tip_bot/tip_message"
 
   module Telegram
+    module Command
+      autoload :Base, "./tip_bot/telegram/command/base"
+      autoload :Start, "./tip_bot/telegram/command/start"
+      autoload :Balance, "./tip_bot/telegram/command/balance"
+    end
+
     autoload :Message, "./tip_bot/telegram/message"
     autoload :WebhookRouter, "./tip_bot/telegram/webhook_router"
   end

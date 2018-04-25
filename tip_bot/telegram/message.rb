@@ -13,6 +13,8 @@ class TipBot::Telegram::Message
   param :bot
   param :subject
 
+  # Returns Telegram::Bot::Types::Message for whenever subject
+  # @return [Telegram::Bot::Types::Message] Message object
   def message
     @message ||= subject.is_a?(Telegram::Bot::Types::CallbackQuery) ? subject.message : subject
   end
@@ -29,11 +31,15 @@ class TipBot::Telegram::Message
 
   def dispatch
     case text
-    when "/start" then start
-    when "/balance" then balance
+    when "/start" then command("Start")
+    when "/balance" then command("Balance")
     when "/tip" then show_tip
     when %r(^\/withdraw) then withdraw
     end
+  end
+
+  def command(klass)
+    "TipBot::Telegram::Command::#{klass}".constantize.call(bot, message, subject)
   end
 
   def start

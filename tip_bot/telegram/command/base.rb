@@ -1,0 +1,29 @@
+class TipBot::Telegram::Command::Base
+  extend Dry::Initializer
+  extend ConstructorShortcut[:call]
+  extend Forwardable
+
+  param :bot
+  param :message
+  param :subject
+
+  def_delegators :message, :from, :chat, :text, :message_id
+
+  def call
+    raise NotImplementedError, "Implement command response behaviour in child class"
+  end
+
+  protected
+
+  def t(key, **options)
+    I18n.t(key, { scope: command_scope }.merge(options))
+  end
+
+  def direct_message?
+    from.id == chat.id
+  end
+
+  def command_scope
+    [:telegram, :cmd, self.class.name.split("::").last.downcase]
+  end
+end
