@@ -32,8 +32,8 @@ class TipBot::Telegram::Message
     case text
     when "/start" then command("Start")
     when "/balance" then command("Balance")
-    when "/tip" then show_tip
-    when %r(^\/withdraw) then withdraw
+    when "/tip" then command("TipMenu")
+    when %r(^\/withdraw) then command("Withdraw")
     end
   end
 
@@ -56,19 +56,6 @@ class TipBot::Telegram::Message
     message.reply_to_message.nil? ||
       message.reply_to_message.from.id == from.id ||
       false # from.is_bot DEBUG
-  end
-
-  def tip_kb
-    @tip_kb ||= [
-      Telegram::Bot::Types::InlineKeyboardButton.new(
-        text: t(:tip, :tip, count: tip_message.count), callback_data: "tip"
-      ),
-      Telegram::Bot::Types::InlineKeyboardButton.new(text: t(:tip, :skip), callback_data: "skip")
-    ]
-  end
-
-  def tip_kb_markup
-    @tip_kb_markup ||= Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: tip_kb)
   end
 
   def callback

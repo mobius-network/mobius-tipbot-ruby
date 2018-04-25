@@ -10,12 +10,15 @@ module TipBot
 
   module Telegram
     module Command
-      autoload :Base, "./tip_bot/telegram/command/base"
-      autoload :Start, "./tip_bot/telegram/command/start"
-      autoload :Balance, "./tip_bot/telegram/command/balance"
+      autoload :Balance,  "./tip_bot/telegram/command/balance"
+      autoload :Base,     "./tip_bot/telegram/command/base"
+      autoload :Start,    "./tip_bot/telegram/command/start"
+      autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
+      autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end
 
-    autoload :Message, "./tip_bot/telegram/message"
+    autoload :Message,       "./tip_bot/telegram/message"
+    autoload :TipKbMarkup,   "./tip_bot/telegram/tip_kb_markup"
     autoload :WebhookRouter, "./tip_bot/telegram/webhook_router"
   end
 
