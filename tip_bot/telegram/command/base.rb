@@ -26,4 +26,8 @@ class TipBot::Telegram::Command::Base
   def command_scope
     [:telegram, :cmd, self.class.name.split("::").last.downcase]
   end
+
+  def user
+    @user ||= TipBot::User.new(from.username)
+  end
 end

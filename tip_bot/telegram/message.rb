@@ -19,8 +19,7 @@ class TipBot::Telegram::Message
     @message ||= subject.is_a?(Telegram::Bot::Types::CallbackQuery) ? subject.message : subject
   end
 
-  def_delegators :message, :from, :chat, :text, :message_id
-
+  # Parses message text and calls desired command
   def call
     callback if subject.is_a?(Telegram::Bot::Types::CallbackQuery)
     return unless subject.is_a?(Telegram::Bot::Types::Message)
@@ -40,37 +39,6 @@ class TipBot::Telegram::Message
 
   def command(klass)
     "TipBot::Telegram::Command::#{klass}".constantize.call(bot, message, subject)
-  end
-
-  def start
-    type = chat.id == from.id ? :private : :public
-    text = t(:cmd, :start, type, username: from.username)
-    bot.api.send_message(chat_id: from.id, text: text)
-  end
-
-  def balance
-    return unless direct_message?
-    bot.api.send_message(chat_id: from.id, text: balance_reply)
-  end
-
-  def balance_reply
-    return t(:cmd, :balance, :linked, address: user.address) if user.address
-    t(:cmd, :balance, :value, balance: user.balance)
-  end
-
-  def withdraw
-    return unless direct_message?
-    address = text.split(" ")[1]
-    bot.api.send_message(chat_id: from.id, text: withdraw_reply(address))
-  end
-
-  def withdraw_reply(address)
-    return t(:cmd, :withdraw, :address_missing) if address.nil?
-    return t(:cmd, :withdraw, :nothing) if user.balance.zero?
-    user.withdraw(address)
-    t(:cmd, :withdraw, :done, address: address)
-  rescue Mobius::Client::Error::UnknownKeyPairType
-    t(:cmd, :withdraw, :invalid_address, address: address)
   end
 
   def show_tip
@@ -152,10 +120,6 @@ class TipBot::Telegram::Message
 
   def direct_message?
     from.id == chat.id
-  end
-
-  def user
-    @user ||= TipBot::User.new(from.username)
   end
 
   def tip_message
