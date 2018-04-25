@@ -1,5 +1,5 @@
 # Mobius TipBot
-===============
+========================
 
 Easily transfer small amount of MOBI between team members of your Telegram group.
 
