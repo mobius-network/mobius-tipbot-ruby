@@ -13,6 +13,7 @@ module TipBot
       autoload :Balance,  "./tip_bot/telegram/command/balance"
       autoload :Base,     "./tip_bot/telegram/command/base"
       autoload :Start,    "./tip_bot/telegram/command/start"
+      autoload :Tip,      "./tip_bot/telegram/command/tip"
       autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end
