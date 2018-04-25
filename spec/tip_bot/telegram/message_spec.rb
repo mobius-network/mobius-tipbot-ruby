@@ -76,7 +76,7 @@ RSpec.describe TipBot::Telegram::Message do
                 have_received(:send_message)
                 .with(
                   chat_id: message.from.id,
-                  text: match(/balance awaiting for withdraw/),
+                  text: match(/balance awaiting for withdraw/)
                 )
             end
           end
@@ -91,7 +91,7 @@ RSpec.describe TipBot::Telegram::Message do
             from: { id: 123, username: "john_doe" },
             chat: { id: 321 },
             reply_to_message: Telegram::Bot::Types::Message.new(
-              from: { id: 653, username: "jack_black" },
+              from: { id: 653, username: "jack_black" }
             )
           }
         end
@@ -117,7 +117,7 @@ RSpec.describe TipBot::Telegram::Message do
                 chat_id: message.from.id,
                 text: /\@#{message.reply_to_message.from.username} highly appreciates/,
                 reply_to_message_id: message.message_id,
-                reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup),
+                reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
               )
           end
         end
@@ -149,7 +149,6 @@ RSpec.describe TipBot::Telegram::Message do
                 have_received(:send_message)
                 .with(chat_id: message.from.id, text: /Provide target address to withdraw!/)
             end
-            
           end
 
           context "when address is provided" do
@@ -158,7 +157,7 @@ RSpec.describe TipBot::Telegram::Message do
 
             context "when user's balance is zero" do
               before { allow_any_instance_of(TipBot::User).to receive(:balance).and_return(0) }
-              
+
               it "warns about empty balance" do
                 subject.call
                 expect(bot.api).to \
@@ -187,7 +186,7 @@ RSpec.describe TipBot::Telegram::Message do
               context "when address is invalid" do
                 it "sends error message" do
                   allow_any_instance_of(TipBot::User).to \
-                    receive(:withdraw).and_raise(Mobius::Client::Error::UnknownKeyPairType) 
+                    receive(:withdraw).and_raise(Mobius::Client::Error::UnknownKeyPairType)
 
                   subject.call
                   expect(bot.api).to \
