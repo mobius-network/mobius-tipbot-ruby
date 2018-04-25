@@ -33,7 +33,7 @@ Easily transfer small amount of MOBI between team members of your Telegram group
 
 ## Usage
 
-Add TipBot to your Telegram group.
+Add TipBot to your Telegram group. It *must* be supergroup.
 
 TipBot supports following commands:
 * `/tip` - reply to any message in your chat. This will display keyboard and current tip stats.
