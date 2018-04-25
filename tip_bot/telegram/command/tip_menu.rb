@@ -5,7 +5,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
       chat_id: chat.id,
       text: tip_heading,
       reply_to_message_id: message_id,
-      reply_markup: TipBot::Telegram::TipKbMarkup.call
+      reply_markup: TipBot::Telegram::TipKbMarkup.call(0)
     )
   end
 

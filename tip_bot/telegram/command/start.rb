@@ -1,7 +1,7 @@
-class TipBot::Telegram::Command::Start
+class TipBot::Telegram::Command::Start < TipBot::Telegram::Command::Base
   def call
     type = direct_message? ? :private : :public
-    text = t(:"start.#{type}", username: from.username)
+    text = t(type, username: from.username)
     bot.api.send_message(chat_id: from.id, text: text)
   end
 end

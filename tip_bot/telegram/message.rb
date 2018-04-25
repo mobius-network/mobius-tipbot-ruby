@@ -1,5 +1,4 @@
 # Telegram message processor
-# rubocop:disable Metrics/ClassLength
 # TODO: Refator #t, split to shorter classes
 class TipBot::Telegram::Message
   extend Dry::Initializer
@@ -29,7 +28,7 @@ class TipBot::Telegram::Message
   private
 
   def dispatch
-    case text
+    case message.text
     when "/start" then command("Start")
     when "/balance" then command("Balance")
     when "/tip" then command("TipMenu")

@@ -32,7 +32,6 @@ en:
         done: "Your tips has been successfully withdrawn to %{address}!"
         invalid_address: "Invalid target address: %{address}!"
         nothing: "Nothing to withdraw!"
-    kb_value: "%{value} tips"
     tip:
       heading: "@%{username} highly appreciates this message. Tip it! %{amount} tips collected so far."
       tip: "Tip this gentleman! (%{count})"
