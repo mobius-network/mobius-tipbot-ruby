@@ -19,6 +19,6 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   end
 
   def tip_heading
-    t(:heading, username: message.reply_to_message.from.username, amount: 0, scope: %i(telegram tip))
+    t(:heading, username: message.from.username, amount: 0, scope: %i(telegram tip))
   end
 end
