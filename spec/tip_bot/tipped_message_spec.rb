@@ -1,4 +1,4 @@
-RSpec.describe TipBot::TipMessage do
+RSpec.describe TipBot::TippedMessage do
   subject { described_class.new(123) }
 
   # Although we don't test `tip` method explicitly here,

@@ -13,7 +13,7 @@ RSpec.describe TipBot::Telegram::Command::Tip do
   let(:subj) do
     Telegram::Bot::Types::CallbackQuery.new(id: 11, from: tipper, message: bot_message)
   end
-  let(:tip_message) { TipBot::TipMessage.new(bot_message.message_id) }
+  let(:tip_message) { TipBot::TippedMessage.new(bot_message.message_id) }
 
   before do
     allow(bot).to receive(:api).and_return(double("Telegram::Bot::Api", send_message: nil))
