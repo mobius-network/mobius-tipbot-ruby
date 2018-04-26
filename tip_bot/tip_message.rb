@@ -1,3 +1,4 @@
+# Saves stats for tipped message
 class TipBot::TipMessage
   extend Dry::Initializer
 

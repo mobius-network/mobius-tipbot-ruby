@@ -1,3 +1,4 @@
+# Generates tip menu
 class TipBot::Telegram::TipKbMarkup
   extend Dry::Initializer
   extend ConstructorShortcut[:call]

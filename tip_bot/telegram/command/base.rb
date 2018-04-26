@@ -1,3 +1,4 @@
+# Base command handler
 class TipBot::Telegram::Command::Base
   extend Dry::Initializer
   extend ConstructorShortcut[:call]

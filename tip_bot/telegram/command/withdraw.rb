@@ -1,3 +1,4 @@
+# /withdraw command handler
 class TipBot::Telegram::Command::Withdraw < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?

@@ -11,6 +11,8 @@ AllCops:
 
 Documentation:
   Enabled: true
+  Exclude:
+    - tip_bot.rb
 
 Metrics/LineLength:
   Max: 120
@@ -18,6 +20,7 @@ Metrics/LineLength:
 Naming/FileName:
   Exclude:
     - Gemfile
+    - Rakefile
 
 # RSpec/FilePath:
 #   Enabled: false

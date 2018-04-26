@@ -16,8 +16,8 @@ group :development, :test do
 end
 
 group :development do
-  gem "yard", "~> 0.9", ">= 0.9.12"
   gem "rake", "~> 12.0"
+  gem "yard", "~> 0.9", ">= 0.9.12"
 end
 
 group :test do

@@ -1,3 +1,4 @@
+# /start command handler
 class TipBot::Telegram::Command::Start < TipBot::Telegram::Command::Base
   def call
     type = direct_message? ? :private : :public
