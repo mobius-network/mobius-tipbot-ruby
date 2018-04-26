@@ -91,7 +91,7 @@ GEM
     jwt (1.5.6)
     method_source (0.9.0)
     minitest (5.11.3)
-    mobius-client (0.2.0)
+    mobius-client (0.2.1)
       constructor_shortcut (~> 0.2.0)
       dry-initializer (~> 2.4)
       faraday (~> 0.14)
@@ -208,7 +208,7 @@ DEPENDENCIES
   constructor_shortcut
   dry-initializer
   i18n
-  mobius-client
+  mobius-client (~> 0.2)
   multi_json
   pry-byebug
   rack
