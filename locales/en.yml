@@ -33,7 +33,10 @@ en:
         invalid_address: "Invalid target address: %{address}!"
         nothing: "Nothing to withdraw!"
     tip:
-      heading: "@%{username} highly appreciates this message. Tip it! %{amount} tips collected so far."
+      heading:
+        one: "%{usernames} highly appreciates this message. Tip it! %{amount} tips collected so far."
+        other: "%{usernames} highly appreciate this message. Tip it! %{amount} tips collected so far."
+      heading_for_many_tippers: "%{usernames} and %{more} others highly appreciate this message. Tip it! %{amount} tips collected so far."
       tip: "Tip this gentleman! (%{count})"
       skip: "It does not worth it!"
 
