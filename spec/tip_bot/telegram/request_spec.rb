@@ -9,14 +9,18 @@ RSpec.describe TipBot::Telegram::Request do
     allow(TipBot).to receive(:dapp).and_return(double("Mobius::Client::App", transfer: nil))
   end
 
+  RSpec.shared_examples "not triggering API" do
+    it "doesn't trigger API" do
+      subject.call
+      expect(bot.api).not_to have_received(:send_message)
+    end
+  end
+
   describe "#call" do
     context "when subject is neither message, nor callback" do
       let(:message) { Object.new }
 
-      it "doesn't trigger API" do
-        subject.call
-        expect(bot.api).not_to have_received(:send_message)
-      end
+      include_examples "not triggering API"
     end
 
     context "when subject is message" do
@@ -41,10 +45,7 @@ RSpec.describe TipBot::Telegram::Request do
             { text: "/balance", from: { id: 123, username: "john_doe" }, chat: { id: 312 } }
           end
 
-          it "does nothing" do
-            subject.call
-            expect(bot.api).not_to have_received(:send_message)
-          end
+          include_examples "not triggering API"
         end
 
         context "when direct message" do
@@ -81,13 +82,6 @@ RSpec.describe TipBot::Telegram::Request do
                 )
             end
           end
-        end
-      end
-
-      RSpec.shared_examples "not triggering API" do
-        it "doesn't trigger API" do
-          subject.call
-          expect(bot.api).not_to have_received(:send_message)
         end
       end
 
@@ -156,10 +150,7 @@ RSpec.describe TipBot::Telegram::Request do
             { text: "/withdraw an38f", from: { id: 123, username: "john_doe" }, chat: { id: 312 } }
           end
 
-          it "does nothing" do
-            subject.call
-            expect(bot.api).not_to have_received(:send_message)
-          end
+          include_examples "not triggering API"
         end
 
         context "when direct message" do
