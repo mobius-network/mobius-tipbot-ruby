@@ -13,6 +13,7 @@ gem "telegram-bot-ruby"
 group :development, :test do
   gem "pry-byebug"
   gem "rubocop", "~> 0.53"
+  gem "bundle-audit"
 end
 
 group :development do
