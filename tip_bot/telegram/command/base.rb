@@ -28,7 +28,11 @@ class TipBot::Telegram::Command::Base
     [:telegram, :cmd, self.class.name.split("::").last.downcase]
   end
 
+  def username
+    from.username
+  end
+
   def user
-    @user ||= TipBot::User.new(from.username)
+    @user ||= TipBot::User.new(username)
   end
 end
