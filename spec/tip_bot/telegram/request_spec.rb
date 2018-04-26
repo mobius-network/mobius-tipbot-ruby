@@ -128,17 +128,15 @@ RSpec.describe TipBot::Telegram::Request do
         end
 
         context "when tipping is allowed" do
-          let(:tip_not_allowed) { false }
-
-          xit "sends proper message to Telegram API" do
+          it "sends proper message to Telegram API" do
             subject.call
             expect(bot.api).to \
               have_received(:send_message)
               .with(
-                chat_id: message.from.id,
-                text: /\@#{message.reply_to_message.from.username} highly appreciates/,
-                reply_to_message_id: message.message_id,
-                reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
+                chat_id: message.chat.id,
+                text: match(/\@#{message.from.username} highly appreciates/),
+                reply_to_message_id: message.reply_to_message.message_id,
+                reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup),
               )
           end
         end
