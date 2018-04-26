@@ -24,6 +24,10 @@ class TipBot::Telegram::Command::Base
     from.id == chat.id
   end
 
+  def empty_username?
+    from.username.nil? || from.username == ""
+  end
+
   def command_scope
     [:telegram, :cmd, self.class.name.split("::").last.downcase]
   end

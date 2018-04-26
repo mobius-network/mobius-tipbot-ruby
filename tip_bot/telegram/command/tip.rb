@@ -2,6 +2,7 @@
 class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   def call
     return can_not_tip_twice if tip_message.tipped?(username)
+    return if empty_username?
 
     user.tip
     tip_message.tip(username)

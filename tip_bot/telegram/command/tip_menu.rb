@@ -20,10 +20,6 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
       empty_username?
   end
 
-  def empty_username?
-    from.username.nil? || from.username == ""
-  end
-
   def tip_heading
     t(:heading, usernames: "@#{message.from.username}", count: 1, amount: 0, scope: %i(telegram tip))
   end
