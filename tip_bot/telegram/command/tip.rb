@@ -2,6 +2,8 @@
 class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   def call
     return can_not_tip_twice if tip_message.tipped?(username)
+    return can_not_tip_yourself if message.reply_to_message.from.id == subject.from.id
+
     return if empty_username?
 
     TipBot::Telegram::Service::TipMessage.call(subject.message.reply_to_message, username)
@@ -21,6 +23,10 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
 
   def can_not_tip_twice
     bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:can_not_tip_twice))
+  end
+
+  def can_not_tip_yourself
+    bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:can_not_tip_yourself))
   end
 
   def update_tip_menu
