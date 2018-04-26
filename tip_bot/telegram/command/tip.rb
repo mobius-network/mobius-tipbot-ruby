@@ -64,10 +64,10 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def tip_message
-    @tip_message ||= TipBot::TippedMessage.new(message_id)
+    @tip_message ||= TipBot::TippedMessage.new(message.reply_to_message.message_id)
   end
 
   def user
-    @user ||= TipBot::User.new(subject.message.reply_to_message.from.username)
+    @user ||= TipBot::User.new(message.reply_to_message.from.username)
   end
 end
