@@ -1,5 +1,6 @@
 RSpec.describe TipBot::Telegram::Request do
   let(:bot) { instance_double("Telegram::Bot::Client") }
+  let(:message_id) { 785 }
 
   subject { described_class.new(bot, message) }
 
@@ -83,26 +84,52 @@ RSpec.describe TipBot::Telegram::Request do
         end
       end
 
+      RSpec.shared_examples "not triggering API" do
+        it "doesn't trigger API" do
+          subject.call
+          expect(bot.api).not_to have_received(:send_message)
+        end
+      end
+
       describe "/tip" do
+        let(:reply_to_message) do
+          Telegram::Bot::Types::Message.new(
+            from: {
+              id: 653,
+              username: "jack_black",
+            },
+          )
+        end
+        let(:from_bot) { false }
+        let(:from) { { id: 123, username: "john_doe", is_bot: from_bot } }
         let(:message_args) do
           {
-            message_id: 785,
+            message_id: message_id,
             text: "/tip",
-            from: { id: 123, username: "john_doe" },
+            from: from,
             chat: { id: 321 },
-            reply_to_message: Telegram::Bot::Types::Message.new(
-              from: { id: 653, username: "jack_black" }
-            )
+            reply_to_message: reply_to_message,
           }
         end
-        before { allow(subject).to receive(:tip_not_allowed?).and_return(tip_not_allowed) }
 
         context "when tipping is not allowed" do
-          let(:tip_not_allowed) { true }
+          context "when message is not a reply" do
+            let(:reply_to_message) { nil }
+            include_examples "not triggering API"
+          end
 
-          it "doesn't trigger API" do
-            subject.call
-            expect(bot.api).not_to have_received(:send_message)
+          context "when message is reply to itself" do
+            let(:reply_to_message) do
+              Telegram::Bot::Types::Message.new(
+                from: { id: from[:id], username: "jack_black" },
+              )
+            end
+            include_examples "not triggering API"
+          end
+
+          context "when message is sent by the bot" do
+            let(:from_bot) { true }
+            include_examples "not triggering API"
           end
         end
 

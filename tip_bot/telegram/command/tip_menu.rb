@@ -16,7 +16,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def tip_not_allowed?
     message.reply_to_message.nil? ||
       message.reply_to_message.from.id == from.id ||
-      false # from.is_bot DEBUG
+      from.is_bot
   end
 
   def tip_heading
