@@ -16,7 +16,12 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def tip_not_allowed?
     message.reply_to_message.nil? ||
       message.reply_to_message.from.id == from.id ||
-      from.is_bot
+      from.is_bot ||
+      empty_username?
+  end
+
+  def empty_username?
+    from.username.nil? || from.username == ""
   end
 
   def tip_heading
