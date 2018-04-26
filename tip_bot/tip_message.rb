@@ -19,20 +19,24 @@ class TipBot::TipMessage
   # @return [Integer] 1 if tip was successful
   def tip(nickname, value = TipBot.tip_rate)
     TipBot.redis.incrbyfloat(redis_balance_key, value)
-    TipBot.redis.sadd(redis_lock_key, nickname)
+    TipBot.redis.zadd(redis_lock_key, count + 1, nickname)
   end
 
   # Returns true if user with given nickname tipped the message already
   # @param nickname [String] user's nickname
   # @return [Boolean]
   def tipped?(nickname)
-    TipBot.redis.sismember(redis_lock_key, nickname)
+    !TipBot.redis.zscore(redis_lock_key, nickname).nil?
   end
 
   # Returns overall tips count for the message
   # @return [Integer] tips count
   def count
-    TipBot.redis.scard(redis_lock_key).to_i
+    TipBot.redis.zcard(redis_lock_key).to_i
+  end
+
+  def all_tippers
+    TipBot.redis.zrange(redis_lock_key, 0, -1)
   end
 
   private

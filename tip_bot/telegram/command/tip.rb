@@ -42,7 +42,25 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def tip_heading
-    t(:heading, username: subject.from.username, amount: tip_message.balance, scope: %i(telegram tip))
+    all_tippers = tip_message.all_tippers.map { |nick| "@#{nick}" }
+
+    if all_tippers.size > 3
+      t(
+        :heading_for_many_tippers,
+        usernames: all_tippers.last(3).join(", "),
+        amount: tip_message.balance,
+        more: all_tippers.size - 3,
+        scope: %i(telegram tip),
+      )
+    else
+      t(
+        :heading,
+        usernames: all_tippers.join(", "),
+        amount: tip_message.balance,
+        count: all_tippers.size,
+        scope: %i(telegram tip),
+      )
+    end
   end
 
   def tip_message
