@@ -10,7 +10,7 @@ class TipBot::TipMessage
   # Returns overall tips sum in currency for the message
   # @return [Float] tips sum
   def balance
-    TipBot.redis.get(redis_balance_key).to_f
+    TipBot.redis.get(key(:balance)).to_f
   end
 
   # Tips the message
@@ -18,38 +18,32 @@ class TipBot::TipMessage
   # @param value [Numeric] tip's value
   # @return [Integer] 1 if tip was successful
   def tip(nickname, value = TipBot.tip_rate)
-    TipBot.redis.incrbyfloat(redis_balance_key, value)
-    TipBot.redis.zadd(redis_lock_key, count + 1, nickname)
+    TipBot.redis.incrbyfloat(key(:balance), value)
+    TipBot.redis.zadd(key(:lock), count + 1, nickname)
   end
 
   # Returns true if user with given nickname tipped the message already
   # @param nickname [String] user's nickname
   # @return [Boolean]
   def tipped?(nickname)
-    !TipBot.redis.zscore(redis_lock_key, nickname).nil?
+    !TipBot.redis.zscore(key(:lock), nickname).nil?
   end
 
   # Returns overall tips count for the message
   # @return [Integer] tips count
   def count
-    TipBot.redis.zcard(redis_lock_key).to_i
+    TipBot.redis.zcard(key(:lock)).to_i
   end
 
   def all_tippers
-    TipBot.redis.zrange(redis_lock_key, 0, -1)
+    TipBot.redis.zrange(key(:lock), 0, -1)
   end
 
   private
 
-  def redis_balance_key
-    "#{REDIS_BALANCE_KEY}:#{message_id}".freeze
-  end
-
-  def redis_lock_key
-    "#{REDIS_LOCK_KEY}:#{message_id}".freeze
+  def key(scope)
+    "#{BASE_KEY}:#{scope}:#{message_id}".freeze
   end
 
   BASE_KEY = "message".freeze
-  REDIS_BALANCE_KEY = "#{BASE_KEY}:balance".freeze
-  REDIS_LOCK_KEY = "#{BASE_KEY}:lock".freeze
 end
