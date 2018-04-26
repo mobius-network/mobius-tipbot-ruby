@@ -31,6 +31,8 @@ en:
         address_missing: "Provide target address to withdraw!"
         done: "Your tips has been successfully withdrawn to %{address}!"
         invalid_address: "Invalid target address: %{address}!"
+        account_missing: "Target address is missing on Stellar network: %{address}! Check if you're confused with testnet/pubnet addresses."
+        trustline_missing: "Target address %{address} has no trustline for %{code} (issued by %{issuer})! You can add it using Stellar laboratory."
         nothing: "Nothing to withdraw!"
     tip:
       heading:
