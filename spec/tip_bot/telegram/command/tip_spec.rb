@@ -1,14 +1,19 @@
 RSpec.describe TipBot::Telegram::Command::Tip do
   let(:bot) { instance_double("Telegram::Bot::Client") }
   let(:message_args) do
-    { text: "Cool remark", from: { id: 562, username: "jack_black" }, chat: { id: 312 } }
+    {
+      text: "Cool remark",
+      from: { id: 562, username: "jack_black" },
+      chat: { id: 312 },
+      reply_to_message: Telegram::Bot::Types::Message.new(from: { id: 235, username: "frank_sinatra" })
+    }
   end
-  let(:message_to_tip) { Telegram::Bot::Types::Message.new(message_args) }
+  let(:bot_message) { Telegram::Bot::Types::Message.new(message_args) }
   let(:tipper) { { id: 123, username: "john_doe" } }
   let(:subj) do
-    Telegram::Bot::Types::CallbackQuery.new(id: 11, from: tipper, message: message_to_tip)
+    Telegram::Bot::Types::CallbackQuery.new(id: 11, from: tipper, message: bot_message)
   end
-  let(:tip_message) { TipBot::TipMessage.new(message_to_tip.message_id) }
+  let(:tip_message) { TipBot::TipMessage.new(bot_message.message_id) }
 
   before do
     allow(bot).to receive(:api).and_return(double("Telegram::Bot::Api", send_message: nil))
@@ -37,8 +42,8 @@ RSpec.describe TipBot::Telegram::Command::Tip do
 
           it "shows both nicknames in bot's message" do
             expect(bot.api).to receive(:edit_message_text).with(
-              message_id: message_to_tip.message_id,
-              chat_id: message_to_tip.chat.id,
+              message_id: bot_message.message_id,
+              chat_id: bot_message.chat.id,
               text: match(/\@peter_parker, \@#{tipper[:username]} highly appreciate this message/),
               reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup),
             )
@@ -57,8 +62,8 @@ RSpec.describe TipBot::Telegram::Command::Tip do
 
           it "shows only last 3 tippers nicknames in bot's message" do
             expect(bot.api).to receive(:edit_message_text).with(
-              message_id: message_to_tip.message_id,
-              chat_id: message_to_tip.chat.id,
+              message_id: bot_message.message_id,
+              chat_id: bot_message.chat.id,
               text: match(/\@robert_plant, \@tony_iommi, \@#{tipper[:username]} and 3 others highly appreciate this message/),
               reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup),
             )
