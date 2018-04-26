@@ -6,7 +6,7 @@ require "mobius/client"
 
 module TipBot
   autoload :User,       "./tip_bot/user"
-  autoload :TipMessage, "./tip_bot/tip_message"
+  autoload :TippedMessage, "./tip_bot/tipped_message"
 
   module Telegram
     module Command
@@ -16,6 +16,10 @@ module TipBot
       autoload :Tip,      "./tip_bot/telegram/command/tip"
       autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
+    end
+
+    module Service
+      autoload :TipMessage, "./tip_bot/telegram/service/tip_message"
     end
 
     autoload :Request,       "./tip_bot/telegram/request"

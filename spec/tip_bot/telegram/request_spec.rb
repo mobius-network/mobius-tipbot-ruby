@@ -6,7 +6,7 @@ RSpec.describe TipBot::Telegram::Request do
 
   before do
     allow(bot).to receive(:api).and_return(double("Telegram::Bot::Api", send_message: nil))
-    allow(TipBot).to receive(:dapp).and_return(double("Mobius::Client::App", transfer: nil))
+    allow(TipBot).to receive(:dapp).and_return(double("Mobius::Client::App", transfer: nil, pay: nil))
   end
 
   RSpec.shared_examples "not triggering API" do
@@ -128,8 +128,13 @@ RSpec.describe TipBot::Telegram::Request do
         end
 
         context "when tipping is allowed" do
+          before { subject.call }
+
+          it "automatically tips message once" do
+            expect(TipBot::TippedMessage.new(reply_to_message.message_id).count).to eq(1)
+          end
+
           it "sends proper message to Telegram API" do
-            subject.call
             expect(bot.api).to \
               have_received(:send_message)
               .with(
@@ -214,9 +219,6 @@ RSpec.describe TipBot::Telegram::Request do
           end
         end
       end
-    end
-
-    context "when subject is callback" do
     end
   end
 end

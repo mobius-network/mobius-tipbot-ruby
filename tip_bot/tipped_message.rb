@@ -1,5 +1,5 @@
 # Saves stats for tipped message
-class TipBot::TipMessage
+class TipBot::TippedMessage
   extend Dry::Initializer
 
   # @!method initialize

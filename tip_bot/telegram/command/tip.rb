@@ -4,8 +4,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
     return can_not_tip_twice if tip_message.tipped?(username)
     return if empty_username?
 
-    user.tip
-    tip_message.tip(username)
+    TipBot::Telegram::Service::TipMessage.call(subject.message.reply_to_message, username)
 
     update_tip_menu
   rescue Mobius::Client::Error::InsufficientFunds
@@ -65,7 +64,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def tip_message
-    @tip_message ||= TipBot::TipMessage.new(message_id)
+    @tip_message ||= TipBot::TippedMessage.new(message_id)
   end
 
   def user
