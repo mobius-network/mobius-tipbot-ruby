@@ -5,7 +5,10 @@ RSpec.describe TipBot::Telegram::Command::Tip do
       text: "Cool remark",
       from: { id: 562, username: "jack_black" },
       chat: { id: 312 },
-      reply_to_message: Telegram::Bot::Types::Message.new(from: { id: 235, username: "frank_sinatra" })
+      reply_to_message: Telegram::Bot::Types::Message.new(
+        from: { id: 235, username: "frank_sinatra" },
+        chat: { id: 312 }
+      )
     }
   end
   let(:bot_message) { Telegram::Bot::Types::Message.new(message_args) }
@@ -13,7 +16,7 @@ RSpec.describe TipBot::Telegram::Command::Tip do
   let(:subj) do
     Telegram::Bot::Types::CallbackQuery.new(id: 11, from: tipper, message: bot_message)
   end
-  let(:tip_message) { TipBot::TippedMessage.new(bot_message.message_id) }
+  let(:tip_message) { TipBot::TippedMessage.new(bot_message) }
   let(:user) { TipBot::User.new(tipper[:username]) }
 
   before do

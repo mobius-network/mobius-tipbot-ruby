@@ -1,5 +1,12 @@
 RSpec.describe TipBot::TippedMessage do
-  subject { described_class.new(123) }
+  subject do
+    described_class.new(
+      Telegram::Bot::Types::Message.new(
+        message_id: 123,
+        chat: { id: 324 },
+      ),
+    )
+  end
 
   # Although we don't test `tip` method explicitly here,
   # it will be in fact tested through other methods' specs

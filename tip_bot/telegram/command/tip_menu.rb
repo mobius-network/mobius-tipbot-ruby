@@ -19,9 +19,9 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def tip_not_allowed?
     reply_to_message.nil? ||
       reply_to_message.from.id == from.id ||
+      tipped_message.tipped?(username) ||
       from.is_bot ||
-      empty_username? ||
-      tipped_message.tipped?(username)
+      empty_username?
   end
 
   def tip_heading
@@ -35,6 +35,6 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   end
 
   def tipped_message
-    @tipped_message ||= TipBot::TippedMessage.new(reply_to_message.message_id)
+    @tipped_message ||= TipBot::TippedMessage.new(reply_to_message)
   end
 end

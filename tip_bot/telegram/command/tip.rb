@@ -91,7 +91,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def tipped_message
-    @tipped_message ||= TipBot::TippedMessage.new(message.reply_to_message.message_id)
+    @tipped_message ||= TipBot::TippedMessage.new(message.reply_to_message)
   end
 
   def user
