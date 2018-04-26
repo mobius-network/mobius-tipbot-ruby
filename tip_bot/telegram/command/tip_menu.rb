@@ -1,5 +1,4 @@
 # /tip command handler
-require "pry-byebug"
 class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def call
     return if tip_not_allowed?
