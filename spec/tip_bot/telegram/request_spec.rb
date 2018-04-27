@@ -90,8 +90,8 @@ RSpec.describe TipBot::Telegram::Request do
           Telegram::Bot::Types::Message.new(
             from: {
               id: 653,
-              username: "jack_black",
-            },
+              username: "jack_black"
+            }
           )
         end
         let(:from_bot) { false }
@@ -102,7 +102,7 @@ RSpec.describe TipBot::Telegram::Request do
             text: "/tip",
             from: from,
             chat: { id: 321 },
-            reply_to_message: reply_to_message,
+            reply_to_message: reply_to_message
           }
         end
 
@@ -115,7 +115,7 @@ RSpec.describe TipBot::Telegram::Request do
           context "when message is reply to itself" do
             let(:reply_to_message) do
               Telegram::Bot::Types::Message.new(
-                from: { id: from[:id], username: "jack_black" },
+                from: { id: from[:id], username: "jack_black" }
               )
             end
             include_examples "not triggering API"
@@ -141,7 +141,7 @@ RSpec.describe TipBot::Telegram::Request do
                 chat_id: message.chat.id,
                 text: match(/\@#{message.from.username} highly appreciates/),
                 reply_to_message_id: message.reply_to_message.message_id,
-                reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup),
+                reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
               )
           end
         end

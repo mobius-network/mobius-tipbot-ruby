@@ -45,7 +45,7 @@ RSpec.describe TipBot::Telegram::Command::Tip do
               message_id: bot_message.message_id,
               chat_id: bot_message.chat.id,
               text: match(/\@peter_parker, \@#{tipper[:username]} highly appreciate this message/),
-              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup),
+              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
             )
             subject.call
           end
@@ -64,8 +64,10 @@ RSpec.describe TipBot::Telegram::Command::Tip do
             expect(bot.api).to receive(:edit_message_text).with(
               message_id: bot_message.message_id,
               chat_id: bot_message.chat.id,
-              text: match(/\@robert_plant, \@tony_iommi, \@#{tipper[:username]} and 3 others highly appreciate this message/),
-              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup),
+              text: match(
+                /\@robert_plant, \@tony_iommi, \@#{tipper[:username]} and 3 others highly appreciate this message/
+              ),
+              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
             )
             subject.call
           end

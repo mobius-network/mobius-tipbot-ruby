@@ -5,7 +5,7 @@ require "redis-namespace"
 require "mobius/client"
 
 module TipBot
-  autoload :User,       "./tip_bot/user"
+  autoload :User,          "./tip_bot/user"
   autoload :TippedMessage, "./tip_bot/tipped_message"
 
   module Telegram

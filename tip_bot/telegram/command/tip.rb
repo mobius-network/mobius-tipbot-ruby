@@ -56,7 +56,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
         usernames: all_tippers.last(3).join(", "),
         amount: tip_message.balance,
         more: all_tippers.size - 3,
-        scope: %i(telegram tip),
+        scope: %i(telegram tip)
       )
     else
       t(
@@ -64,7 +64,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
         usernames: all_tippers.join(", "),
         amount: tip_message.balance,
         count: all_tippers.size,
-        scope: %i(telegram tip),
+        scope: %i(telegram tip)
       )
     end
   end

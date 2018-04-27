@@ -30,7 +30,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
       usernames: "@#{message.from.username}",
       count: 1,
       amount: tipped_message.balance,
-      scope: %i(telegram tip),
+      scope: %i(telegram tip)
     )
   end
 
