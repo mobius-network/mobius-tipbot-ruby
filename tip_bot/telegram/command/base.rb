@@ -8,7 +8,9 @@ class TipBot::Telegram::Command::Base
   param :message
   param :subject
 
-  def_delegators :message, :from, :chat, :text, :message_id
+  def_delegators :message, :from, :chat, :text, :message_id, :reply_to_message
+  def_delegator :from, :username
+  def_delegator :bot, :api
 
   def call
     raise NotImplementedError, "Implement command response behaviour in child class"
@@ -30,10 +32,6 @@ class TipBot::Telegram::Command::Base
 
   def command_scope
     [:telegram, :cmd, self.class.name.split("::").last.downcase]
-  end
-
-  def username
-    from.username
   end
 
   def user

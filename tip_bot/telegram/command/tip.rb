@@ -1,7 +1,7 @@
 # Tip button press handler
 class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   def call
-    return can_not_tip_twice if tip_message.tipped?(username)
+    return can_not_tip_twice if tipped_message.tipped?(username)
     return can_not_tip_yourself if message.reply_to_message.from.id == subject.from.id
 
     return if empty_username?
@@ -34,7 +34,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
       message_id: message_id,
       chat_id: chat.id,
       text: tip_heading,
-      reply_markup: TipBot::Telegram::TipKbMarkup.call(tip_message.count)
+      reply_markup: TipBot::Telegram::TipKbMarkup.call(tipped_message.count)
     )
   end
 
@@ -48,13 +48,13 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def tip_heading
-    all_tippers = tip_message.all_tippers.map { |nick| "@#{nick}" }
+    all_tippers = tipped_message.all_tippers.map { |nick| "@#{nick}" }
 
     if all_tippers.size > 3
       t(
         :heading_for_many_tippers,
         usernames: all_tippers.last(3).join(", "),
-        amount: tip_message.balance,
+        amount: tipped_message.balance,
         more: all_tippers.size - 3,
         scope: %i(telegram tip)
       )
@@ -62,15 +62,15 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
       t(
         :heading,
         usernames: all_tippers.join(", "),
-        amount: tip_message.balance,
+        amount: tipped_message.balance,
         count: all_tippers.size,
         scope: %i(telegram tip)
       )
     end
   end
 
-  def tip_message
-    @tip_message ||= TipBot::TippedMessage.new(message.reply_to_message.message_id)
+  def tipped_message
+    @tipped_message ||= TipBot::TippedMessage.new(message.reply_to_message.message_id)
   end
 
   def user
