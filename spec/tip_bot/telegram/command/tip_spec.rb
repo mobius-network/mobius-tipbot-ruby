@@ -14,6 +14,7 @@ RSpec.describe TipBot::Telegram::Command::Tip do
     Telegram::Bot::Types::CallbackQuery.new(id: 11, from: tipper, message: bot_message)
   end
   let(:tip_message) { TipBot::TippedMessage.new(bot_message.message_id) }
+  let(:user) { TipBot::User.new(tipper[:username]) }
 
   before do
     allow(bot).to receive(:api).and_return(double("Telegram::Bot::Api", send_message: nil))
@@ -30,6 +31,18 @@ RSpec.describe TipBot::Telegram::Command::Tip do
         expect(bot.api).to \
           receive(:answer_callback_query)
           .with(callback_query_id: subj.id, text: "You cannot tip twice the same message!")
+
+        subject.call
+      end
+    end
+
+    context "when user has already tipped some message within lock period" do
+      before { user.lock }
+
+      it "renders error message" do
+        expect(bot.api).to \
+          receive(:answer_callback_query)
+          .with(callback_query_id: subj.id, text: "You can not tip twice within an hour!")
 
         subject.call
       end

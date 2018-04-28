@@ -28,6 +28,7 @@ en:
         error: "Error sending tip!"
         can_not_tip_twice: "You cannot tip twice the same message!"
         can_not_tip_yourself: "You cannot tip your own message!"
+        can_not_tip_often: "You can not tip twice within an hour!"
       withdraw:
         address_missing: "Provide target address to withdraw!"
         done: "Your tips has been successfully withdrawn to %{address}!"

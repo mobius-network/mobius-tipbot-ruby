@@ -3,10 +3,10 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   def call
     return can_not_tip_twice if already_tipped?
     return can_not_tip_yourself if himself?
+    return can_not_tip_often if locked?
     return if empty_username?
 
-    call_tip_message
-
+    call_tip_message_and_lock
     update_tip_menu
   rescue Mobius::Client::Error::InsufficientFunds
     error_insufficient_funds
@@ -18,6 +18,10 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
 
   def username
     subject.from.username
+  end
+
+  def locked?
+    tipper_user.locked?
   end
 
   def himself?
@@ -34,6 +38,10 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
 
   def can_not_tip_yourself
     bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:can_not_tip_yourself))
+  end
+
+  def can_not_tip_often
+    bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:can_not_tip_often))
   end
 
   def update_tip_menu
@@ -90,7 +98,12 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
     @user ||= TipBot::User.new(message.reply_to_message.from.username)
   end
 
-  def call_tip_message
+  def tipper_user
+    @tipper_user ||= TipBot::User.new(username)
+  end
+
+  def call_tip_message_and_lock
     TipBot::Telegram::Service::TipMessage.call(subject.message.reply_to_message, username)
+    tipper_user.lock
   end
 end
