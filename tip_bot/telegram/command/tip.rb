@@ -104,6 +104,5 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
 
   def call_tip_message_and_lock
     TipBot::Telegram::Service::TipMessage.call(subject.message.reply_to_message, username)
-    tipper_user.lock
   end
 end

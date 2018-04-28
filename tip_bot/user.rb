@@ -38,7 +38,7 @@ class TipBot::User
 
   # Blocks user from sending tips for period
   def lock
-    TipBot.redis.set(redis_lock_key, true, nx: true, expire: LOCK_DURATION)
+    TipBot.redis.set(redis_lock_key, true, nx: true, ex: LOCK_DURATION)
   end
 
   # Returns true if user is not allowed to send tips.
