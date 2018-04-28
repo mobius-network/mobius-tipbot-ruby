@@ -6,7 +6,7 @@ class TipBot::Telegram::Service::TipMessage
     def call(message, tipper)
       user = TipBot::User.new(message.from.username)
       (user.tip && user.lock) unless user.locked?
-      TipBot::TippedMessage.new(message.message_id).tip(tipper)
+      TipBot::TippedMessage.new(message).tip(tipper)
     end
   end
 end

@@ -3,9 +3,9 @@ class TipBot::TippedMessage
   extend Dry::Initializer
 
   # @!method initialize
-  # @param message_id [Integer] Telegram message id
+  # @param message [Telegram::Bot::Types::Message] Telegram message object
   # @!scope instance
-  param :message_id
+  param :message
 
   # Returns overall tips sum in currency for the message
   # @return [Float] tips sum
@@ -42,7 +42,7 @@ class TipBot::TippedMessage
   private
 
   def key(scope)
-    "#{BASE_KEY}:#{scope}:#{message_id}".freeze
+    "#{BASE_KEY}:#{scope}:chat:#{message.chat.id}:#{message.message_id}".freeze
   end
 
   BASE_KEY = "message".freeze

@@ -90,8 +90,9 @@ RSpec.describe TipBot::Telegram::Request do
           Telegram::Bot::Types::Message.new(
             from: {
               id: 653,
-              username: "jack_black"
-            }
+              username: "jack_black",
+            },
+            chat: { id: 321 },
           )
         end
         let(:from_bot) { false }
@@ -115,7 +116,8 @@ RSpec.describe TipBot::Telegram::Request do
           context "when message is reply to itself" do
             let(:reply_to_message) do
               Telegram::Bot::Types::Message.new(
-                from: { id: from[:id], username: "jack_black" }
+                from: { id: from[:id], username: "jack_black" },
+                chat: { id: 321 },
               )
             end
             include_examples "not triggering API"
@@ -131,7 +133,7 @@ RSpec.describe TipBot::Telegram::Request do
           before { subject.call }
 
           it "automatically tips message once" do
-            expect(TipBot::TippedMessage.new(reply_to_message.message_id).count).to eq(1)
+            expect(TipBot::TippedMessage.new(reply_to_message).count).to eq(1)
           end
 
           it "sends proper message to Telegram API" do
