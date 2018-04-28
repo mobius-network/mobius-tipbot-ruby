@@ -36,12 +36,29 @@ class TipBot::User
     TipBot.redis.hset(REDIS_BALANCE_KEY, nickname, 0)
   end
 
+  # Blocks user from sending tips for period
+  def lock
+    TipBot.redis.set(redis_lock_key, true, nx: true, expire: LOCK_DURATION)
+  end
+
+  # Returns true if user is not allowed to send tips.
+  # @return [Boolean] true if locked
+  def locked?
+    (TipBot.redis.get(redis_lock_key) && true) || false
+  end
+
   private
 
   def increment(value)
     TipBot.redis.hincrbyfloat(REDIS_BALANCE_KEY, nickname, value)
   end
 
+  def redis_lock_key
+    "#{REDIS_LOCK_KEY}:#{nickname}".freeze
+  end
+
   REDIS_ADDRESS_KEY = "address".freeze
   REDIS_BALANCE_KEY = "balance".freeze
+  REDIS_LOCK_KEY = "lock".freeze
+  LOCK_DURATION = 3600
 end

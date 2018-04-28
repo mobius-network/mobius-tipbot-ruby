@@ -17,4 +17,10 @@ RSpec.describe TipBot::User do
     user.tip
     expect(user.balance).to eq(0)
   end
+
+  it "#lock, #locked?" do
+    expect(user.locked?).to eq(false)
+    user.lock
+    expect(user.locked?).to eq(true)
+  end
 end
