@@ -30,6 +30,10 @@ Easily transfer small amount of MOBI between team members of your Telegram group
    * `MOBIUS_TIPBOT_APP_PRIVATE_KEY` - Private key of TipBot account.
    * `MOBIUS_TIPBOT_RATE` - Tip amount.
    * `MOBIUS_TIPBOT_NETWORK` - "public" or "test", Stellar network to use.
+   * `MOBIUS_TIPBOT_ASSET_CODE` - custom Stellar asset for tips. Should be in Alphanumeric 4-character maximum format. Default is MOBI.
+   * `MOBIUS_TIPBOT_ASSET_ISSUER` - custom Stellar asset issuer address
+
+   **Note** `MOBIUS_TIPBOT_ASSET_CODE` and `MOBIUS_TIPBOT_ASSET_ISSUER` should be provided together. Otherwise defaults will be used silently.
 
 ## Usage
 
@@ -40,9 +44,12 @@ TipBot supports following commands:
 * `/balance` - this will show your tip balance (works in DM only).
 * `/withdraw <address>` - this will send your collected tips to following Stellar address. All following tips will be send directly there, bypassing TipBot account (works in DM only).
 
+### Using custom Stellar assets
+
+TipBot allows you to use custom Stellar asset instead of MOBI for tips. To achieve this set env variables `MOBIUS_TIPBOT_ASSET_CODE` and `MOBIUS_TIPBOT_ASSET_ISSUER`, and don't forget to create trustlines for your asset in source pool account and TipBot account
+
 ## Planned features
 
 * Using accounts provided by users to send tips.
 * Slack support.
-* Custom Stellar assets.
 * Dynamical change of tip rate using special command.

@@ -3,6 +3,7 @@ require "dry-initializer"
 require "constructor_shortcut"
 require "redis-namespace"
 require "mobius/client"
+require "pry-byebug" if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
 
 module TipBot
   autoload :User,          "./tip_bot/user"
@@ -67,13 +68,10 @@ module TipBot
       @tip_rate ||= (ENV["MOBIUS_TIPBOT_RATE"] || 1).to_f
     end
 
-    # Sets up I18n, checks that required variables are present
+    # Sets up I18n and mobius client, then checks that required variables are present
     def configure!
-      I18n.load_path = Dir.glob(File.join(File.dirname(__FILE__), "locales/*.yml"))
-      I18n.locale = ENV["MOBIUS_TIPBOT_LOCALE"] || :en
-
-      Mobius::Client.network = ENV["MOBIUS_TIPBOT_NETWORK"] == "public" ? :public : :test
-
+      configure_i18n
+      configure_mobius_client
       validate!
     end
 
@@ -85,6 +83,26 @@ module TipBot
       raise ArgumentError, I18n.t(:token_missing, i18n_args) if token.nil?
       raise ArgumentError, I18n.t(:redis_missing, i18n_args) if redis.nil?
       raise ArgumentError, I18n.t(:dapp_missing, i18n_args) if dapp.nil?
+    end
+
+    def configure_i18n
+      I18n.load_path = Dir.glob(File.join(File.dirname(__FILE__), "locales/*.yml"))
+      I18n.locale = ENV["MOBIUS_TIPBOT_LOCALE"] || :en
+    end
+
+    def configure_mobius_client
+      Mobius::Client.network = ENV["MOBIUS_TIPBOT_NETWORK"] == "public" ? :public : :test
+      asset_code = ENV["MOBIUS_TIPBOT_ASSET_CODE"]
+      asset_issuer = ENV["MOBIUS_TIPBOT_ASSET_ISSUER"]
+
+      if asset_code.nil? || asset_issuer.nil?
+        return logger.warn(<<~MSG)
+          You should provide both code and issuer, if you want to use custom Stellar asset for tips. Falling back to defaults (MOBI)
+        MSG
+      end
+
+      Mobius::Client.asset_code = asset_code
+      Mobius::Client.asset_issuer = asset_issuer
     end
 
     def build_dapp
