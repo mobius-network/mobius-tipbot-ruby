@@ -3,8 +3,8 @@ RSpec.describe TipBot::TippedMessage do
     described_class.new(
       Telegram::Bot::Types::Message.new(
         message_id: 123,
-        chat: { id: 324 },
-      ),
+        chat: { id: 324 }
+      )
     )
   end
 

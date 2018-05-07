@@ -90,9 +90,9 @@ RSpec.describe TipBot::Telegram::Request do
           Telegram::Bot::Types::Message.new(
             from: {
               id: 653,
-              username: "jack_black",
+              username: "jack_black"
             },
-            chat: { id: 321 },
+            chat: { id: 321 }
           )
         end
         let(:from_bot) { false }
@@ -117,7 +117,7 @@ RSpec.describe TipBot::Telegram::Request do
             let(:reply_to_message) do
               Telegram::Bot::Types::Message.new(
                 from: { id: from[:id], username: "jack_black" },
-                chat: { id: 321 },
+                chat: { id: 321 }
               )
             end
             include_examples "not triggering API"
