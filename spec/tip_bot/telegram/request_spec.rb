@@ -40,48 +40,11 @@ RSpec.describe TipBot::Telegram::Request do
       end
 
       describe "/balance" do
-        context "when not direct message" do
-          let(:message_args) do
-            { text: "/balance", from: { id: 123, username: "john_doe" }, chat: { id: 312 } }
-          end
+        let(:message_args) { { text: "/balance" } }
 
-          include_examples "not triggering API"
-        end
-
-        context "when direct message" do
-          let(:message_args) do
-            { text: "/balance", from: { id: 123, username: "john_doe" }, chat: { id: 123 } }
-          end
-
-          context "when user has Stellar address" do
-            before do
-              allow_any_instance_of(TipBot::User).to \
-                receive(:address).and_return("some_truthy_value")
-            end
-
-            it "sends proper message to Telegram API" do
-              subject.call
-              expect(bot.api).to \
-                have_received(:send_message)
-                .with(chat_id: message.from.id, text: match(/all tips are instantly sent/))
-            end
-          end
-
-          context "when user has no Stellar address" do
-            before do
-              allow_any_instance_of(TipBot::User).to receive(:address).and_return(nil)
-            end
-
-            it "sends proper message to Telegram API" do
-              subject.call
-              expect(bot.api).to \
-                have_received(:send_message)
-                .with(
-                  chat_id: message.from.id,
-                  text: match(/balance awaiting for withdraw/)
-                )
-            end
-          end
+        it "uses Balance command instance" do
+          expect_any_instance_of(TipBot::Telegram::Command::Balance).to receive(:call)
+          subject.call
         end
       end
 
