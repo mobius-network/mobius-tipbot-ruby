@@ -9,17 +9,21 @@ class TipBot::User
   param :nickname
   param :dapp, default: -> { TipBot.dapp }
 
-  # Tips user for given value
-  # @param value [Float] Value in selected currency
-  def tip(value = TipBot.tip_rate)
-    dapp.pay(value, target_address: address)
-    increment(value) unless address
-  end
+  # # Tips user for given value
+  # # @param value [Float] Value in selected currency
+  # def tip(value = TipBot.tip_rate)
+  #   dapp.pay(value, target_address: address)
+  #   increment(value) unless address
+  # end
 
   # Address linked to user
   # @return [String] Stellar address
   def address
     TipBot.redis.hget(REDIS_ADDRESS_KEY, nickname)
+  end
+
+  def address=(address)
+    TipBot.redis.hset(REDIS_ADDRESS_KEY, nickname, address)
   end
 
   # User balance
@@ -32,7 +36,6 @@ class TipBot::User
   # @param address [String] Stellar address
   def withdraw(address)
     dapp.transfer(balance, address)
-    TipBot.redis.hset(REDIS_ADDRESS_KEY, nickname, address)
     TipBot.redis.hset(REDIS_BALANCE_KEY, nickname, 0)
   end
 
@@ -47,11 +50,11 @@ class TipBot::User
     (TipBot.redis.get(redis_lock_key) && true) || false
   end
 
-  private
-
-  def increment(value)
+  def increment_balance(value)
     TipBot.redis.hincrbyfloat(REDIS_BALANCE_KEY, nickname, value)
   end
+
+  private
 
   def redis_lock_key
     "#{REDIS_LOCK_KEY}:#{nickname}".freeze

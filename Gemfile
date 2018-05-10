@@ -27,5 +27,7 @@ group :test do
   gem "rubocop-rspec", "~> 1.23"
   gem "simplecov", "~> 0.16.1"
   gem "simplecov-console", "~> 0.4.2"
+  gem "stellar-sdk", "~> 0.3"
+  gem "vcr", "~> 3.0", ">= 3.0.3"
   gem "webmock", "~> 3.3"
 end
