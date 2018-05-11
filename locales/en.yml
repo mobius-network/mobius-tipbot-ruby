@@ -11,7 +11,7 @@ en:
           /balance will show your earned tips amount.
 
 
-          /withdraw <address> will withdraw accumulated tips to your Stellar account.
+          /withdraw <address> <amount> will withdraw accumulated tips to your Stellar account. Omit amount to withdraw all the tips at once
 
 
           Use http://stellarterm.com to create one if you do not have it yet!
@@ -22,7 +22,7 @@ en:
           Reply any message with /tip command to create tip menu!
       balance:
         linked: "You do not have any awaiting tips, all tips are instantly sent to %{address}!"
-        value: "Your balance awaiting for withdraw is %{balance}, use /withdraw <address> to get your tips!"
+        value: "Your balance awaiting for withdraw is %{balance}, use /withdraw <address> <amount> to get your tips!"
       tip:
         insufficient_funds: "TipBot has not sufficient balance to send tips!"
         error: "Error sending tip!"
@@ -30,18 +30,27 @@ en:
         can_not_tip_yourself: "You cannot tip your own message!"
         can_not_tip_often: "You can not tip twice within an hour!"
       withdraw:
-        address_missing: "Provide target address to withdraw!"
-        done: "Your tips has been successfully withdrawn to %{address}!"
-        invalid_address: "Invalid target address: %{address}!"
+        done: "You have successfully withdrew %{amount} %{asset} to %{address}!"
         account_missing: "Target address is missing on Stellar network: %{address}! Check if you're confused with testnet/pubnet addresses."
+        invalid_address: "Invalid target address: %{address}!"
         trustline_missing: "Target address %{address} has no trustline for %{code} (issued by %{issuer})! You can add it using Stellar laboratory."
         nothing: "Nothing to withdraw!"
+      linkaddress:
+        done: "Address %{address} has been successfully linked to your Telegram account!"
+        address_missing: "Provide target address to link!"
     tip:
       heading:
         one: "%{usernames} highly appreciates this message. Tip it! %{amount} tips collected so far."
         other: "%{usernames} highly appreciate this message. Tip it! %{amount} tips collected so far."
       heading_for_many_tippers: "%{usernames} and %{more} others highly appreciate this message. Tip it! %{amount} tips collected so far."
       tip: "Send tip! (%{count})"
+
+    policies:
+      withdraw_command_validness_policy:
+        address_missing: "Provide target address to withdraw!"
+        insufficient_balance: "Insufficient balance"
+        invalid_amount: "Invalid amount"
+        amount_is_not_positive: "Enter positive amount to withdraw!"
 
   errors:
     token_missing: Provide TipBot token in MOBIUS_TIPBOT_TOKEN

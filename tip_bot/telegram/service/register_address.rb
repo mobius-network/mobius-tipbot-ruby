@@ -1,3 +1,4 @@
+# Register address command
 class TipBot::Telegram::Service::RegisterAddress
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
@@ -9,21 +10,24 @@ class TipBot::Telegram::Service::RegisterAddress
   param :deposit_amount
 
   def call
-    raise NoTrustlineError unless user_stellar_account.trustline_exists?
+    raise NoTrustlineError unless provided_stellar_account.trustline_exists?
 
-    user.address ||= new_random_stellar_account.keypair.address
-
-    transfer_tx.to_envelope.to_xdr(:base64)
+    if user.address.nil?
+      user.address = new_random_stellar_account.keypair.address
+      new_account_tx.to_envelope(new_random_stellar_account.keypair).to_xdr(:base64)
+    else
+      transfer_tx.to_envelope.to_xdr(:base64)
+    end
   end
 
   private
 
   def new_random_stellar_account
-    @new_random_stellar_account ||= Mobius::Client::Blockchain::Account.new(Stellar::KeyPair.random).tap do |acc|
-      Mobius::Client::FriendBot.call(acc.keypair.seed, 0)
-      bot_app_keypair = Mobius::Client.to_keypair(TipBot.dapp.seed)
-      Mobius::Client::Blockchain::AddCosigner.call(acc.keypair, bot_app_keypair)
-    end
+    @new_random_stellar_account ||= Mobius::Client::Blockchain::Account.new(Stellar::KeyPair.random)
+  end
+
+  def bot_app_keypair
+    @bot_app_keypair ||= Mobius::Client.to_keypair(TipBot.dapp.seed)
   end
 
   def provided_stellar_account
@@ -44,15 +48,84 @@ class TipBot::Telegram::Service::RegisterAddress
     @user ||= TipBot::User.new(username)
   end
 
+  def new_account_operations
+    [
+      create_account_op,
+      change_trust_op,
+      set_options_op,
+      add_bot_as_signer_op,
+      payment_op
+    ]
+  end
+
+  def create_account_op
+    Stellar::Operation.create_account(
+      destination: user_stellar_account.keypair,
+      starting_balance: 2.5 + 1
+    )
+  end
+
+  def change_trust_op
+    Stellar::Operation.change_trust(
+      line: [
+        :alphanum4,
+        Mobius::Client.stellar_asset.code,
+        Mobius::Client.to_keypair(Mobius::Client.stellar_asset.issuer)
+      ],
+      limit: 922337203685,
+      source_account: user_stellar_account.keypair
+    )
+  end
+
+  def set_options_op
+    Stellar::Operation.set_options(
+      source_account: user_stellar_account.keypair,
+      high_threshold: 2,
+      med_threshold: 1,
+      low_threshold: 1,
+      master_weight: 0,
+      signer: Stellar::Signer.new(
+        key: Stellar::SignerKey.new(
+          :signer_key_type_ed25519,
+          provided_stellar_account.keypair.raw_public_key
+        ),
+        weight: 2
+      )
+    )
+  end
+
+  def add_bot_as_signer_op
+    Stellar::Operation.set_options(
+      source_account: user_stellar_account.keypair,
+      signer: Stellar::Signer.new(
+        key: Stellar::SignerKey.new(
+          :signer_key_type_ed25519,
+          bot_app_keypair.raw_public_key
+        ),
+        weight: 1
+      )
+    )
+  end
+
+  def payment_op
+    Stellar::Operation.payment(
+      destination: user_stellar_account.keypair,
+      amount: Stellar::Amount.new(deposit_amount.to_f, Mobius::Client.stellar_asset).to_payment
+    )
+  end
+
+  def new_account_tx
+    Stellar::Transaction.for_account(
+      account: provided_stellar_account.keypair,
+      sequence: provided_stellar_account.next_sequence_value,
+      fee: 100 * new_account_operations.size
+    ).tap { |t| t.operations.concat(new_account_operations) }
+  end
+
   def transfer_tx
     Stellar::Transaction.for_account(
       account: provided_stellar_account.keypair,
       sequence: provided_stellar_account.next_sequence_value
-    ).tap do |t|
-      t.operations << Stellar::Operation.payment(
-        destination: user_stellar_account.keypair,
-        amount: Stellar::Amount.new(deposit_amount.to_f, Mobius::Client.stellar_asset).to_payment
-      )
-    end
+    ).tap { |t| t.operations << payment_op }
   end
 end

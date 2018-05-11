@@ -4,6 +4,9 @@ require "constructor_shortcut"
 require "redis-namespace"
 require "mobius/client"
 require "pry-byebug" if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
+require "tram-policy"
+
+autoload :WithdrawCommandValidnessPolicy, "./tip_bot/telegram/policy/withdraw_command_validness_policy"
 
 module TipBot
   autoload :User,          "./tip_bot/user"
@@ -16,14 +19,15 @@ module TipBot
       autoload :Start,    "./tip_bot/telegram/command/start"
       autoload :Tip,      "./tip_bot/telegram/command/tip"
       autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
-      autoload :LinkAddress,  "./tip_bot/telegram/command/link_address"
-      autoload :Register,  "./tip_bot/telegram/command/register"
+      autoload :LinkAddress, "./tip_bot/telegram/command/link_address"
+      autoload :Register, "./tip_bot/telegram/command/register"
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end
 
     module Service
       autoload :TipMessage, "./tip_bot/telegram/service/tip_message"
       autoload :RegisterAddress, "./tip_bot/telegram/service/register_address"
+      autoload :Withdraw, "./tip_bot/telegram/service/withdraw"
     end
 
     autoload :Request,       "./tip_bot/telegram/request"
@@ -64,6 +68,10 @@ module TipBot
     # Mobius::Client::App getter
     def dapp
       @dapp ||= build_dapp
+    end
+
+    def app_keypair
+      @app_keypair ||= Mobius::Client.to_keypair(dapp.seed)
     end
 
     # Tip rate

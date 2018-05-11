@@ -181,6 +181,9 @@ GEM
       hitimes
     toml-rb (1.1.1)
       citrus (~> 3.0, > 3.0)
+    tram-policy (1.0.0)
+      dry-initializer (~> 2.0)
+      i18n (~> 1.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unicode-display_width (1.3.2)
@@ -221,8 +224,8 @@ DEPENDENCIES
   rubocop-rspec (~> 1.23)
   simplecov (~> 0.16.1)
   simplecov-console (~> 0.4.2)
-  stellar-sdk (~> 0.3)
   telegram-bot-ruby
+  tram-policy
   vcr (~> 3.0, >= 3.0.3)
   webmock (~> 3.3)
   yard (~> 0.9, >= 0.9.12)

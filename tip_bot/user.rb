@@ -29,14 +29,11 @@ class TipBot::User
   # User balance
   # @return [Float] User balance
   def balance
-    TipBot.redis.hget(REDIS_BALANCE_KEY, nickname).to_f
-  end
-
-  # Sends accumulated tips to given address, records address in database
-  # @param address [String] Stellar address
-  def withdraw(address)
-    dapp.transfer(balance, address)
-    TipBot.redis.hset(REDIS_BALANCE_KEY, nickname, 0)
+    @balance ||= if stellar_account.nil?
+                   TipBot.redis.hget(REDIS_BALANCE_KEY, nickname).to_f
+                 else
+                   stellar_account.balance.to_f
+                 end
   end
 
   # Blocks user from sending tips for period
@@ -52,6 +49,14 @@ class TipBot::User
 
   def increment_balance(value)
     TipBot.redis.hincrbyfloat(REDIS_BALANCE_KEY, nickname, value)
+  end
+
+  def decrement_balance(value)
+    increment_balance(-value)
+  end
+
+  def stellar_account
+    address && Mobius::Client::Blockchain::Account.new(Mobius::Client.to_keypair(address))
   end
 
   private
