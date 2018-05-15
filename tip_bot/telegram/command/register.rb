@@ -1,5 +1,6 @@
 require "cgi"
 
+# /register command handler
 class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?

@@ -26,7 +26,7 @@ class TipBot::Telegram::Service::Withdraw
         account: user.stellar_account.keypair,
         sequence: user.stellar_account.next_sequence_value,
         destination: Mobius::Client.to_keypair(destination_address),
-        amount: tx_amount
+        amount: StellarHelpers.to_payment_amount(amount_to_withdraw)
       )
       .to_envelope(TipBot.app_keypair)
       .to_xdr(:base64)
@@ -34,10 +34,6 @@ class TipBot::Telegram::Service::Withdraw
 
   def post_tx(txe)
     Mobius::Client.horizon_client.horizon.transactions._post(tx: txe)
-  end
-
-  def tx_amount
-    Stellar::Amount.new(amount_to_withdraw, Mobius::Client.stellar_asset).to_payment
   end
 
   def amount_to_withdraw

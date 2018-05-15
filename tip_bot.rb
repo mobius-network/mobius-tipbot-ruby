@@ -7,6 +7,7 @@ require "pry-byebug" if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
 require "tram-policy"
 
 autoload :WithdrawCommandValidnessPolicy, "./tip_bot/telegram/policy/withdraw_command_validness_policy"
+autoload :StellarHelpers, "./tip_bot/utils/stellar_helpers"
 
 module TipBot
   autoload :User,          "./tip_bot/user"
@@ -70,8 +71,14 @@ module TipBot
       @dapp ||= build_dapp
     end
 
+    def app_account
+      @app_account ||= Mobius::Client::Blockchain::Account.new(
+        Mobius::Client.to_keypair(dapp.seed)
+      )
+    end
+
     def app_keypair
-      @app_keypair ||= Mobius::Client.to_keypair(dapp.seed)
+      @app_keypair ||= app_account.keypair
     end
 
     # Tip rate

@@ -12,22 +12,16 @@ class TipBot::Telegram::Service::RegisterAddress
   def call
     raise NoTrustlineError unless provided_stellar_account.trustline_exists?
 
-    if user.address.nil?
-      user.address = new_random_stellar_account.keypair.address
-      new_account_tx.to_envelope(new_random_stellar_account.keypair).to_xdr(:base64)
-    else
-      transfer_tx.to_envelope.to_xdr(:base64)
-    end
+    return transfer_txe.to_xdr(:base64) unless user.address.nil?
+
+    user.address = new_random_stellar_account.keypair.address
+    new_account_txe.to_xdr(:base64)
   end
 
   private
 
   def new_random_stellar_account
     @new_random_stellar_account ||= Mobius::Client::Blockchain::Account.new(Stellar::KeyPair.random)
-  end
-
-  def bot_app_keypair
-    @bot_app_keypair ||= Mobius::Client.to_keypair(TipBot.dapp.seed)
   end
 
   def provided_stellar_account
@@ -84,48 +78,42 @@ class TipBot::Telegram::Service::RegisterAddress
       med_threshold: 1,
       low_threshold: 1,
       master_weight: 0,
-      signer: Stellar::Signer.new(
-        key: Stellar::SignerKey.new(
-          :signer_key_type_ed25519,
-          provided_stellar_account.keypair.raw_public_key
-        ),
-        weight: 2
-      )
+      signer: StellarHelpers.to_signer(provided_stellar_account, weight: 2)
     )
   end
 
   def add_bot_as_signer_op
     Stellar::Operation.set_options(
       source_account: user_stellar_account.keypair,
-      signer: Stellar::Signer.new(
-        key: Stellar::SignerKey.new(
-          :signer_key_type_ed25519,
-          bot_app_keypair.raw_public_key
-        ),
-        weight: 1
-      )
+      signer: StellarHelpers.to_signer(TipBot.app_account, weight: 1)
     )
   end
 
   def payment_op
     Stellar::Operation.payment(
       destination: user_stellar_account.keypair,
-      amount: Stellar::Amount.new(deposit_amount.to_f, Mobius::Client.stellar_asset).to_payment
+      amount: StellarHelpers.to_payment_amount(deposit_amount.to_f)
     )
   end
 
-  def new_account_tx
-    Stellar::Transaction.for_account(
-      account: provided_stellar_account.keypair,
-      sequence: provided_stellar_account.next_sequence_value,
-      fee: 100 * new_account_operations.size
-    ).tap { |t| t.operations.concat(new_account_operations) }
+  def new_account_txe
+    Stellar::Transaction
+      .for_account(
+        account: provided_stellar_account.keypair,
+        sequence: provided_stellar_account.next_sequence_value,
+        fee: 100 * new_account_operations.size
+      )
+      .tap { |t| t.operations.concat(new_account_operations) }
+      .to_envelope(new_random_stellar_account.keypair)
   end
 
-  def transfer_tx
-    Stellar::Transaction.for_account(
-      account: provided_stellar_account.keypair,
-      sequence: provided_stellar_account.next_sequence_value
-    ).tap { |t| t.operations << payment_op }
+  def transfer_txe
+    Stellar::Transaction
+      .for_account(
+        account: provided_stellar_account.keypair,
+        sequence: provided_stellar_account.next_sequence_value
+      )
+      .tap { |t| t.operations << payment_op }
+      .to_envelope
   end
 end
