@@ -29,17 +29,30 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip
-    value = TipBot.tip_rate
-    dapp.pay(value, target_address: message_author.address)
-    message_author.increment_balance(value) unless message_author.address
+    if tipper.stellar_account.nil?
+      tip_via_dapp
+    else
+      tip_via_user_account
+    end
+
+    message_author.increment_balance(tip_amount) unless message_author.address
     TipBot::TippedMessage.new(message).tip(tipper_nickname)
   end
 
-  def dapp
-    if tipper.address.nil?
-      TipBot.dapp
-    else
-      Mobius::Client::App.new(TipBot.dapp.seed, tipper.address)
-    end
+  def tip_via_dapp
+    TipBot.dapp.pay(tip_amount, target_address: message_author.address)
+  end
+
+  def tip_via_user_account
+    destination = message_author.address || TipBot.app_keypair.address
+    StellarHelpers.transfer(
+      from: tipper.stellar_account,
+      to: destination,
+      amount: tip_amount
+    )
+  end
+
+  def tip_amount
+    TipBot.tip_rate
   end
 end

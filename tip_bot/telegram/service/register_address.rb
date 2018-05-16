@@ -12,10 +12,11 @@ class TipBot::Telegram::Service::RegisterAddress
   def call
     raise NoTrustlineError unless provided_stellar_account.trustline_exists?
 
-    return transfer_txe.to_xdr(:base64) unless user.address.nil?
+    return transfer_txe unless user.address.nil?
 
-    user.address = new_random_stellar_account.keypair.address
-    new_account_txe.to_xdr(:base64)
+    generated_keypair = new_random_stellar_account.keypair
+    user.address = generated_keypair.address
+    new_account_tx.to_envelope(generated_keypair)
   end
 
   private
@@ -96,7 +97,7 @@ class TipBot::Telegram::Service::RegisterAddress
     )
   end
 
-  def new_account_txe
+  def new_account_tx
     Stellar::Transaction
       .for_account(
         account: provided_stellar_account.keypair,
@@ -104,7 +105,6 @@ class TipBot::Telegram::Service::RegisterAddress
         fee: 100 * new_account_operations.size
       )
       .tap { |t| t.operations.concat(new_account_operations) }
-      .to_envelope(new_random_stellar_account.keypair)
   end
 
   def transfer_txe

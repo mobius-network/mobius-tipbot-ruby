@@ -10,7 +10,7 @@ class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
   private
 
   def register_address
-    xdr = TipBot::Telegram::Service::RegisterAddress.call(from.username, address, deposit_amount)
+    xdr = TipBot::Telegram::Service::RegisterAddress.call(from.username, address, deposit_amount).to_xdr(:base64)
     "https://www.stellar.org/laboratory/#txsigner?xdr=#{CGI.escape(xdr)}&network=#{Mobius::Client.network}"
   rescue Mobius::Client::Error::AccountMissing
     say_account_is_missing
