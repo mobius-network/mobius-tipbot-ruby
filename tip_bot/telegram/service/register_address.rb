@@ -4,15 +4,15 @@ class TipBot::Telegram::Service::RegisterAddress
   extend ConstructorShortcut[:call]
 
   class NoTrustlineError < StandardError; end
+  class AddressAlreadyRegisteredError < StandardError; end
 
   param :username
   param :address
   param :deposit_amount
 
   def call
+    raise AddressAlreadyRegisteredError unless user.address.nil?
     raise NoTrustlineError unless provided_stellar_account.trustline_exists?
-
-    return transfer_txe unless user.address.nil?
 
     generated_keypair = new_random_stellar_account.keypair
     user.address = generated_keypair.address
@@ -105,15 +105,5 @@ class TipBot::Telegram::Service::RegisterAddress
         fee: 100 * new_account_operations.size
       )
       .tap { |t| t.operations.concat(new_account_operations) }
-  end
-
-  def transfer_txe
-    Stellar::Transaction
-      .for_account(
-        account: provided_stellar_account.keypair,
-        sequence: provided_stellar_account.next_sequence_value
-      )
-      .tap { |t| t.operations << payment_op }
-      .to_envelope
   end
 end

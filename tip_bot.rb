@@ -7,6 +7,7 @@ require "pry-byebug" if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
 require "tram-policy"
 
 autoload :WithdrawCommandValidnessPolicy, "./tip_bot/telegram/policy/withdraw_command_validness_policy"
+autoload :RegisterCommandValidnessPolicy, "./tip_bot/telegram/policy/register_command_validness_policy"
 autoload :StellarHelpers, "./tip_bot/utils/stellar_helpers"
 
 module TipBot
