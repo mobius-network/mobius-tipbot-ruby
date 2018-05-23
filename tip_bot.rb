@@ -21,7 +21,7 @@ module TipBot
       autoload :Start,    "./tip_bot/telegram/command/start"
       autoload :Tip,      "./tip_bot/telegram/command/tip"
       autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
-      autoload :LinkAddress, "./tip_bot/telegram/command/link_address"
+      autoload :MyAddress, "./tip_bot/telegram/command/my_address"
       autoload :Register, "./tip_bot/telegram/command/register"
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end

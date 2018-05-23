@@ -29,7 +29,7 @@ class RegisterCommandValidnessPolicy < Tram::Policy
   end
 
   def source_address_presence
-    return if command.user.address || source_address
+    return if source_address
     errors.add :source_address_missing
   end
 end

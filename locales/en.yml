@@ -39,6 +39,9 @@ en:
         register_address_link: "We have prepared a Stellar transaction that will create a Stellar account that will be used with this tip bot. This new account will hold your tokens for sending and receiving tips. Please follow the link, sign it to fund it with 3.5 XLM, and then submit to the Stellar network. %{url}"
         account_missing: "Account %{address} is missing on Stellar network!"
         trustline_missing: "Address %{address} has no trustline for %{code}"
+        registered_address: "You already have registered an address. It's %{address}. You can fund it any way, convenient for you!"
+      myaddress:
+        address_is_not_registered: "You don't have registered address. Please, use /register command to create one"
         registered_address: "Your deposit address is %{address}. You can fund it any way, convenient for you!"
     tip:
       heading:
