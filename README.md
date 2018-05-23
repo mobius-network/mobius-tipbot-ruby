@@ -42,7 +42,11 @@ Add TipBot to your Telegram group. It *must* be supergroup and bot must have pri
 TipBot supports following commands:
 * `/tip` - reply to any message in your chat. This will display keyboard and current tip stats.
 * `/balance` - this will show your tip balance (works in DM only).
-* `/withdraw <address>` - this will send your collected tips to following Stellar address. All following tips will be send directly there, bypassing TipBot account (works in DM only).
+* `/withdraw <address> <amount>` - this will send <amount> of your collected tips to following Stellar address. If <amount> is omitted, all of your tips will be withdrawn. Works in DM only.
+* `/register <address> <amount>` - if you want to tip users from your own Stellar account, use this command. `<address>`
+  - is your Stellar address, it will be used to fund your deposit account in bot. Deposit will be funded with `<amount>`
+* `/my_address` - returns your deposit address, that was created after `/register` command invocation, so you will be
+  able to fund it any way convenient to you
 
 ### Using custom Stellar assets
 
