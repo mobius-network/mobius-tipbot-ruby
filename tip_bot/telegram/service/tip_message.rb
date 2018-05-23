@@ -15,7 +15,7 @@ class TipBot::Telegram::Service::TipMessage
   def call
     return if tipper.locked?
     tip
-    tipper.lock
+    tipper.lock if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] != "development"
   end
 
   private

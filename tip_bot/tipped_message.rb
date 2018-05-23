@@ -39,6 +39,18 @@ class TipBot::TippedMessage
     TipBot.redis.zrange(key(:lock), 0, -1)
   end
 
+  # Stores id of bot's message with tip button for future references
+  # @param keyboard_message_id Telegram message id
+  def attach_button(keyboard_message_id)
+    TipBot.redis.set(key(:keyboard_message), keyboard_message_id)
+  end
+
+  # Returns id of bot's message with tip button
+  # @ return [Integer] Telegram message id
+  def button_message_id
+    TipBot.redis.get(key(:keyboard_message))&.to_i
+  end
+
   private
 
   def key(scope)
