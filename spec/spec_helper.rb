@@ -3,11 +3,17 @@ require "telegram/bot"
 require "redis-namespace"
 require "simplecov"
 require "simplecov-console"
+require "vcr"
 
 SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
 SimpleCov.start do
   add_filter "spec"
   track_files "{.,tip_bot}/**/*.rb"
+end
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
 end
 
 require "./tip_bot"

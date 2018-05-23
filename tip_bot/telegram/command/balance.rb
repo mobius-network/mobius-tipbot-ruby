@@ -8,7 +8,6 @@ class TipBot::Telegram::Command::Balance < TipBot::Telegram::Command::Base
   private
 
   def reply
-    return t(:linked, address: user.address) if user.address
     t(:value, balance: user.balance)
   end
 end

@@ -31,6 +31,8 @@ class TipBot::Telegram::Request
     when "/start" then command("Start")
     when "/balance" then command("Balance")
     when "/tip" then command("TipMenu")
+    when "/my_address" then command("MyAddress")
+    when %r(^\/register) then command("Register")
     when %r(^\/withdraw) then command("Withdraw")
     end
   end

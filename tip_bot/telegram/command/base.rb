@@ -16,6 +16,10 @@ class TipBot::Telegram::Command::Base
     raise NotImplementedError, "Implement command response behaviour in child class"
   end
 
+  def user
+    @user ||= TipBot::User.new(username)
+  end
+
   protected
 
   def t(key, **options)
@@ -32,9 +36,5 @@ class TipBot::Telegram::Command::Base
 
   def command_scope
     [:telegram, :cmd, self.class.name.split("::").last.downcase]
-  end
-
-  def user
-    @user ||= TipBot::User.new(username)
   end
 end
