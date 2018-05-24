@@ -30,10 +30,21 @@ class TipBot::User
   # @return [Float] User balance
   def balance
     @balance ||= if stellar_account.nil?
-                   TipBot.redis.hget(REDIS_BALANCE_KEY, nickname).to_f
+                   redis_balance
                  else
                    stellar_account.balance.to_f
                  end
+  end
+
+  def redis_balance
+    TipBot.redis.hget(REDIS_BALANCE_KEY, nickname).to_f
+  end
+
+  def merge_balances
+    return if stellar_account.nil? || redis_balance.zero?
+
+    TipBot.dapp.pay(redis_balance, target_address: stellar_account.keypair.address)
+    TipBot.redis.hdel(REDIS_BALANCE_KEY, nickname)
   end
 
   # Blocks user from sending tips for period

@@ -14,9 +14,10 @@ class TipBot::Telegram::Service::RegisterAddress
     raise AddressAlreadyRegisteredError unless user.address.nil?
     raise NoTrustlineError unless provided_stellar_account.trustline_exists?
 
-    generated_keypair = new_random_stellar_account.keypair
-    user.address = generated_keypair.address
-    new_account_tx.to_envelope(generated_keypair)
+    {
+      user_address: new_random_stellar_account.keypair.address,
+      txe: new_account_tx.to_envelope(new_random_stellar_account.keypair)
+    }
   end
 
   private
@@ -29,14 +30,6 @@ class TipBot::Telegram::Service::RegisterAddress
     @provided_stellar_account ||= Mobius::Client::Blockchain::Account.new(
       Mobius::Client.to_keypair(address)
     )
-  end
-
-  def user_stellar_account
-    @user_stellar_account ||=
-      user.address &&
-      Mobius::Client::Blockchain::Account.new(
-        Mobius::Client.to_keypair(user.address)
-      )
   end
 
   def user
@@ -55,7 +48,7 @@ class TipBot::Telegram::Service::RegisterAddress
 
   def create_account_op
     Stellar::Operation.create_account(
-      destination: user_stellar_account.keypair,
+      destination: new_random_stellar_account.keypair,
       starting_balance: 2.5 + 1
     )
   end
@@ -68,13 +61,13 @@ class TipBot::Telegram::Service::RegisterAddress
         Mobius::Client.to_keypair(Mobius::Client.stellar_asset.issuer)
       ],
       limit: 922337203685,
-      source_account: user_stellar_account.keypair
+      source_account: new_random_stellar_account.keypair
     )
   end
 
   def set_options_op
     Stellar::Operation.set_options(
-      source_account: user_stellar_account.keypair,
+      source_account: new_random_stellar_account.keypair,
       high_threshold: 2,
       med_threshold: 1,
       low_threshold: 1,
@@ -85,14 +78,14 @@ class TipBot::Telegram::Service::RegisterAddress
 
   def add_bot_as_signer_op
     Stellar::Operation.set_options(
-      source_account: user_stellar_account.keypair,
+      source_account: new_random_stellar_account.keypair,
       signer: StellarHelpers.to_signer(TipBot.app_account, weight: 1)
     )
   end
 
   def payment_op
     Stellar::Operation.payment(
-      destination: user_stellar_account.keypair,
+      destination: new_random_stellar_account.keypair,
       amount: StellarHelpers.to_payment_amount(deposit_amount.to_f)
     )
   end

@@ -4,7 +4,13 @@ require "cgi"
 class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?
-    bot.api.send_message(chat_id: from.id, text: register_address)
+    bot.api.send_message(chat_id: from.id, text: register_address, reply_markup: acknowledge_button)
+  rescue Mobius::Client::Error::AccountMissing
+    say_account_is_missing
+  rescue TipBot::Telegram::Service::RegisterAddress::NoTrustlineError
+    say_no_trustline
+  rescue TipBot::Telegram::Service::RegisterAddress::AddressAlreadyRegisteredError
+    say_registered_address
   end
 
   def address
@@ -22,29 +28,52 @@ class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
     return policy.errors.messages.first unless policy.valid?
 
     say_url
-  rescue Mobius::Client::Error::AccountMissing
-    say_account_is_missing
-  rescue TipBot::Telegram::Service::RegisterAddress::NoTrustlineError
-    say_no_trustline
-  rescue TipBot::Telegram::Service::RegisterAddress::AddressAlreadyRegisteredError
-    say_registered_address
   end
 
   def say_account_is_missing
-    t(:account_missing, address: address)
+    bot.api.send_message(chat_id: from.id, text: t(:account_missing, address: address))
   end
 
   def say_no_trustline
-    t(:trustline_missing, address: address, code: Mobius::Client.stellar_asset)
+    bot.api.send_message(
+      chat_id: from.id,
+      text: t(:trustline_missing, address: address, code: Mobius::Client.stellar_asset)
+    )
   end
 
   def say_registered_address
-    t(:registered_address, address: user.address)
+    bot.api.send_message(
+      chat_id: from.id,
+      text: t(:registered_address, address: user.address)
+    )
   end
 
   def say_url
-    xdr = TipBot::Telegram::Service::RegisterAddress.call(from.username, address, deposit_amount).to_xdr(:base64)
+    xdr = txe_to_sign.to_xdr(:base64)
     url = "https://www.stellar.org/laboratory/#txsigner?xdr=#{CGI.escape(xdr)}&network=#{Mobius::Client.network}"
     t(:register_address_link, url: url)
+  end
+
+  def acknowledge_button
+    Telegram::Bot::Types::InlineKeyboardMarkup.new(
+      inline_keyboard: [
+        Telegram::Bot::Types::InlineKeyboardButton.new(
+          text: t(:address_register_ack),
+          callback_data: "reg_ack:#{new_user_address}" # we've got limit in 64 bytes here
+        )
+      ]
+    )
+  end
+
+  def new_user_address
+    service_call[:user_address]
+  end
+
+  def txe_to_sign
+    service_call[:txe]
+  end
+
+  def service_call
+    @service_call ||= TipBot::Telegram::Service::RegisterAddress.call(from.username, address, deposit_amount)
   end
 end

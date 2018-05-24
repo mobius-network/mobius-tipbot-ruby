@@ -19,8 +19,7 @@ class TipBot::Telegram::Request
 
   # Parses message text and calls desired command
   def call
-    tip_button_press if subject.is_a?(Telegram::Bot::Types::CallbackQuery)
-    return unless subject.is_a?(Telegram::Bot::Types::Message)
+    return process_callback_query if subject.is_a?(Telegram::Bot::Types::CallbackQuery)
     dispatch
   end
 
@@ -41,7 +40,11 @@ class TipBot::Telegram::Request
     "TipBot::Telegram::Command::#{klass}".constantize.call(bot, message, subject)
   end
 
-  def tip_button_press
-    TipBot::Telegram::Command::Tip.call(bot, message, subject)
+  def process_callback_query
+    case subject.data
+    when "tip" then TipBot::Telegram::Command::Tip.call(bot, message, subject)
+    when %r(^reg_ack)
+      TipBot::Telegram::Command::RegisterAck.call(bot, message, subject)
+    end
   end
 end

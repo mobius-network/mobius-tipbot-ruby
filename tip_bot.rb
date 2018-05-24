@@ -23,6 +23,7 @@ module TipBot
       autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
       autoload :MyAddress, "./tip_bot/telegram/command/my_address"
       autoload :Register, "./tip_bot/telegram/command/register"
+      autoload :RegisterAck, "./tip_bot/telegram/command/register_ack"
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end
 
