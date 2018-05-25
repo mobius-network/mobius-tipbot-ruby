@@ -8,6 +8,7 @@ gem "mobius-client", "~> 0.2"
 gem "multi_json"
 gem "rack"
 gem "redis"
+gem "redis-namespace", "~> 1.6"
 gem "telegram-bot-ruby"
 gem "tram-policy"
 
@@ -23,7 +24,6 @@ group :development do
 end
 
 group :test do
-  gem "redis-namespace", "~> 1.6"
   gem "rspec", "~> 3.0"
   gem "rubocop-rspec", "~> 1.23"
   gem "simplecov", "~> 0.16.1"
