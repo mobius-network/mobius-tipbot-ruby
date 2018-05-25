@@ -9,7 +9,7 @@ class TipBot::Telegram::WebhookRouter
     return noop unless request.post?
 
     body = MultiJson.load request.body.read
-    token = request.path[1..-1].to_sym
+    token = request.path[1..-1]
     webhook(token, body)
   end
 
