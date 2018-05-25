@@ -1,1 +1,1 @@
-telegram: bin/telegram_wh
+web: bin/telegram_wh
