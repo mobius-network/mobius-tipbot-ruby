@@ -1,0 +1,30 @@
+{
+  "name": "Mobius Telegram Tip Bot",
+  "description": "Telegram bot, allowing to tip users for cool messages in cryptocurrencies",
+  "repository": "https://github.com/mobius-network/mobius-tipbot-ruby",
+  "keywords": ["mobius", "telegram", "bot"],
+  "env": {
+    "MOBIUS_TIPBOT_TOKEN": {
+      "description": "Telegram bot token. You can obtain one, using BotFather"
+    },
+    "MOBIUS_TIPBOT_APP_PRIVATE_KEY": {
+      "description": "Seed of Stellar account for depositing tips"
+    },
+    "MOBIUS_TIPBOT_CREDIT_ADDRESS": {
+      "description": "Public key of the Stellar account with money pool for tips"
+    },
+    "MOBIUS_TIPBOT_RATE": {
+      "description": "Single tip amount",
+      "value": "0.5"
+    },
+    "MOBIUS_TIPBOT_ASSET_CODE": {
+      "description": "Custom Stellar asset code for tips",
+      "required": false
+    },
+    "MOBIUS_TIPBOT_ASSET_ISSUER": {
+      "description": "Custom Stellar asset issuer",
+      "required": false
+    }
+  },
+  "addons": [ "heroku-redis" ]
+}

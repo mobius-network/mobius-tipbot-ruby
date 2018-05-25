@@ -45,8 +45,11 @@ module TipBot
     # Redis instance getter
     def redis
       @redis ||=
-        ENV["MOBIUS_TIPBOT_REDIS_URL"] &&
-        Redis::Namespace.new(:tipbot, redis: Redis.new(url: ENV["MOBIUS_TIPBOT_REDIS_URL"]))
+        (ENV["MOBIUS_TIPBOT_REDIS_URL"] || ENV["REDIS_URL"]) &&
+        Redis::Namespace.new(
+          :tipbot,
+          redis: Redis.new(url: ENV["MOBIUS_TIPBOT_REDIS_URL"] || ENV["REDIS_URL"]),
+        )
     end
 
     # Logger instance setter
