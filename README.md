@@ -52,6 +52,14 @@ TipBot supports following commands:
 
 TipBot allows you to use custom Stellar asset instead of MOBI for tips. To achieve this set env variables `MOBIUS_TIPBOT_ASSET_CODE` and `MOBIUS_TIPBOT_ASSET_ISSUER`, and don't forget to create trustlines for your asset in source pool account and TipBot account
 
+## Deploy
+
+Just press this button for deploying app into Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/mobius-network/mobius-tipbot-ruby)
+
+Then fill in the config variables and click "Deploy for Free" button.
+
 ## Planned features
 
 * Using accounts provided by users to send tips.
