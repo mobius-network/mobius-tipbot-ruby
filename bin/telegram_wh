@@ -1,1 +1,1 @@
-rackup bin/telegram_wh.ru
+rackup bin/telegram_wh.ru -p $PORT
