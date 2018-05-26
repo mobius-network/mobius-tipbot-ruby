@@ -24,7 +24,7 @@ class TipBot::Telegram::WebhookRouter
     if token == TipBot.token
       bot = Telegram::Bot::Client.new(TipBot.token)
       update = Telegram::Bot::Types::Update.new(data)
-      message = update.message
+      message = update.message || update.callback_query
 
       TipBot::Telegram::Request.call(bot, message)
 
