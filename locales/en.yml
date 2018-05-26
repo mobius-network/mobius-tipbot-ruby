@@ -56,8 +56,8 @@ en:
         registered_address: "Your deposit address is %{address}. You can fund it any way, convenient for you!"
     tip:
       heading:
-        one: "%{usernames} highly appreciates this message. Tip it! %{amount} tips collected so far."
-        other: "%{usernames} highly appreciate this message. Tip it! %{amount} tips collected so far."
+        one: "%{usernames} \xE2\x9D\xA4 this message! %{amount} %{asset} tipped so far."
+        other: "%{usernames} \xE2\x9D\xA4 this message! %{amount} %{asset} tipped so far."
       heading_for_many_tippers: "%{usernames} and %{more} others highly appreciate this message. Tip it! %{amount} tips collected so far."
       already_tipped_message: "This message was already tipped. Use this button for tipping it! %{link}"
       tip: "Send tip! (%{count})"
