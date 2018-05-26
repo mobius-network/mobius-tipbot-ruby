@@ -11,6 +11,8 @@ class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
     say_no_trustline
   rescue TipBot::Telegram::Service::RegisterAddress::AddressAlreadyRegisteredError
     say_registered_address
+  rescue Mobius::Client::Error::UnknownKeyPairType
+    say_invalid_address
   end
 
   def address
@@ -52,6 +54,10 @@ class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
     xdr = txe_to_sign.to_xdr(:base64)
     url = "https://www.stellar.org/laboratory/#txsigner?xdr=#{CGI.escape(xdr)}&network=#{Mobius::Client.network}"
     t(:register_address_link, url: url)
+  end
+
+  def say_invalid_address
+    t(:invalid_address, address: address)
   end
 
   def acknowledge_button
