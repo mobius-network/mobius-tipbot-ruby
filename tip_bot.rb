@@ -57,7 +57,7 @@ module TipBot
 
     # Logger instance getter
     def logger
-      @logger ||= Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
+      @logger ||= Logger.new(STDOUT).tap { |l| l.level = Logger::DEBUG }
     end
 
     # Token setter
