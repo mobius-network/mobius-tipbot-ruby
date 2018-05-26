@@ -16,7 +16,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
       chat_id: chat.id,
       text: t(
         :already_tipped_message,
-        link: "t.me/#{chat.username}/#{tipped_message.button_message}",
+        link: "t.me/#{chat.username}/#{tipped_message.button_message_id}",
         scope: %i(telegram tip)
       )
     )
