@@ -19,7 +19,6 @@ class TipBot::Telegram::Request
 
   # Parses message text and calls desired command
   def call
-    TipBot.logger.debug(subject)
     return process_callback_query if subject.is_a?(Telegram::Bot::Types::CallbackQuery)
     dispatch
   end
