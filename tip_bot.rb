@@ -5,10 +5,14 @@ require "redis-namespace"
 require "mobius/client"
 require "pry-byebug" if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
 require "tram-policy"
+require "mail"
+require "sucker_punch"
 
 autoload :WithdrawCommandValidnessPolicy, "./tip_bot/telegram/policy/withdraw_command_validness_policy"
 autoload :CreateCommandValidnessPolicy, "./tip_bot/telegram/policy/create_command_validness_policy"
 autoload :StellarHelpers, "./tip_bot/utils/stellar_helpers"
+
+autoload :BalanceAlertJob, "./tip_bot/jobs/balance_alert_job"
 
 module TipBot
   autoload :User,          "./tip_bot/user"
@@ -79,6 +83,20 @@ module TipBot
       @dapp ||= build_dapp
     end
 
+    def asset_code
+      Mobius::Client.stellar_asset.code
+    end
+
+    def check_balance
+      return unless (threshold = ENV["MOBIUS_TIPBOT_APP_BALANCE_ALERT_THRESHOLD"])
+
+      current_balance = dapp.balance
+
+      return if current_balance > threshold
+
+      BalanceAlertJob.perform_async(current_balance)
+    end
+
     def app_account
       @app_account ||= Mobius::Client::Blockchain::Account.new(app_keypair)
     end
@@ -104,6 +122,7 @@ module TipBot
     def configure!
       configure_i18n
       configure_mobius_client
+      configure_mailer
       validate!
     end
 
@@ -145,6 +164,18 @@ module TipBot
 
       Mobius::Client.asset_code = asset_code
       Mobius::Client.asset_issuer = asset_issuer
+    end
+
+    def configure_mailer
+      return unless ENV["MOBIUS_TIPBOT_SMTP_HOST"]
+
+      Mail.defaults do
+        delivery_method(
+          :smtp,
+          address: ENV["MOBIUS_TIPBOT_SMTP_HOST"],
+          port: ENV["MOBIUS_TIPBOT_SMTP_PORT"]
+        )
+      end
     end
 
     def build_dapp
