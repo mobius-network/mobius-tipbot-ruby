@@ -2,6 +2,7 @@
 class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def call
     return if tip_not_allowed?
+    return can_not_tip_often if user.locked?
     return forward_existing_keyboard if message_already_tipped?
 
     TipBot::Telegram::Service::TipMessage.call(reply_to_message, username)
@@ -19,6 +20,14 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
         link: "t.me/#{chat.username}/#{tipped_message.button_message_id}",
         scope: %i(telegram tip)
       )
+    )
+  end
+
+  def can_not_tip_often
+    api.send_message(
+      chat_id: chat.id,
+      text: I18n.t(:can_not_tip_often, scope: %i[telegram cmd tip]),
+      reply_to_message_id: message.message_id
     )
   end
 
