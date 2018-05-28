@@ -8,6 +8,6 @@ class TipBot::Telegram::Command::Balance < TipBot::Telegram::Command::Base
   private
 
   def reply
-    t(:value, balance: user.balance)
+    t(:value, balance: user.balance, asset: Mobius::Client.stellar_asset.code)
   end
 end

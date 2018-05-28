@@ -13,7 +13,10 @@ class TipBot::Telegram::TipKbMarkup
 
   def tip_kb
     @tip_kb ||= [
-      button(text: I18n.t(:tip, count: people_count, scope: i18n_scope), callback_data: "tip")
+      button(
+        text: I18n.t(:button_text, count: people_count, scope: i18n_scope),
+        callback_data: "tip"
+      )
     ]
   end
 
@@ -22,6 +25,6 @@ class TipBot::Telegram::TipKbMarkup
   end
 
   def i18n_scope
-    @i18n_scope ||= %i(telegram tip).freeze
+    @i18n_scope ||= %i(telegram cmd tip).freeze
   end
 end

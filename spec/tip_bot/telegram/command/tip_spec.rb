@@ -1,4 +1,5 @@
 RSpec.describe TipBot::Telegram::Command::Tip do
+  let(:command_i18n_scope) { %i[telegram cmd tip] }
   let(:bot) { instance_double("Telegram::Bot::Client") }
   let(:message_args) do
     {
@@ -53,14 +54,46 @@ RSpec.describe TipBot::Telegram::Command::Tip do
 
     context "when user didn't tip this message before" do
       describe "successful scenario" do
+        context 'when user is a first tipper' do
+          let(:expected_text) do
+            I18n.t(
+              :heading,
+              usernames: "@#{tipper[:username]}",
+              amount: TipBot.tip_rate,
+              asset: Mobius::Client.stellar_asset.code,
+              scope: command_i18n_scope
+            )
+          end
+
+          it "shows user's nickname in bot's message" do
+            expect(bot.api).to receive(:edit_message_text).with(
+              message_id: bot_message.message_id,
+              chat_id: bot_message.chat.id,
+              text: expected_text,
+              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
+            )
+            subject.call
+          end
+        end
+
         context "when user is a second tipper" do
+          let(:expected_text) do
+            I18n.t(
+              :heading,
+              usernames: "@peter_parker, @#{tipper[:username]}",
+              amount: 2 * TipBot.tip_rate,
+              asset: Mobius::Client.stellar_asset.code,
+              scope: command_i18n_scope
+            )
+          end
+
           before { tip_message.tip("peter_parker") }
 
           it "shows both nicknames in bot's message" do
             expect(bot.api).to receive(:edit_message_text).with(
               message_id: bot_message.message_id,
               chat_id: bot_message.chat.id,
-              text: match(/\@peter_parker, \@#{tipper[:username]} highly appreciate this message/),
+              text: expected_text,
               reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
             )
             subject.call
@@ -68,21 +101,25 @@ RSpec.describe TipBot::Telegram::Command::Tip do
         end
 
         context "when there were a lot of tippers" do
-          before do
-            tip_message.tip("peter_parker")
-            tip_message.tip("jack_black")
-            tip_message.tip("jim_morrison")
-            tip_message.tip("robert_plant")
-            tip_message.tip("tony_iommi")
+          let(:tippers) { %w[peter_parker jack_black jim_morrison robert_plant tony_iommi] }
+          let(:expected_text) do
+            I18n.t(
+              :heading_for_many_tippers,
+              usernames: "@robert_plant, @tony_iommi, @#{tipper[:username]}",
+              amount: (tippers.size + 1) * TipBot.tip_rate,
+              asset: Mobius::Client.stellar_asset.code,
+              more: 3,
+              scope: command_i18n_scope
+            )
           end
+
+          before { tippers.each { |u| tip_message.tip(u) } }
 
           it "shows only last 3 tippers nicknames in bot's message" do
             expect(bot.api).to receive(:edit_message_text).with(
               message_id: bot_message.message_id,
               chat_id: bot_message.chat.id,
-              text: match(
-                /\@robert_plant, \@tony_iommi, \@#{tipper[:username]} and 3 others highly appreciate this message/
-              ),
+              text: expected_text,
               reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
             )
             subject.call

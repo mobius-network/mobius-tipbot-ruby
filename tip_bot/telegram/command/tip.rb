@@ -76,8 +76,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
       usernames: all_tippers.last(3).join(", "),
       amount: tipped_message.balance,
       more: all_tippers.size - 3,
-      asset: Mobius::Client.asset_code,
-      scope: %i(telegram tip)
+      asset: Mobius::Client.asset_code
     )
   end
 
@@ -86,9 +85,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
       :heading,
       usernames: all_tippers.join(", "),
       amount: tipped_message.balance,
-      count: all_tippers.size,
-      asset: Mobius::Client.asset_code,
-      scope: %i(telegram tip)
+      asset: Mobius::Client.asset_code
     )
   end
 

@@ -7,7 +7,8 @@ class WithdrawCommandValidnessPolicy < Tram::Policy
   option :user_balance, default: -> { command.user.balance }
   option :amount_to_withdraw, default: -> { command.amount }
 
-  validate :destination_presence
+  validate :balance_is_positive, stop_on_failure: true
+  validate :destination_presence, stop_on_failure: true
   validate :valid_amount, stop_on_failure: true
   validate :amount_is_positive, stop_on_failure: true
   validate :sufficient_balance
@@ -17,6 +18,11 @@ class WithdrawCommandValidnessPolicy < Tram::Policy
   def destination_presence
     return unless destination_address.nil?
     errors.add :address_missing
+  end
+
+  def balance_is_positive
+    return if user_balance.positive?
+    errors.add :balance_is_zero
   end
 
   def sufficient_balance

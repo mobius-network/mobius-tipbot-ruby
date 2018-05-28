@@ -9,17 +9,11 @@ class TipBot::User
   param :nickname
   param :dapp, default: -> { TipBot.dapp }
 
-  # # Tips user for given value
-  # # @param value [Float] Value in selected currency
-  # def tip(value = TipBot.tip_rate)
-  #   dapp.pay(value, target_address: address)
-  #   increment(value) unless address
-  # end
-
   # Address linked to user
   # @return [String] Stellar address
   def address
-    TipBot.redis.hget(REDIS_ADDRESS_KEY, nickname)
+    value = TipBot.redis.hget(REDIS_ADDRESS_KEY, nickname)
+    value&.empty? ? nil : value
   end
 
   def address=(address)

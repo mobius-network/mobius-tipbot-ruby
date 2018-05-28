@@ -4,6 +4,7 @@ require "redis-namespace"
 require "simplecov"
 require "simplecov-console"
 require "vcr"
+require "pry-byebug"
 
 SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
 SimpleCov.start do
@@ -22,6 +23,13 @@ I18n.load_path = Dir.glob(File.join(File.dirname(__FILE__), "../locales/*.yml"))
 I18n.locale = :en
 
 TipBot.redis = Redis::Namespace.new(:tipbot_test, redis: Redis.new)
+
+RSpec.shared_examples "not triggering API" do
+  it "doesn't trigger API" do
+    subject.call
+    expect(bot.api).not_to have_received(:send_message)
+  end
+end
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"

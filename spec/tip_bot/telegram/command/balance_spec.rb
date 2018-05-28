@@ -8,6 +8,7 @@ RSpec.describe TipBot::Telegram::Command::Balance do
     }
   end
   let(:message) { Telegram::Bot::Types::Message.new(message_args) }
+  let(:user) { TipBot::User.new(message.from.username) }
 
   subject { described_class.new(bot, message, nil) }
 
@@ -34,30 +35,36 @@ RSpec.describe TipBot::Telegram::Command::Balance do
 
       context "when user has Stellar address" do
         before do
-          allow_any_instance_of(TipBot::User).to \
-            receive(:address).and_return("some_truthy_value")
+          # seed is SASMROFT6E6QAKOLU46GLN4U2VHMEHMKJNWAVDGSQW5F3X2C7DJJHR22
+          user.address = "GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART"
         end
 
-        it "sends proper message to Telegram API" do
-          subject.call
-          expect(bot.api).to \
-            have_received(:send_message)
-            .with(chat_id: message.from.id, text: match(/all tips are instantly sent/))
+        it "takes balance from Stellar" do
+          VCR.use_cassette("balance/with_address") do
+            subject.call
+            expect(bot.api).to \
+              have_received(:send_message)
+              .with(
+                chat_id: message.from.id,
+                text: match(/^Your balance awaiting for withdraw is 1000\.0 MOBI/)
+              )
+          end
         end
       end
 
       context "when user has no Stellar address" do
         before do
-          allow_any_instance_of(TipBot::User).to receive(:address).and_return(nil)
+          user.address = nil
+          user.increment_balance(4)
         end
 
-        it "sends proper message to Telegram API" do
+        it "takes balance from redis" do
           subject.call
           expect(bot.api).to \
             have_received(:send_message)
             .with(
               chat_id: message.from.id,
-              text: match(/balance awaiting for withdraw/)
+              text: match(/^Your balance awaiting for withdraw is 4\.0 MOBI/)
             )
         end
       end

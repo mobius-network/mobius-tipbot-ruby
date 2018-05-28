@@ -44,8 +44,4 @@ class TipBot::Telegram::Command::Withdraw < TipBot::Telegram::Command::Base
   def say_done(withdrawn_amount)
     t(:done, address: address, amount: withdrawn_amount, asset: Mobius::Client.asset_code)
   end
-
-  def say_nothing_to_withdraw
-    t(:nothing)
-  end
 end
