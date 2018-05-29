@@ -17,7 +17,7 @@ en:
           Use http://stellarterm.com to create one if you do not have it yet!
 
 
-          /register <address> <amount> - if you want to tip users from your own Stellar account, use this command. `<address>` - is your Stellar address, it will be used to fund your deposit account in bot. Deposit will be funded with `<amount>`
+          /register <address> <amount> - register your own Stellar account to send tips from. `<address>` - is your Stellar address, it will be used to fund your Tipping Account. Tipping Account will be funded with `<amount>`
 
 
           /my_address - returns your deposit address, that was created after /register command invocation, so you will be able to fund it any way convenient to you
