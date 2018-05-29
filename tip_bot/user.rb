@@ -47,8 +47,10 @@ class TipBot::User
   end
 
   # Returns true if user is not allowed to send tips.
+  # Users with registered custom Stellar accounts are never locked
   # @return [Boolean] true if locked
   def locked?
+    return false unless stellar_account.nil?
     (TipBot.redis.get(redis_lock_key) && true) || false
   end
 
