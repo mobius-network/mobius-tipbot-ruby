@@ -94,7 +94,7 @@ module TipBot
 
       return if current_balance > threshold
 
-      BalanceAlertJob.perform_async(current_balance)
+      BalanceAlertJob.perform_async(:low, current_balance)
     end
 
     def app_account
@@ -123,6 +123,7 @@ module TipBot
       configure_i18n
       configure_mobius_client
       configure_mailer
+      SuckerPunch.logger = logger
       validate!
     end
 

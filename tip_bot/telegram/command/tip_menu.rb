@@ -9,9 +9,19 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
     TipBot::Telegram::Service::TipMessage.call(reply_to_message, from)
 
     send_tip_button
+  rescue Mobius::Client::Error::InsufficientFunds
+    error_insufficient_funds
   end
 
   private
+
+  def error_insufficient_funds
+    bot.api.send_message(
+      chat_id: chat.id,
+      text: t(:insufficient_funds, scope: %i[telegram cmd tip]),
+      reply_to_message_id: message.message_id
+    )
+  end
 
   def forward_existing_keyboard
     api.send_message(

@@ -34,7 +34,7 @@ en:
         linked: "You do not have any awaiting tips, all tips are instantly sent to %{address}!"
         value: "Your balance awaiting for withdraw is %{balance} %{asset}, use /withdraw <address> <amount> to get your tips!"
       tip:
-        insufficient_funds: "TipBot has not sufficient balance to send tips!"
+        insufficient_funds: "TipBot has not sufficient balance to send tips! Admin is notified"
         error: "Error sending tip!"
         can_not_tip_twice: "You cannot tip twice the same message!"
         can_not_tip_yourself: "You cannot tip your own message!"
@@ -88,6 +88,15 @@ en:
         source_address_missing: "Provide source address for deposit!"
         invalid_deposit_amount: "Invalid amount"
         deposit_amount_is_not_positive: "Enter positive amount to deposit!"
+
+    jobs:
+      balance_alert:
+        exhausted:
+          subject: "TipBot balance is exhausted"
+          body: "TipBot balance is insufficient even for a single tip! Take action!"
+        low:
+          subject:  "TipBot balance is low"
+          body: "Balance went below threshold. Current balance is %{current_balance} %{asset}"
 
 
   errors:

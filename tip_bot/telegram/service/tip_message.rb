@@ -16,6 +16,9 @@ class TipBot::Telegram::Service::TipMessage
     return if tipper.locked?
     tip
     tipper.lock if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] != "development"
+  rescue Mobius::Client::Error::InsufficientFunds
+    BalanceAlertJob.perform_async(:exhausted)
+    raise
   end
 
   private
