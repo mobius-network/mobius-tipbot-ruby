@@ -1,15 +1,15 @@
 require "cgi"
 
-# /register command handler
-class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
+# /create command handler
+class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?
     bot.api.send_message(chat_id: from.id, text: register_address, reply_markup: acknowledge_button)
   rescue Mobius::Client::Error::AccountMissing
     say_account_is_missing
-  rescue TipBot::Telegram::Service::RegisterAddress::NoTrustlineError
+  rescue TipBot::Telegram::Service::CreateAddress::NoTrustlineError
     say_no_trustline
-  rescue TipBot::Telegram::Service::RegisterAddress::AddressAlreadyRegisteredError
+  rescue TipBot::Telegram::Service::CreateAddress::AddressAlreadyCreatedError
     say_registered_address
   rescue Mobius::Client::Error::UnknownKeyPairType
     say_invalid_address
@@ -26,7 +26,7 @@ class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
   private
 
   def register_address
-    policy = ::RegisterCommandValidnessPolicy[self]
+    policy = ::CreateCommandValidnessPolicy[self]
     return policy.errors.messages.first unless policy.valid?
 
     say_url
@@ -80,6 +80,6 @@ class TipBot::Telegram::Command::Register < TipBot::Telegram::Command::Base
   end
 
   def service_call
-    @service_call ||= TipBot::Telegram::Service::RegisterAddress.call(from.username, address, deposit_amount)
+    @service_call ||= TipBot::Telegram::Service::CreateAddress.call(from.username, address, deposit_amount)
   end
 end

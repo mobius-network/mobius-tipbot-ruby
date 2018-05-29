@@ -31,7 +31,7 @@ class TipBot::Telegram::Request
     when "/balance" then command("Balance")
     when "/tip" then command("TipMenu")
     when "/my_address" then command("MyAddress")
-    when %r(^\/register) then command("Register")
+    when %r(^\/create) then command("Create")
     when %r(^\/withdraw) then command("Withdraw")
     end
   end
@@ -44,7 +44,7 @@ class TipBot::Telegram::Request
     case subject.data
     when "tip" then TipBot::Telegram::Command::Tip.call(bot, message, subject)
     when %r(^reg_ack)
-      TipBot::Telegram::Command::RegisterAck.call(bot, message, subject)
+      TipBot::Telegram::Command::CreateAck.call(bot, message, subject)
     end
   end
 end

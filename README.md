@@ -43,9 +43,8 @@ TipBot supports following commands:
 * `/tip` - reply to any message in your chat. This will display keyboard and current tip stats.
 * `/balance` - this will show your tip balance (works in DM only).
 * `/withdraw <address> <amount>` - this will send <amount> of your collected tips to following Stellar address. If <amount> is omitted, all of your tips will be withdrawn. Works in DM only.
-* `/register <address> <amount>` - register your own Stellar account to send tips from. `<address>` - is your Stellar
-  address, it will be used to fund your Tipping Account. Tipping Account will be funded with `<amount>`
-* `/my_address` - returns your deposit address, that was created after `/register` command invocation, so you will be
+* `/create <funding_address> <amount>` - create and fund your own Tipping Account to send tips from (no more 1 tip per hour limit!). `<funding_address>` - is your current Stellar account that will be used fund your Tipping Account. `<amount>` - the amount that Tipping Account will be funded with 
+* `/my_address` - returns your deposit address, that was created after `/create` command invocation, so you will be
   able to fund it any way convenient to you
 
 ### Using custom Stellar assets

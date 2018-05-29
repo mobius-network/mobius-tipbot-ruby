@@ -1,4 +1,4 @@
-class TipBot::Telegram::Command::RegisterAck < TipBot::Telegram::Command::Base
+class TipBot::Telegram::Command::CreateAck < TipBot::Telegram::Command::Base
   def call
     return address_is_not_funded unless new_address_is_funded?
 

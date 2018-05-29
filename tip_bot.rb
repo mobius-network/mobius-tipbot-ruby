@@ -7,7 +7,7 @@ require "pry-byebug" if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
 require "tram-policy"
 
 autoload :WithdrawCommandValidnessPolicy, "./tip_bot/telegram/policy/withdraw_command_validness_policy"
-autoload :RegisterCommandValidnessPolicy, "./tip_bot/telegram/policy/register_command_validness_policy"
+autoload :CreateCommandValidnessPolicy, "./tip_bot/telegram/policy/create_command_validness_policy"
 autoload :StellarHelpers, "./tip_bot/utils/stellar_helpers"
 
 module TipBot
@@ -22,14 +22,14 @@ module TipBot
       autoload :Tip,      "./tip_bot/telegram/command/tip"
       autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
       autoload :MyAddress, "./tip_bot/telegram/command/my_address"
-      autoload :Register, "./tip_bot/telegram/command/register"
-      autoload :RegisterAck, "./tip_bot/telegram/command/register_ack"
+      autoload :Create, "./tip_bot/telegram/command/create"
+      autoload :CreateAck, "./tip_bot/telegram/command/create_ack"
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end
 
     module Service
       autoload :TipMessage, "./tip_bot/telegram/service/tip_message"
-      autoload :RegisterAddress, "./tip_bot/telegram/service/register_address"
+      autoload :CreateAddress, "./tip_bot/telegram/service/create_address"
       autoload :Withdraw, "./tip_bot/telegram/service/withdraw"
     end
 

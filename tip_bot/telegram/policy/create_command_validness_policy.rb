@@ -1,5 +1,5 @@
-# Policy for validating /register command arguments
-class RegisterCommandValidnessPolicy < Tram::Policy
+# Policy for validating /create command arguments
+class CreateCommandValidnessPolicy < Tram::Policy
   root_scope "telegram", "policies"
   param :command
 

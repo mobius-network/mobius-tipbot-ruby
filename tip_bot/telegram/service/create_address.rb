@@ -1,17 +1,17 @@
-# Register address command
-class TipBot::Telegram::Service::RegisterAddress
+# Create address command
+class TipBot::Telegram::Service::CreateAddress
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
 
   class NoTrustlineError < StandardError; end
-  class AddressAlreadyRegisteredError < StandardError; end
+  class AddressAlreadyCreatedError < StandardError; end
 
   param :username
   param :address
   param :deposit_amount
 
   def call
-    raise AddressAlreadyRegisteredError unless user.address.nil?
+    raise AddressAlreadyCreatedError unless user.address.nil?
     raise NoTrustlineError unless provided_stellar_account.trustline_exists?
 
     {
