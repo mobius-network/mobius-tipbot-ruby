@@ -178,7 +178,9 @@ module TipBot
         delivery_method(
           :smtp,
           address: ENV["MOBIUS_TIPBOT_SMTP_HOST"],
-          port: ENV["MOBIUS_TIPBOT_SMTP_PORT"]
+          port: ENV["MOBIUS_TIPBOT_SMTP_PORT"],
+          user_name: ENV["MOBIUS_TIPBOT_SMTP_USERNAME"],
+          password: ENV["MOBIUS_TIPBOT_SMTP_PASSWORD"]
         )
       end
     end

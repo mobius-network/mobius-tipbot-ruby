@@ -40,6 +40,14 @@
     "MOBIUS_TIPBOT_SMTP_PORT": {
       "description": "SMTP server port for sending notifications",
       "required": false
+    },
+    "MOBIUS_TIPBOT_SMTP_USERNAME": {
+      "description": "SMTP server username",
+      "required": false
+    },
+    "MOBIUS_TIPBOT_SMTP_PASSWORD": {
+      "description": "SMTP server password",
+      "required": false
     }
   },
   "addons": [ "heroku-redis" ]
