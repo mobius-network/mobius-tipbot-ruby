@@ -52,7 +52,7 @@ en:
         address_register_ack: "Done!"
         invalid_address: "Address %{address} is invalid!"
       registerack:
-        all_set: "All set! Your deposit address is %{new_address}"
+        all_set: "All set! Your new Tipping Account is %{new_address}. You can directly send additional funds to it if it runs out!"
         not_funded: "It seems, that address we generated is not funded yet. Did you post transaction we provided?"
       myaddress:
         address_is_not_registered: "You don't have registered address. Please, use /register command to create one"
