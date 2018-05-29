@@ -88,13 +88,17 @@ module TipBot
     end
 
     def check_balance
-      return unless (threshold = ENV["MOBIUS_TIPBOT_APP_BALANCE_ALERT_THRESHOLD"])
+      return unless balance_alert_threshold
 
       current_balance = dapp.balance
 
-      return if current_balance > threshold
+      return if current_balance > balance_alert_threshold
 
       BalanceAlertJob.perform_async(:low, current_balance)
+    end
+
+    def balance_alert_threshold
+      ENV["MOBIUS_TIPBOT_APP_BALANCE_ALERT_THRESHOLD"]&.to_f
     end
 
     def app_account

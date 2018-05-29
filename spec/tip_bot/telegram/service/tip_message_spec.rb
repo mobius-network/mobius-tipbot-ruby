@@ -91,5 +91,30 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
         end
       end
     end
+
+    context "when bot has low balance" do
+      let(:current_balance) { TipBot.balance_alert_threshold.fdiv(2) }
+      before do
+        allow(TipBot).to receive(:balance_alert_threshold).and_return(3.0)
+        allow(TipBot.dapp).to receive(:balance).and_return(current_balance)
+        allow(TipBot.dapp).to receive(:pay)
+      end
+
+      it "sends notification to admin and reraise error" do
+        expect(BalanceAlertJob).to receive(:perform_async).with(:low, current_balance)
+        subject.call
+      end
+    end
+
+    context "when bot doesn't have sufficient balance" do
+      before do
+        allow(TipBot.dapp).to receive(:pay).and_raise(Mobius::Client::Error::InsufficientFunds)
+      end
+
+      it "sends notification to admin and reraise error" do
+        expect(BalanceAlertJob).to receive(:perform_async).with(:exhausted)
+        expect { subject.call }.to raise_error(Mobius::Client::Error::InsufficientFunds)
+      end
+    end
   end
 end
