@@ -17,8 +17,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
       chat_id: chat.id,
       text: t(
         :already_tipped_message,
-        link: "t.me/#{chat.username}/#{tipped_message.button_message_id}",
-        scope: %i(telegram tip)
+        link: "t.me/#{chat.username}/#{tipped_message.button_message_id}"
       )
     )
   end
@@ -26,7 +25,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def can_not_tip_often
     api.send_message(
       chat_id: chat.id,
-      text: I18n.t(:can_not_tip_often, scope: %i[telegram cmd tip]),
+      text: t(:can_not_tip_often),
       reply_to_message_id: message.message_id
     )
   end
@@ -60,12 +59,15 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
       usernames: "@#{message.from.username}",
       count: 1,
       amount: tipped_message.balance,
-      asset: Mobius::Client.asset_code,
-      scope: %i(telegram cmd tip)
+      asset: Mobius::Client.asset_code
     )
   end
 
   def tipped_message
     @tipped_message ||= TipBot::TippedMessage.new(reply_to_message)
+  end
+
+  def command_scope
+    %i[telegram cmd tip]
   end
 end
