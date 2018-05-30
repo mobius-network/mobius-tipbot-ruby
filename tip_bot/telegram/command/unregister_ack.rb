@@ -19,7 +19,7 @@ class TipBot::Telegram::Command::UnregisterAck < TipBot::Telegram::Command::Base
   def user_address_is_merged?
     # This will trigger error on deleted address
     Mobius::Client::Blockchain::Account.new(
-      Stellar::KeyPair.from_address(user.address),
+      Stellar::KeyPair.from_address(user.address)
     ).balance
     false
   rescue Mobius::Client::Error::AccountMissing

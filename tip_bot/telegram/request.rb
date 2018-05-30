@@ -27,7 +27,7 @@ class TipBot::Telegram::Request
 
   def dispatch
     case message.text
-    when "/start" then command("Start")
+    when "/start", "/help" then command("Start")
     when "/balance" then command("Balance")
     when "/tip" then command("TipMenu")
     when "/my_address" then command("MyAddress")
