@@ -44,6 +44,7 @@ TipBot supports following commands:
 * `/balance` - this will show your tip balance (works in DM only).
 * `/withdraw <address> <amount>` - this will send <amount> of your collected tips to following Stellar address. If <amount> is omitted, all of your tips will be withdrawn. Works in DM only.
 * `/create <funding_address> <amount>` - create and fund your own Tipping Account to send tips from (no more 1 tip per hour limit!). `<funding_address>` - is your current Stellar account that will be used fund your Tipping Account. `<amount>` - the amount that Tipping Account will be funded with 
+*`/unregister <withdraw_address>` - unregister your Tipping Account and withdraw your funds. You will revert to tipping from the default pool and be limited to 1 tip per hour  `<withdraw_address>` - Stellar address where your funds will be withdrawn to and Tipping Account will be merged into
 * `/my_address` - returns your deposit address, that was created after `/create` command invocation, so you will be
   able to fund it any way convenient to you
 

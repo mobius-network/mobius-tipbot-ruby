@@ -32,6 +32,7 @@ class TipBot::Telegram::Request
     when "/tip" then command("TipMenu")
     when "/my_address" then command("MyAddress")
     when %r(^\/create) then command("Create")
+    when %r(^\/unregister) then command("Unregister")
     when %r(^\/withdraw) then command("Withdraw")
     end
   end
@@ -45,6 +46,8 @@ class TipBot::Telegram::Request
     when "tip" then TipBot::Telegram::Command::Tip.call(bot, message, subject)
     when %r(^reg_ack)
       TipBot::Telegram::Command::CreateAck.call(bot, message, subject)
+    when "unreg_ack"
+      TipBot::Telegram::Command::UnregisterAck.call(bot, message, subject)
     end
   end
 end

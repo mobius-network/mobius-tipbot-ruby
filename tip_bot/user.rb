@@ -17,7 +17,11 @@ class TipBot::User
   end
 
   def address=(address)
-    TipBot.redis.hset(REDIS_ADDRESS_KEY, nickname, address)
+    if address.nil?
+      TipBot.redis.hdel(REDIS_ADDRESS_KEY, nickname)
+    else
+      TipBot.redis.hset(REDIS_ADDRESS_KEY, nickname, address)
+    end
   end
 
   # User balance

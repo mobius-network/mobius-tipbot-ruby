@@ -20,6 +20,9 @@ en:
           /create <funding_address> <amount> - create and fund your own Tipping Account to send tips from (no more 1 tip per hour limit!). `<funding_address>` - is your current Stellar account that will be used fund your Tipping Account. `<amount>` - the amount that Tipping Account will be funded with
 
 
+          /unregister <withdraw_address> - unregister your Tipping Account and withdraw your funds. You will revert to tipping from the default pool and be limited to 1 tip per hour  `<withdraw_address>` - Stellar address where your funds will be withdrawn to and Tipping Account will be merged into
+
+
           /my_address - returns your Tipping Account, that was created after /create command invocation, so you will be able to fund it any way convenient to you
         public: >
           Hi, @%{username}, I am Mobius TipBot!
@@ -54,6 +57,16 @@ en:
       createack:
         all_set: "All set! Your new Tipping Account is %{new_address}. You can directly send additional funds to it if it runs out!"
         not_funded: "It seems, that address we generated is not funded yet. Did you post transaction we provided?"
+      unregister:
+        done: "Account is succesfully merged"
+        trustline_missing: "Address %{address} has no trustline for %{code}"
+        account_missing: "Account %{address} is missing on Stellar network!"
+        no_address_registered: "You didn't create address"
+        unregister_address_link: "We have prepared a Stellar transaction that will merge your TipBot account. Please follow the link, sign it and then submit to the Stellar network. %{url}"
+        address_unregister_ack: "Done!"
+      unregisterack:
+        merged: "Successfully merged"
+        not_merged: "It seems, that address wasn't merged. Did you post transaction we provided?"
       myaddress:
         address_is_not_registered: "You don't have registered address. Please, use /create command to create one"
         registered_address: "Your deposit address is %{address}. You can fund it any way, convenient for you!"

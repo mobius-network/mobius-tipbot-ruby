@@ -24,12 +24,15 @@ module TipBot
       autoload :MyAddress, "./tip_bot/telegram/command/my_address"
       autoload :Create, "./tip_bot/telegram/command/create"
       autoload :CreateAck, "./tip_bot/telegram/command/create_ack"
+      autoload :Unregister, "./tip_bot/telegram/command/unregister"
+      autoload :UnregisterAck, "./tip_bot/telegram/command/unregister_ack"
       autoload :Withdraw, "./tip_bot/telegram/command/withdraw"
     end
 
     module Service
       autoload :TipMessage, "./tip_bot/telegram/service/tip_message"
       autoload :CreateAddress, "./tip_bot/telegram/service/create_address"
+      autoload :UnregisterAddress, "./tip_bot/telegram/service/unregister_address"
       autoload :Withdraw, "./tip_bot/telegram/service/withdraw"
     end
 
