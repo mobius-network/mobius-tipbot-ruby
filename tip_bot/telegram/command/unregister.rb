@@ -21,6 +21,8 @@ class TipBot::Telegram::Command::Unregister < TipBot::Telegram::Command::Base
   private
 
   def unregister_address
+    return t(:withdraw_address_missing) if withdraw_address.nil?
+
     xdr = TipBot::Telegram::Service::UnregisterAddress.call(from.username, withdraw_address)
     url = "https://www.stellar.org/laboratory/#txsigner?xdr=#{CGI.escape(xdr)}&network=#{Mobius::Client.network}"
 
