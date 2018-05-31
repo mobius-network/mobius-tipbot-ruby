@@ -65,6 +65,7 @@ en:
         unregister_address_link: "We have prepared a Stellar transaction that will merge your TipBot account. Please follow the link, sign it and then submit to the Stellar network. %{url}"
         address_unregister_ack: "Done!"
         withdraw_address_missing: "Provide target address to withdraw to!"
+        withdraw_address_invalid: "Provided address is invalid"
       unregisterack:
         merged: "Successfully merged"
         not_merged: "It seems, that address wasn't merged. Did you post transaction we provided?"

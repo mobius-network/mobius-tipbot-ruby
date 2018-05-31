@@ -11,8 +11,8 @@ class TipBot::Telegram::Service::UnregisterAddress
   param :withdraw_address
 
   def call
-    raise NoTrustlineError unless merge_destination_account.trustline_exists?
     raise NoAddressRegistered if user.stellar_account.nil?
+    raise NoTrustlineError unless merge_destination_account.trustline_exists?
 
     merge_account_tx.to_envelope.to_xdr(:base64)
   end

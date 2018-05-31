@@ -8,6 +8,8 @@ class TipBot::Telegram::Command::Unregister < TipBot::Telegram::Command::Base
     unregister_address
   rescue Mobius::Client::Error::AccountMissing
     say_account_is_missing
+  rescue Mobius::Client::Error::UnknownKeyPairType
+    say_address_is_invalid
   rescue TipBot::Telegram::Service::UnregisterAddress::NoTrustlineError
     say_no_trustline
   rescue TipBot::Telegram::Service::UnregisterAddress::NoAddressRegistered
@@ -50,6 +52,10 @@ class TipBot::Telegram::Command::Unregister < TipBot::Telegram::Command::Base
 
   def say_address_is_missing
     bot.api.send_message(chat_id: from.id, text: t(:withdraw_address_missing))
+  end
+
+  def say_address_is_invalid
+    bot.api.send_message(chat_id: from.id, text: t(:withdraw_address_invalid))
   end
 
   def acknowledge_button
