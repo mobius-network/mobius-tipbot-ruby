@@ -5,7 +5,7 @@ class TipBot::Telegram::Command::Unregister < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?
 
-    bot.api.send_message(chat_id: from.id, text: unregister_address, reply_markup: acknowledge_button)
+    unregister_address
   rescue Mobius::Client::Error::AccountMissing
     say_account_is_missing
   rescue TipBot::Telegram::Service::UnregisterAddress::NoTrustlineError
@@ -21,12 +21,16 @@ class TipBot::Telegram::Command::Unregister < TipBot::Telegram::Command::Base
   private
 
   def unregister_address
-    return t(:withdraw_address_missing) if withdraw_address.nil?
+    return say_address_is_missing if withdraw_address.nil?
 
     xdr = TipBot::Telegram::Service::UnregisterAddress.call(from.username, withdraw_address)
     url = "https://www.stellar.org/laboratory/#txsigner?xdr=#{CGI.escape(xdr)}&network=#{Mobius::Client.network}"
 
-    t(:unregister_address_link, url: url)
+    bot.api.send_message(
+      chat_id: from.id,
+      text: t(:unregister_address_link, url: url),
+      reply_markup: acknowledge_button
+    )
   end
 
   def say_account_is_missing
@@ -42,6 +46,10 @@ class TipBot::Telegram::Command::Unregister < TipBot::Telegram::Command::Base
 
   def say_no_address_registered
     bot.api.send_message(chat_id: from.id, text: t(:no_address_registered))
+  end
+
+  def say_address_is_missing
+    bot.api.send_message(chat_id: from.id, text: t(:withdraw_address_missing))
   end
 
   def acknowledge_button
