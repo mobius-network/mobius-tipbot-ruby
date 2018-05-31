@@ -4,7 +4,7 @@ require "cgi"
 class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?
-    bot.api.send_message(chat_id: from.id, text: register_address, reply_markup: acknowledge_button)
+    register_address
   rescue Mobius::Client::Error::AccountMissing
     say_account_is_missing
   rescue TipBot::Telegram::Service::CreateAddress::NoTrustlineError
@@ -27,37 +27,38 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
 
   def register_address
     policy = ::CreateCommandValidnessPolicy[self]
-    return policy.errors.messages.first unless policy.valid?
+    return reply(policy.errors.messages.first) unless policy.valid?
 
-    say_url
+    say_url_and_button
   end
 
   def say_account_is_missing
-    bot.api.send_message(chat_id: from.id, text: t(:account_missing, address: address))
+    reply(t(:account_missing, address: address))
   end
 
   def say_no_trustline
-    bot.api.send_message(
-      chat_id: from.id,
-      text: t(:trustline_missing, address: address, code: Mobius::Client.stellar_asset)
+    reply(
+      t(:trustline_missing, address: address, code: Mobius::Client.stellar_asset)
     )
   end
 
   def say_registered_address
+    reply(t(:registered_address, address: user.address))
+  end
+
+  def say_url_and_button
+    xdr = txe_to_sign.to_xdr(:base64)
+    url = "https://www.stellar.org/laboratory/#txsigner?xdr=#{CGI.escape(xdr)}&network=#{Mobius::Client.network}"
+
     bot.api.send_message(
       chat_id: from.id,
-      text: t(:registered_address, address: user.address)
+      text: t(:register_address_link, url: url),
+      reply_markup: acknowledge_button
     )
   end
 
-  def say_url
-    xdr = txe_to_sign.to_xdr(:base64)
-    url = "https://www.stellar.org/laboratory/#txsigner?xdr=#{CGI.escape(xdr)}&network=#{Mobius::Client.network}"
-    t(:register_address_link, url: url)
-  end
-
   def say_invalid_address
-    t(:invalid_address, address: address)
+    reply(t(:invalid_address, address: address))
   end
 
   def acknowledge_button
