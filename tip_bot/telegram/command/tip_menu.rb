@@ -45,7 +45,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
     reply_to_message.nil? ||
       reply_to_message.from.id == from.id ||
       tipped_message.tipped?(username) ||
-      from.is_bot ||
+      reply_to_message.from.is_bot ||
       empty_username?
   end
 
