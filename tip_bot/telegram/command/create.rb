@@ -34,7 +34,7 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   end
 
   def say_no_username
-    reply(t(:no_username, address: address))
+    reply(t(:no_username))
   end
 
   def say_account_is_missing

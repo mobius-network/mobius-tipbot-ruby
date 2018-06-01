@@ -1,6 +1,7 @@
 # /tip command handler
 class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def call
+    return say_no_username if empty_username?
     return if tip_not_allowed?
     return can_not_tip_often if user.locked?
     return forward_existing_keyboard if message_already_tipped?
@@ -69,5 +70,9 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
 
   def command_scope
     %i[telegram cmd tip]
+  end
+
+  def say_no_username
+    reply(t(:no_username))
   end
 end

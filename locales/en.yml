@@ -42,6 +42,7 @@ en:
         heading_for_many_tippers: "%{usernames} and %{more} others ❤s this message. %{amount} %{asset} tipped so far 🤑"
         already_tipped_message: "This message was already tipped. Use this button for tipping it! %{link}"
         button_text: "Send tip! (%{count})"
+        no_username: "You should have username set to perform this action"
       withdraw:
         done: "You have successfully withdrew %{amount} %{asset} to %{address}!"
         account_missing: "Target address is missing on Stellar network: %{address}! Check if you're confused with testnet/pubnet addresses."
