@@ -21,7 +21,7 @@ class TipBot::Telegram::Command::Base
   end
 
   def reply(text)
-    bot.api.send_message(chat_id: from.id, text: text)
+    bot.api.send_message(chat_id: chat.id, text: text)
   end
 
   protected
