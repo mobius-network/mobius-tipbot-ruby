@@ -54,6 +54,7 @@ en:
         registered_address: "You already have registered an address. It's %{address}. You can fund it any way, convenient for you!"
         address_register_ack: "Done!"
         invalid_address: "Address %{address} is invalid!"
+        no_username: "You should have username set to perform this action"
       createack:
         all_set: "All set! Your new Tipping Account is %{new_address}. You can directly send additional funds to it if it runs out!"
         not_funded: "It seems, that address we generated is not funded yet. Did you post transaction we provided?"

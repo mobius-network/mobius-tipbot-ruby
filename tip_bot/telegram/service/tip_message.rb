@@ -7,10 +7,10 @@ class TipBot::Telegram::Service::TipMessage
 
   # @!method initialize(seed)
   # @param message [Telegram::Bot::Types::Message] Message to be tipped
-  # @param tipper_nickname [String] Telegram username of a tipper
+  # @param tipper_user [Telegram::Bot::Types::Message::User] tipper
   # @!scope instance
   param :message
-  param :tipper_nickname
+  param :tipper_user
 
   def call
     return if tipper.locked?
@@ -21,11 +21,11 @@ class TipBot::Telegram::Service::TipMessage
   private
 
   def message_author
-    @message_author ||= TipBot::User.new(message.from.username)
+    @message_author ||= TipBot::User.new(message.from.id)
   end
 
   def tipper
-    @tipper ||= TipBot::User.new(tipper_nickname)
+    @tipper ||= TipBot::User.new(tipper_user.id)
   end
 
   def tip
@@ -36,7 +36,7 @@ class TipBot::Telegram::Service::TipMessage
     end
 
     message_author.increment_balance(tip_amount) unless message_author.address
-    TipBot::TippedMessage.new(message).tip(tipper_nickname)
+    TipBot::TippedMessage.new(message).tip(tipper_user.username)
   end
 
   def tip_via_dapp

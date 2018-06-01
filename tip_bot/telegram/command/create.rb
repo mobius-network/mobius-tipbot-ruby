@@ -4,6 +4,7 @@ require "cgi"
 class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?
+    return say_no_username if empty_username?
     register_address
   rescue Mobius::Client::Error::AccountMissing
     say_account_is_missing
@@ -30,6 +31,10 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
     return reply(policy.errors.messages.first) unless policy.valid?
 
     say_url_and_button
+  end
+
+  def say_no_username
+    reply(t(:no_username, address: address))
   end
 
   def say_account_is_missing
@@ -81,6 +86,6 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   end
 
   def service_call
-    @service_call ||= TipBot::Telegram::Service::CreateAddress.call(from.username, address, deposit_amount)
+    @service_call ||= TipBot::Telegram::Service::CreateAddress.call(from.id, address, deposit_amount)
   end
 end

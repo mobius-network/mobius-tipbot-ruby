@@ -17,7 +17,7 @@ class TipBot::Telegram::Command::Base
   end
 
   def user
-    @user ||= TipBot::User.new(username)
+    @user ||= TipBot::User.new(from.id)
   end
 
   def reply(text)

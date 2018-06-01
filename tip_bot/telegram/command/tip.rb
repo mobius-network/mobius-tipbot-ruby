@@ -94,14 +94,14 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def user
-    @user ||= TipBot::User.new(message.reply_to_message.from.username)
+    @user ||= TipBot::User.new(message.reply_to_message.from.id)
   end
 
   def tipper_user
-    @tipper_user ||= TipBot::User.new(username)
+    @tipper_user ||= TipBot::User.new(from.id)
   end
 
   def call_tip_message_and_lock
-    TipBot::Telegram::Service::TipMessage.call(subject.message.reply_to_message, username)
+    TipBot::Telegram::Service::TipMessage.call(subject.message.reply_to_message, subject.from)
   end
 end

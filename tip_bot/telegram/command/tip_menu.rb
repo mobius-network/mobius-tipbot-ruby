@@ -5,7 +5,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
     return can_not_tip_often if user.locked?
     return forward_existing_keyboard if message_already_tipped?
 
-    TipBot::Telegram::Service::TipMessage.call(reply_to_message, username)
+    TipBot::Telegram::Service::TipMessage.call(reply_to_message, from)
 
     send_tip_button
   end

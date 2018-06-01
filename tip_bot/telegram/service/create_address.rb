@@ -6,7 +6,7 @@ class TipBot::Telegram::Service::CreateAddress
   class NoTrustlineError < StandardError; end
   class AddressAlreadyCreatedError < StandardError; end
 
-  param :username
+  param :user_id
   param :address
   param :deposit_amount
 
@@ -33,7 +33,7 @@ class TipBot::Telegram::Service::CreateAddress
   end
 
   def user
-    @user ||= TipBot::User.new(username)
+    @user ||= TipBot::User.new(user_id)
   end
 
   def new_account_operations
