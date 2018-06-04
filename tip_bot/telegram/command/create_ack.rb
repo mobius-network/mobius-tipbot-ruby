@@ -30,6 +30,6 @@ class TipBot::Telegram::Command::CreateAck < TipBot::Telegram::Command::Base
   end
 
   def user
-    @user ||= TipBot::User.new(subject.from.username)
+    @user ||= TipBot::User.new(subject.from.id)
   end
 end

@@ -7,7 +7,7 @@ class TipBot::Telegram::Service::UnregisterAddress
   class NoTrustlineError < StandardError; end
   class NoAddressRegistered < StandardError; end
 
-  param :username
+  param :user_id
   param :withdraw_address
 
   def call
@@ -26,7 +26,7 @@ class TipBot::Telegram::Service::UnregisterAddress
   end
 
   def user
-    @user ||= TipBot::User.new(username)
+    @user ||= TipBot::User.new(user_id)
   end
 
   def merge_account_operations
