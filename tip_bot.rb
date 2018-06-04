@@ -80,13 +80,19 @@ module TipBot
     end
 
     def app_account
-      @app_account ||= Mobius::Client::Blockchain::Account.new(
-        Mobius::Client.to_keypair(dapp.seed)
-      )
+      @app_account ||= Mobius::Client::Blockchain::Account.new(app_keypair)
     end
 
     def app_keypair
-      @app_keypair ||= app_account.keypair
+      @app_keypair ||= Mobius::Client.to_keypair(dapp.seed)
+    end
+
+    def pool_keypair
+      @pool_keypair ||= Mobius::Client.to_keypair(dapp.address)
+    end
+
+    def pool_account
+      @pool_account ||= Mobius::Client::Blockchain::Account.new(pool_keypair)
     end
 
     # Tip rate

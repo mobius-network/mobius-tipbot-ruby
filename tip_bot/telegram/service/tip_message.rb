@@ -40,11 +40,12 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip_via_dapp
+    return if message_author.address.nil?
     TipBot.dapp.pay(tip_amount, target_address: message_author.address)
   end
 
   def tip_via_user_account
-    destination = message_author.address || TipBot.app_keypair.address
+    destination = message_author.address || TipBot.pool_keypair.address
     StellarHelpers.transfer(
       from: tipper.stellar_account,
       to: destination,

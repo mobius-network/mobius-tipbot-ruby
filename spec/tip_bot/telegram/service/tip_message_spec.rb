@@ -52,8 +52,8 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
       it do
         VCR.use_cassette("tip_message/no_addresses") do
           subject.call
-          expect(deposit_account.balance).to eq(TipBot.tip_rate)
-          expect(credit_account.balance).to eq(1000.0 - TipBot.tip_rate)
+          expect(deposit_account.balance).to eq(0)
+          expect(credit_account.balance).to eq(1000.0)
         end
       end
     end
@@ -68,8 +68,8 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
             subject.call
 
             expect(tipper_user.stellar_account.balance).to eq(1000.0 - TipBot.tip_rate)
-            expect(deposit_account.balance).to eq(2 * TipBot.tip_rate)
-            expect(credit_account.balance).to eq(1000.0 - TipBot.tip_rate)
+            expect(deposit_account.balance).to eq(0)
+            expect(credit_account.balance).to eq(1000.0 + TipBot.tip_rate)
           end
         end
       end
@@ -85,8 +85,8 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
             expect(tipper_user.stellar_account.balance).to eq(1000.0 - 2 * TipBot.tip_rate)
             expect(message_author.stellar_account.balance).to eq(TipBot.tip_rate)
             # these shouldn't change
-            expect(deposit_account.balance).to eq(2 * TipBot.tip_rate)
-            expect(credit_account.balance).to eq(1000.0 - TipBot.tip_rate)
+            expect(deposit_account.balance).to eq(0)
+            expect(credit_account.balance).to eq(1000.0 + TipBot.tip_rate)
           end
         end
       end
