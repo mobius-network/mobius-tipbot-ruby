@@ -19,8 +19,8 @@ class TipBot::Telegram::Command::Withdraw < TipBot::Telegram::Command::Base
     policy = ::WithdrawCommandValidnessPolicy[self]
     return policy.errors.messages.first unless policy.valid?
 
-    withdrawn_amount = TipBot::Telegram::Service::Withdraw.call(user, address, amount&.to_f)
-    say_done(withdrawn_amount)
+    TipBot::Telegram::Service::Withdraw.call(user, address, amount_to_withdraw)
+    say_done
   rescue Mobius::Client::Error::TrustlineMissing
     say_trustline_missing
   rescue Mobius::Client::Error::AccountMissing
@@ -41,7 +41,11 @@ class TipBot::Telegram::Command::Withdraw < TipBot::Telegram::Command::Base
     t(:invalid_address, address: address)
   end
 
-  def say_done(withdrawn_amount)
-    t(:done, address: address, amount: withdrawn_amount, asset: Mobius::Client.asset_code)
+  def say_done
+    t(:done, address: address, amount: amount_to_withdraw, asset: Mobius::Client.asset_code)
+  end
+
+  def amount_to_withdraw
+    @amount_to_withdraw ||= (amount&.to_f || user.balance)
   end
 end

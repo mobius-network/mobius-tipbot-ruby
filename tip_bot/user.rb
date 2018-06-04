@@ -22,6 +22,7 @@ class TipBot::User
     else
       TipBot.redis.hset(REDIS_ADDRESS_KEY, nickname, address)
     end
+    @stellar_account = nil
   end
 
   # User balance
@@ -67,7 +68,8 @@ class TipBot::User
   end
 
   def stellar_account
-    address && Mobius::Client::Blockchain::Account.new(Mobius::Client.to_keypair(address))
+    @stellar_account ||=
+      address && Mobius::Client::Blockchain::Account.new(Mobius::Client.to_keypair(address))
   end
 
   private

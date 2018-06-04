@@ -41,15 +41,12 @@ RSpec.describe TipBot::Telegram::Request do
       describe "/tip" do
         let(:reply_to_message) do
           Telegram::Bot::Types::Message.new(
-            from: {
-              id: 653,
-              username: "jack_black"
-            },
+            from: {id: 653, username: "jack_black", is_bot: from_bot},
             chat: { id: 321 }
           )
         end
         let(:from_bot) { false }
-        let(:from) { { id: 123, username: "john_doe", is_bot: from_bot } }
+        let(:from) { { id: 123, username: "john_doe" } }
         let(:message_args) do
           {
             message_id: message_id,
