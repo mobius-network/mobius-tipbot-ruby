@@ -107,6 +107,16 @@ module TipBot
       validate!
     end
 
+    def chats_whitelist
+      return if ENV["MOBIUS_TIPBOT_CHATS_WHITELIST"].nil?
+
+      ENV["MOBIUS_TIPBOT_CHATS_WHITELIST"].split(",").map(&:to_i)
+    end
+
+    def development?
+      ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
+    end
+
     private
 
     def validate!

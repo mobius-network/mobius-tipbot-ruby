@@ -38,6 +38,7 @@ class TipBot::Telegram::Request
   end
 
   def command(klass)
+    return say_chat_not_permitted unless chat_is_permitted?
     "TipBot::Telegram::Command::#{klass}".constantize.call(bot, message, subject)
   end
 
@@ -49,5 +50,20 @@ class TipBot::Telegram::Request
     when "unreg_ack"
       TipBot::Telegram::Command::UnregisterAck.call(bot, message, subject)
     end
+  end
+
+  def chat_is_permitted?
+    return true if TipBot.development? ||
+                   TipBot.chats_whitelist.nil? ||
+                   message.chat.type == "private"
+
+    TipBot.chats_whitelist.include?(message.chat.id)
+  end
+
+  def say_chat_not_permitted
+    bot.api.send_message(
+      chat_id: message.chat.id,
+      text: I18n.t(:chat_is_not_permitted, scope: :telegram)
+    )
   end
 end

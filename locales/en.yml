@@ -1,6 +1,7 @@
 en:
   telegram:
     hello: Starting Mobius Telegram TipBot...
+    chat_is_not_permitted: Tip Bot is not allowed to work in this chat
     cmd:
       unknown: "Unknown command: %{command}"
       start:
