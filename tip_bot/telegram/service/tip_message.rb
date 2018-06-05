@@ -7,7 +7,7 @@ class TipBot::Telegram::Service::TipMessage
 
   # @!method initialize(seed)
   # @param message [Telegram::Bot::Types::Message] Message to be tipped
-  # @param tipper_user [Telegram::Bot::Types::Message::User] tipper
+  # @param tipper_user [Telegram::Bot::Types::User] tipper
   # @!scope instance
   param :message
   param :tipper_user
@@ -43,13 +43,12 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip_via_dapp
-    return if message_author.address.nil?
     TipBot.dapp.pay(tip_amount, target_address: message_author.address)
     TipBot.check_balance
   end
 
   def tip_via_user_account
-    destination = message_author.address || TipBot.pool_keypair.address
+    destination = message_author.address || TipBot.app_keypair.address
     StellarHelpers.transfer(
       from: tipper.stellar_account,
       to: destination,

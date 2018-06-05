@@ -98,7 +98,7 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def tipper_user
-    @tipper_user ||= TipBot::User.new(from.id)
+    @tipper_user ||= TipBot::User.new(subject.from.id)
   end
 
   def call_tip_message_and_lock

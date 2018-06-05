@@ -12,9 +12,9 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
     )
   end
 
-  let(:message_author) { TipBot::User.new(message.from.username) }
-  let(:tipper_nickname) { "john_doe" }
-  let(:tipper_user) { TipBot::User.new(tipper_nickname) }
+  let(:message_author) { TipBot::User.new(message.from.id) }
+  let(:tipper_id) { 512 }
+  let(:tipper_user) { TipBot::User.new(tipper_id) }
 
   # Both deposit and credit account are pre-created, funded, and deposit account is
   # set to be a cosigner for the credit account
@@ -38,7 +38,12 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
     )
   end
 
-  subject { described_class.new(message, tipper_nickname) }
+  subject do
+    described_class.new(
+      message,
+      Telegram::Bot::Types::User.new(id: tipper_id, username: "john_doe")
+    )
+  end
 
   before do
     TipBot.dapp = Mobius::Client::App.new(
@@ -52,8 +57,8 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
       it do
         VCR.use_cassette("tip_message/no_addresses") do
           subject.call
-          expect(deposit_account.balance).to eq(0)
-          expect(credit_account.balance).to eq(1000.0)
+          expect(deposit_account.balance).to eq(TipBot.tip_rate)
+          expect(credit_account.balance).to eq(1000.0 - TipBot.tip_rate)
         end
       end
     end
@@ -68,8 +73,8 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
             subject.call
 
             expect(tipper_user.stellar_account.balance).to eq(1000.0 - TipBot.tip_rate)
-            expect(deposit_account.balance).to eq(0)
-            expect(credit_account.balance).to eq(1000.0 + TipBot.tip_rate)
+            expect(deposit_account.balance).to eq(2 * TipBot.tip_rate)
+            expect(credit_account.balance).to eq(1000.0 - TipBot.tip_rate)
           end
         end
       end
@@ -85,8 +90,8 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
             expect(tipper_user.stellar_account.balance).to eq(1000.0 - 2 * TipBot.tip_rate)
             expect(message_author.stellar_account.balance).to eq(TipBot.tip_rate)
             # these shouldn't change
-            expect(deposit_account.balance).to eq(0)
-            expect(credit_account.balance).to eq(1000.0 + TipBot.tip_rate)
+            expect(deposit_account.balance).to eq(2 * TipBot.tip_rate)
+            expect(credit_account.balance).to eq(1000.0 - TipBot.tip_rate)
           end
         end
       end

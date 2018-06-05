@@ -109,14 +109,6 @@ module TipBot
       @app_keypair ||= Mobius::Client.to_keypair(dapp.seed)
     end
 
-    def pool_keypair
-      @pool_keypair ||= Mobius::Client.to_keypair(dapp.address)
-    end
-
-    def pool_account
-      @pool_account ||= Mobius::Client::Blockchain::Account.new(pool_keypair)
-    end
-
     # Tip rate
     def tip_rate
       @tip_rate ||= (ENV["MOBIUS_TIPBOT_RATE"] || 1).to_f
