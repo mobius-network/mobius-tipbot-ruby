@@ -89,7 +89,10 @@ GEM
     inflecto (0.0.2)
     json (2.1.0)
     jwt (1.5.6)
+    mail (2.7.0)
+      mini_mime (>= 0.1.1)
     method_source (0.9.0)
+    mini_mime (1.0.0)
     minitest (5.11.3)
     mobius-client (0.2.1)
       constructor_shortcut (~> 0.2.0)
@@ -171,6 +174,8 @@ GEM
       hyperclient (~> 0.7.0)
       stellar-base (~> 0.13.0)
       toml-rb (~> 1.1.1)
+    sucker_punch (2.0.4)
+      concurrent-ruby (~> 1.0.0)
     telegram-bot-ruby (0.8.6.1)
       faraday
       inflecto
@@ -212,6 +217,7 @@ DEPENDENCIES
   constructor_shortcut
   dry-initializer
   i18n
+  mail (~> 2.7.0)
   mobius-client (~> 0.2)
   multi_json
   pry-byebug
@@ -224,6 +230,7 @@ DEPENDENCIES
   rubocop-rspec (~> 1.23)
   simplecov (~> 0.16.1)
   simplecov-console (~> 0.4.2)
+  sucker_punch (~> 2.0)
   telegram-bot-ruby
   tram-policy
   vcr (~> 3.0, >= 3.0.3)

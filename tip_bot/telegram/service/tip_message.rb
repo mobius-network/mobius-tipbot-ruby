@@ -16,6 +16,9 @@ class TipBot::Telegram::Service::TipMessage
     return if tipper.locked?
     tip
     tipper.lock if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] != "development"
+  rescue Mobius::Client::Error::InsufficientFunds
+    BalanceAlertJob.perform_async(:exhausted)
+    raise
   end
 
   private
@@ -42,6 +45,7 @@ class TipBot::Telegram::Service::TipMessage
   def tip_via_dapp
     return if message_author.address.nil?
     TipBot.dapp.pay(tip_amount, target_address: message_author.address)
+    TipBot.check_balance
   end
 
   def tip_via_user_account

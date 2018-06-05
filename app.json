@@ -24,6 +24,30 @@
     "MOBIUS_TIPBOT_ASSET_ISSUER": {
       "description": "Custom Stellar asset issuer",
       "required": false
+    },
+    "MOBIUS_TIPBOT_APP_BALANCE_ALERT_THRESHOLD": {
+      "description": "Threshold for alerting about low app balance",
+      "required": false
+    },
+    "MOBIUS_TIPBOT_ADMIN_EMAIL": {
+      "description": "Admin email for receiving notifications",
+      "required": false
+    },
+    "MOBIUS_TIPBOT_SMTP_HOST": {
+      "description": "SMTP server host for sending notifications",
+      "required": false
+    },
+    "MOBIUS_TIPBOT_SMTP_PORT": {
+      "description": "SMTP server port for sending notifications",
+      "required": false
+    },
+    "MOBIUS_TIPBOT_SMTP_USERNAME": {
+      "description": "SMTP server username",
+      "required": false
+    },
+    "MOBIUS_TIPBOT_SMTP_PASSWORD": {
+      "description": "SMTP server password",
+      "required": false
     }
   },
   "addons": [ "heroku-redis" ]
