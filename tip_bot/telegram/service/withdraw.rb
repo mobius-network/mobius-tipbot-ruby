@@ -9,7 +9,7 @@ class TipBot::Telegram::Service::Withdraw
 
   def call
     if user.stellar_account.nil?
-      TipBot.dapp.transfer(amount, destination_address)
+      TipBot.dev_dapp.transfer(amount, destination_address)
       user.decrement_balance(amount)
     else
       withdraw_from_user_account

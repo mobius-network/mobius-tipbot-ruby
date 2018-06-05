@@ -83,6 +83,15 @@ module TipBot
       @dapp ||= build_dapp
     end
 
+    # It's actually some kind of hack to be able to
+    # transfer money from dapp account itself
+    def dev_dapp
+      @dev_dapp ||= Mobius::Client::App.new(
+        dapp.seed,
+        Mobius::Client::Blockchain::KeyPairFactory.produce(dapp.seed).address
+      )
+    end
+
     def asset_code
       Mobius::Client.stellar_asset.code
     end
