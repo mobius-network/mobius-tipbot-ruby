@@ -10,12 +10,11 @@ class TipBot::Telegram::Service::TipMessage
   # @param tipper_user [Telegram::Bot::Types::User] tipper
   # @!scope instance
   param :message
-  param :tipper_user
+  param :tipper
 
   def call
     return if tipper.locked?
     tip
-    tipper.lock if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] != "development"
   rescue Mobius::Client::Error::InsufficientFunds
     BalanceAlertJob.perform_async(:exhausted)
     raise
@@ -27,33 +26,54 @@ class TipBot::Telegram::Service::TipMessage
     @message_author ||= TipBot::User.new(message.from.id)
   end
 
-  def tipper
-    @tipper ||= TipBot::User.new(tipper_user.id)
-  end
+  # def tipper
+  #   @tipper ||= TipBot::User.new(tipper_user.id)
+  # end
 
   def tip
-    if tipper.stellar_account.nil?
-      tip_via_dapp
-    else
+    if tipper.has_funded_address?
       tip_via_user_account
+    else
+      tip_via_dapp
     end
 
-    message_author.increment_balance(tip_amount) unless message_author.address
-    TipBot::TippedMessage.new(message).tip(tipper_user.username)
+    TipBot::TippedMessage.new(message).tip(tipper.username)
   end
 
   def tip_via_dapp
-    TipBot.dapp.pay(tip_amount, target_address: message_author.address)
+    if message_author.address
+      tip_via_dapp_to_address(message_author.address)
+    else
+      tip_via_dapp_inside
+    end
+
     TipBot.check_balance
+  end
+
+  def tip_via_dapp_to_address(address)
+    if tipper.balance.positive?
+      TipBot.dev_dapp.transfer(tip_amount, address)
+      tipper.decrement_balance(tip_amount)
+    else
+      TipBot.dapp.pay(tip_amount, target_address: address)
+      tipper.lock
+    end
+  end
+
+  def tip_via_dapp_inside
+    if tipper.balance.positive?
+      tipper.transfer_from_balance(tip_amount, message_author)
+    else
+      TipBot.dapp.pay(tip_amount)
+      message_author.increment_balance(tip_amount)
+      tipper.lock
+    end
   end
 
   def tip_via_user_account
     destination = message_author.address || TipBot.app_keypair.address
-    StellarHelpers.transfer(
-      from: tipper.stellar_account,
-      to: destination,
-      amount: tip_amount
-    )
+    tipper.user_dapp.transfer(tip_amount, destination)
+    message_author.increment_balance(tip_amount) if message_author.address.nil?
   end
 
   def tip_amount

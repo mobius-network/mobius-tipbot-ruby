@@ -6,6 +6,9 @@ require "simplecov-console"
 require "vcr"
 require "pry-byebug"
 
+ENV["MOBIUS_TIPBOT_APP_PRIVATE_KEY"] = "SBPC3QY625XDUTAMF235EU3UNAZYZLKTL5UMJVX2PURW6SMZTYSPEJE6"
+ENV["MOBIUS_TIPBOT_CREDIT_ADDRESS"] = "GCJYXHZFOT673V4UIRMZWKPWWWXL36UGAG7G4VYYJEWQOLM4K6VJLHIX"
+
 SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
 SimpleCov.start do
   add_filter "spec"
@@ -15,6 +18,7 @@ end
 VCR.configure do |config|
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
   config.hook_into :webmock
+  config.debug_logger = $stdout
 end
 
 require "./tip_bot"

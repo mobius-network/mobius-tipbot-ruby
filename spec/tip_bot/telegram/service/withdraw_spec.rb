@@ -6,9 +6,7 @@ RSpec.describe TipBot::Telegram::Service::Withdraw do
 
   subject { described_class.new(user, destination_address, amount) }
 
-  before do
-    allow(TipBot).to receive(:dapp).and_return(double("Mobius::Client::App", transfer: nil))
-  end
+  before { allow(TipBot.dev_dapp).to receive(:transfer) }
 
   it "returns withdrawn amount" do
     expect(subject.call).to eq(amount)
@@ -18,7 +16,7 @@ RSpec.describe TipBot::Telegram::Service::Withdraw do
     before { user.increment_balance(user_balance) }
 
     it "withdraws via DAapp" do
-      expect(TipBot.dapp).to receive(:transfer).with(amount, destination_address)
+      expect(TipBot.dev_dapp).to receive(:transfer).with(amount, destination_address)
       subject.call
     end
 

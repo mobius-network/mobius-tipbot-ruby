@@ -4,10 +4,9 @@ class TipBot::User
 
   # @!method initialize(seed)
   # @param id [Integer] User Telegram id
-  # @param dapp [Mobius::Client::App] Application instance
   # @!scope instance
   param :id
-  param :dapp, default: -> { TipBot.dapp }
+  param :username, optional: true
 
   # Address linked to user
   # @return [String] Stellar address
@@ -35,6 +34,11 @@ class TipBot::User
                  end
   end
 
+  def reload_balance
+    @balance = nil
+    balance
+  end
+
   def redis_balance
     TipBot.redis.hget(REDIS_BALANCE_KEY, id).to_f
   end
@@ -48,6 +52,7 @@ class TipBot::User
 
   # Blocks user from sending tips for period
   def lock
+    return if TipBot.development?
     TipBot.redis.set(redis_lock_key, true, nx: true, ex: LOCK_DURATION)
   end
 
@@ -55,7 +60,6 @@ class TipBot::User
   # Users with registered custom Stellar accounts are never locked
   # @return [Boolean] true if locked
   def locked?
-    return false unless stellar_account.nil?
     (TipBot.redis.get(redis_lock_key) && true) || false
   end
 
@@ -70,6 +74,21 @@ class TipBot::User
   def stellar_account
     @stellar_account ||=
       address && Mobius::Client::Blockchain::Account.new(Mobius::Client.to_keypair(address))
+  end
+
+  def transfer_from_balance(amount, target_user)
+    TipBot.redis.multi do
+      decrement_balance(amount)
+      target_user.increment_balance(amount)
+    end
+  end
+
+  def user_dapp
+    @user_dapp ||= Mobius::Client::App.new(TipBot.dapp.seed, address)
+  end
+
+  def has_funded_address?
+    address && balance.positive?
   end
 
   private

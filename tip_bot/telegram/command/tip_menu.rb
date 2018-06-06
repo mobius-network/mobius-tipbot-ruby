@@ -6,7 +6,7 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
     return can_not_tip_often if user.locked?
     return forward_existing_keyboard if message_already_tipped?
 
-    TipBot::Telegram::Service::TipMessage.call(reply_to_message, from)
+    TipBot::Telegram::Service::TipMessage.call(reply_to_message, user)
 
     send_tip_button
   rescue Mobius::Client::Error::InsufficientFunds

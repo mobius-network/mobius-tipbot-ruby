@@ -17,14 +17,14 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 05 Jun 2018 05:56:17 GMT
+      - Wed, 06 Jun 2018 08:57:13 GMT
       Content-Type:
       - application/hal+json; charset=utf-8
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d97b613a7c1d1178fec1586f65aaba3061528178177; expires=Wed, 05-Jun-19
-        05:56:17 GMT; path=/; domain=.stellar.org; HttpOnly
+      - __cfduid=d8fb53bf84227b8edad39e585ec6de2841528275432; expires=Thu, 06-Jun-19
+        08:57:12 GMT; path=/; domain=.stellar.org; HttpOnly
       Content-Disposition:
       - inline
       Vary:
@@ -32,15 +32,15 @@ http_interactions:
       X-Ratelimit-Limit:
       - '17200'
       X-Ratelimit-Remaining:
-      - '17133'
+      - '17199'
       X-Ratelimit-Reset:
-      - '1219'
+      - '3600'
       Expect-Ct:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Server:
       - cloudflare
       Cf-Ray:
-      - 42606527ec7d8e55-DME
+      - 4269ab8e3a979041-DME
     body:
       encoding: UTF-8
       string: |-
@@ -83,14 +83,14 @@ http_interactions:
           },
           "horizon_version": "snapshot-1bf713b",
           "core_version": "stellar-core 9.2.0rc6 (b0923f153b86d394a83b2a619db6b23f07ed0700)",
-          "history_latest_ledger": 9334988,
+          "history_latest_ledger": 9354439,
           "history_elder_ledger": 1,
-          "core_latest_ledger": 9334988,
+          "core_latest_ledger": 9354439,
           "network_passphrase": "Test SDF Network ; September 2015",
           "protocol_version": 9
         }
     http_version: 
-  recorded_at: Tue, 05 Jun 2018 05:56:17 GMT
+  recorded_at: Wed, 06 Jun 2018 08:57:13 GMT
 - request:
     method: get
     uri: https://horizon-testnet.stellar.org/accounts/GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART
@@ -108,14 +108,14 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 05 Jun 2018 05:56:18 GMT
+      - Wed, 06 Jun 2018 08:57:16 GMT
       Content-Type:
       - application/hal+json; charset=utf-8
       Connection:
       - keep-alive
       Set-Cookie:
-      - __cfduid=d5ae6da3bf98f35e0483aae81157a281d1528178178; expires=Wed, 05-Jun-19
-        05:56:18 GMT; path=/; domain=.stellar.org; HttpOnly
+      - __cfduid=dd25cb5c102e5e44632249100d2090e491528275435; expires=Thu, 06-Jun-19
+        08:57:15 GMT; path=/; domain=.stellar.org; HttpOnly
       Content-Disposition:
       - inline
       Vary:
@@ -123,15 +123,15 @@ http_interactions:
       X-Ratelimit-Limit:
       - '17200'
       X-Ratelimit-Remaining:
-      - '17132'
+      - '17199'
       X-Ratelimit-Reset:
-      - '1218'
+      - '3600'
       Expect-Ct:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Server:
       - cloudflare
       Cf-Ray:
-      - 4260652dc9414e48-DME
+      - 4269aba28dea8e55-DME
     body:
       encoding: UTF-8
       string: |-
@@ -207,5 +207,5 @@ http_interactions:
           "data": {}
         }
     http_version: 
-  recorded_at: Tue, 05 Jun 2018 05:56:18 GMT
+  recorded_at: Wed, 06 Jun 2018 08:57:16 GMT
 recorded_with: VCR 3.0.3
