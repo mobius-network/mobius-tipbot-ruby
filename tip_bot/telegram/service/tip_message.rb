@@ -7,7 +7,7 @@ class TipBot::Telegram::Service::TipMessage
 
   # @!method initialize(seed)
   # @param message [Telegram::Bot::Types::Message] Message to be tipped
-  # @param tipper_user [Telegram::Bot::Types::User] tipper
+  # @param tipper_user [TipBot::User] tipper
   # @!scope instance
   param :message
   param :tipper
@@ -25,10 +25,6 @@ class TipBot::Telegram::Service::TipMessage
   def message_author
     @message_author ||= TipBot::User.new(message.from.id)
   end
-
-  # def tipper
-  #   @tipper ||= TipBot::User.new(tipper_user.id)
-  # end
 
   def tip
     if tipper.has_funded_address?
@@ -51,7 +47,7 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip_via_dapp_to_address(address)
-    if tipper.balance.positive?
+    if tipper.balance >= tip_amount
       TipBot.dev_dapp.transfer(tip_amount, address)
       tipper.decrement_balance(tip_amount)
     else
@@ -61,7 +57,7 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip_via_dapp_inside
-    if tipper.balance.positive?
+    if tipper.balance >= tip_amount
       tipper.transfer_from_balance(tip_amount, message_author)
     else
       TipBot.dapp.pay(tip_amount)
