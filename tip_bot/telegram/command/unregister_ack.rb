@@ -27,6 +27,6 @@ class TipBot::Telegram::Command::UnregisterAck < TipBot::Telegram::Command::Base
   end
 
   def user
-    @user ||= TipBot::User.new(subject.from.id)
+    @user ||= TipBot::User.new(subject.from)
   end
 end

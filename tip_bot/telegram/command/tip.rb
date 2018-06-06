@@ -76,7 +76,8 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
       usernames: all_tippers.last(3).join(", "),
       amount: tipped_message.balance,
       more: all_tippers.size - 3,
-      asset: Mobius::Client.asset_code
+      recipient: tipped_message.author.display_name,
+      recipient_total: tipped_message.author.balance
     )
   end
 
@@ -85,7 +86,8 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
       :heading,
       usernames: all_tippers.join(", "),
       amount: tipped_message.balance,
-      asset: Mobius::Client.asset_code
+      recipient: tipped_message.author.display_name,
+      recipient_total: tipped_message.author.balance
     )
   end
 
@@ -94,17 +96,17 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   end
 
   def user
-    @user ||= TipBot::User.new(message.reply_to_message.from.id)
+    @user ||= TipBot::User.new(message.reply_to_message.from)
   end
 
   def tipper_user
-    @tipper_user ||= TipBot::User.new(subject.from.id)
+    @tipper_user ||= TipBot::User.new(subject.from)
   end
 
   def call_tip_message_and_lock
     TipBot::Telegram::Service::TipMessage.call(
       subject.message.reply_to_message,
-      TipBot::User.new(subject.from.id, subject.from.username)
+      TipBot::User.new(subject.from)
     )
   end
 end

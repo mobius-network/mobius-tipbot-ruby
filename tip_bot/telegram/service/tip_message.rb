@@ -23,7 +23,7 @@ class TipBot::Telegram::Service::TipMessage
   private
 
   def message_author
-    @message_author ||= TipBot::User.new(message.from.id)
+    @message_author ||= TipBot::User.new(message.from)
   end
 
   def tip

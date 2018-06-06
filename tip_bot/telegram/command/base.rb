@@ -17,7 +17,7 @@ class TipBot::Telegram::Command::Base
   end
 
   def user
-    @user ||= TipBot::User.new(from.id, from.username)
+    @user ||= TipBot::User.new(from)
   end
 
   def reply(text)
@@ -27,7 +27,7 @@ class TipBot::Telegram::Command::Base
   protected
 
   def t(key, **options)
-    I18n.t(key, { scope: command_scope }.merge(options))
+    I18n.t(key, { asset: Mobius::Client.asset_code, scope: command_scope }.merge(options))
   end
 
   def direct_message?

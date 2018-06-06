@@ -7,7 +7,7 @@ class TipBot::Telegram::Service::UnregisterAddress
   class NoTrustlineError < StandardError; end
   class NoAddressRegistered < StandardError; end
 
-  param :user_id
+  param :user
   param :withdraw_address
 
   def call
@@ -23,10 +23,6 @@ class TipBot::Telegram::Service::UnregisterAddress
     @merge_destination_account ||= Mobius::Client::Blockchain::Account.new(
       Mobius::Client.to_keypair(withdraw_address)
     )
-  end
-
-  def user
-    @user ||= TipBot::User.new(user_id)
   end
 
   def merge_account_operations

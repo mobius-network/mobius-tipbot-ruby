@@ -1,12 +1,14 @@
 # Tip storage
 class TipBot::User
   extend Dry::Initializer
+  extend Forwardable
 
-  # @!method initialize(seed)
-  # @param id [Integer] User Telegram id
+  # @!method initialize(telegram_user)
+  # @param telegram_user [Telegram::Bot::Types::User] telegram user
   # @!scope instance
-  param :id
-  param :username, optional: true
+  param :telegram_user
+
+  def_delegators :telegram_user, :id, :username, :first_name, :last_name
 
   # Address linked to user
   # @return [String] Stellar address
@@ -89,6 +91,14 @@ class TipBot::User
 
   def has_funded_address?
     address && balance.positive?
+  end
+
+  def display_name
+    if username
+      "@#{username}"
+    else
+      "#{first_name} #{last_name}".strip
+    end
   end
 
   private

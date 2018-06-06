@@ -6,7 +6,7 @@ class TipBot::Telegram::Service::CreateAddress
   class NoTrustlineError < StandardError; end
   class AddressAlreadyCreatedError < StandardError; end
 
-  param :user_id
+  param :user
   param :address
   param :deposit_amount
 
@@ -30,10 +30,6 @@ class TipBot::Telegram::Service::CreateAddress
     @provided_stellar_account ||= Mobius::Client::Blockchain::Account.new(
       Mobius::Client.to_keypair(address)
     )
-  end
-
-  def user
-    @user ||= TipBot::User.new(user_id)
   end
 
   def new_account_operations

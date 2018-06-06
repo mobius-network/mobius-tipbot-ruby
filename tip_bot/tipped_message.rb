@@ -51,6 +51,10 @@ class TipBot::TippedMessage
     TipBot.redis.get(key(:keyboard_message))&.to_i
   end
 
+  def author
+    @author ||= TipBot::User.new(message.from)
+  end
+
   private
 
   def key(scope)

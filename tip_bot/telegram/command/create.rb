@@ -86,6 +86,6 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   end
 
   def service_call
-    @service_call ||= TipBot::Telegram::Service::CreateAddress.call(from.id, address, deposit_amount)
+    @service_call ||= TipBot::Telegram::Service::CreateAddress.call(user, address, deposit_amount)
   end
 end
