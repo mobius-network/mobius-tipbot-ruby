@@ -12,10 +12,14 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
     )
   end
 
-  let(:message_author) { TipBot::User.new(message.from.id) }
+  let(:message_author) do
+    TipBot::User.new(Telegram::Bot::Types::User.new(message.from))
+  end
   let(:tipper_balance) { 15 }
   let(:tipper_id) { 512 }
-  let(:tipper_user) { TipBot::User.new(tipper_id, "john_doe") }
+  let(:tipper_user) do
+    TipBot::User.new(Telegram::Bot::Types::User.new(id: tipper_id, username: "john_doe"))
+  end
 
   subject { described_class.new(message, tipper_user) }
 

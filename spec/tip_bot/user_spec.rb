@@ -1,5 +1,8 @@
 RSpec.describe TipBot::User do
-  subject(:user) { described_class.new(nickname) }
+  subject(:user) do
+    described_class.new(Telegram::Bot::Types::User.new(username: nickname))
+  end
+
   let(:rate) { TipBot.tip_rate }
   let(:nickname) { "foobar" }
 

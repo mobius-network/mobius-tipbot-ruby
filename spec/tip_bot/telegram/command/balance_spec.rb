@@ -8,7 +8,7 @@ RSpec.describe TipBot::Telegram::Command::Balance do
     }
   end
   let(:message) { Telegram::Bot::Types::Message.new(message_args) }
-  let(:user) { TipBot::User.new(message.from.id) }
+  let(:user) { TipBot::User.new(Telegram::Bot::Types::User.new(message.from)) }
 
   subject { described_class.new(bot, message, nil) }
 

@@ -1,5 +1,9 @@
 RSpec.describe TipBot::Telegram::Service::Withdraw do
-  let(:user) { TipBot::User.new("john_doe") }
+  let(:user) do
+    TipBot::User.new(
+      Telegram::Bot::Types::User.new(username: "john_doe")
+    )
+  end
   let(:user_balance) { 15 }
   let(:amount) { 5 }
   let(:destination_address) { "some_address" }

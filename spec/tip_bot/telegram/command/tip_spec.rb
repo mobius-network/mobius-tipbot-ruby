@@ -18,7 +18,7 @@ RSpec.describe TipBot::Telegram::Command::Tip do
     Telegram::Bot::Types::CallbackQuery.new(id: 11, from: tipper, message: bot_message)
   end
   let(:tip_message) { TipBot::TippedMessage.new(bot_message) }
-  let(:user) { TipBot::User.new(tipper[:id]) }
+  let(:user) { TipBot::User.new(Telegram::Bot::Types::User.new(tipper)) }
 
   before do
     allow(bot).to receive(:api).and_return(double("Telegram::Bot::Api", send_message: nil))
@@ -54,13 +54,15 @@ RSpec.describe TipBot::Telegram::Command::Tip do
 
     context "when user didn't tip this message before" do
       describe "successful scenario" do
-        context 'when user is a first tipper' do
+        context "when user is a first tipper" do
           let(:expected_text) do
             I18n.t(
               :heading,
               usernames: "@#{tipper[:username]}",
               amount: TipBot.tip_rate,
               asset: Mobius::Client.stellar_asset.code,
+              recipient: "@frank_sinatra",
+              recipient_total: 1.0,
               scope: command_i18n_scope
             )
           end
@@ -83,6 +85,8 @@ RSpec.describe TipBot::Telegram::Command::Tip do
               usernames: "@peter_parker, @#{tipper[:username]}",
               amount: 2 * TipBot.tip_rate,
               asset: Mobius::Client.stellar_asset.code,
+              recipient: "@frank_sinatra",
+              recipient_total: 1.0,
               scope: command_i18n_scope
             )
           end
@@ -108,6 +112,8 @@ RSpec.describe TipBot::Telegram::Command::Tip do
               usernames: "@robert_plant, @tony_iommi, @#{tipper[:username]}",
               amount: (tippers.size + 1) * TipBot.tip_rate,
               asset: Mobius::Client.stellar_asset.code,
+              recipient: "@frank_sinatra",
+              recipient_total: 1.0,
               more: 3,
               scope: command_i18n_scope
             )
