@@ -84,6 +84,6 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   end
 
   def say_no_username
-    reply(t(:no_username))
+    respond(t(:no_username))
   end
 end

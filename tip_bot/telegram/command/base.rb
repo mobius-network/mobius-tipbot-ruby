@@ -20,7 +20,7 @@ class TipBot::Telegram::Command::Base
     @user ||= TipBot::User.new(from)
   end
 
-  def reply(text)
+  def respond(text)
     bot.api.send_message(chat_id: chat.id, text: text)
   end
 
