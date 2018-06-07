@@ -38,7 +38,6 @@ en:
         error: "Error sending tip!"
         can_not_tip_twice: "You cannot tip twice the same message!"
         can_not_tip_yourself: "You cannot tip your own message!"
-        can_not_tip_often: "You can not tip twice within an hour!"
         heading: "%{usernames} ❤️s this message! %{amount} %{asset} tipped so far 🤑"
         heading_for_many_tippers: "%{usernames} and %{more} others ❤s this message. %{amount} %{asset} tipped so far 🤑"
         already_tipped_message: "This message was already tipped. Use this button for tipping it! %{link}"
@@ -77,6 +76,14 @@ en:
         registered_address: "Your deposit address is %{address}. You can fund it any way, convenient for you!"
 
     policies:
+      tip_command_validness_policy:
+        invalid_amount: "Amount %{amount} is invalid"
+        tipping_bot: "You cannot tip bots"
+        already_tipped: "You tipped this message already"
+        tipping_self: "You cannot tip yourself"
+        not_in_reply: "Use /tip command in reply to message you want to tip"
+        tipper_username_missing: "You should have username set to tip"
+        can_not_tip_often: "You can not tip twice within an hour!"
       withdraw_command_validness_policy:
         address_missing: "Provide target address to withdraw!"
         insufficient_balance: "Insufficient balance"

@@ -10,6 +10,7 @@ require "sucker_punch"
 
 autoload :WithdrawCommandValidnessPolicy, "./tip_bot/telegram/policy/withdraw_command_validness_policy"
 autoload :CreateCommandValidnessPolicy, "./tip_bot/telegram/policy/create_command_validness_policy"
+autoload :TipCommandValidnessPolicy, "./tip_bot/telegram/policy/tip_command_validness_policy"
 autoload :StellarHelpers, "./tip_bot/utils/stellar_helpers"
 
 autoload :BalanceAlertJob, "./tip_bot/jobs/balance_alert_job"
@@ -24,6 +25,7 @@ module TipBot
       autoload :Base,     "./tip_bot/telegram/command/base"
       autoload :Start,    "./tip_bot/telegram/command/start"
       autoload :Tip,      "./tip_bot/telegram/command/tip"
+      autoload :TipCustomAmount, "./tip_bot/telegram/command/tip_custom_amount"
       autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
       autoload :MyAddress, "./tip_bot/telegram/command/my_address"
       autoload :Create, "./tip_bot/telegram/command/create"

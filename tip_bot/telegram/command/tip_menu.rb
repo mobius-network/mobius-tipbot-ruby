@@ -1,9 +1,7 @@
-# /tip command handler
+# /tip <amount> command handler
 class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def call
-    return say_no_username if empty_username?
-    return if tip_not_allowed?
-    return can_not_tip_often if user.locked?
+    return reply(policy.errors.messages.first) unless policy.valid?
     return forward_existing_keyboard if message_already_tipped?
 
     TipBot::Telegram::Service::TipMessage.call(reply_to_message, user)
@@ -13,31 +11,22 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
     error_insufficient_funds
   end
 
+  def amount
+    @amount ||= text.split(" ")[1]
+  end
+
   private
 
   def error_insufficient_funds
-    bot.api.send_message(
-      chat_id: chat.id,
-      text: t(:insufficient_funds, scope: %i[telegram cmd tip]),
-      reply_to_message_id: message.message_id
-    )
+    reply(t(:insufficient_funds))
   end
 
   def forward_existing_keyboard
-    api.send_message(
-      chat_id: chat.id,
-      text: t(
+    reply(
+      t(
         :already_tipped_message,
         link: "t.me/#{chat.username}/#{tipped_message.button_message_id}"
       )
-    )
-  end
-
-  def can_not_tip_often
-    api.send_message(
-      chat_id: chat.id,
-      text: t(:can_not_tip_often),
-      reply_to_message_id: message.message_id
     )
   end
 
@@ -49,15 +38,6 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
       reply_markup: TipBot::Telegram::TipKbMarkup.call(tipped_message.count)
     )
     tipped_message.attach_button(response.dig("result", "message_id"))
-  end
-
-  # We can not tip bots, man himself and show standalone tipping menu
-  def tip_not_allowed?
-    reply_to_message.nil? ||
-      reply_to_message.from.id == from.id ||
-      tipped_message.tipped?(username) ||
-      reply_to_message.from.is_bot ||
-      empty_username?
   end
 
   def message_already_tipped?
@@ -83,7 +63,11 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
     %i[telegram cmd tip]
   end
 
-  def say_no_username
-    respond(t(:no_username))
+  def policy
+    ::TipCommandValidnessPolicy[
+      amount: amount,
+      message_to_tip: reply_to_message,
+      tipper: user
+    ]
   end
 end
