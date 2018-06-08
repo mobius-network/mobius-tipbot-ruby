@@ -36,7 +36,8 @@ class TipBot::TippedMessage
   end
 
   def all_tippers
-    TipBot.redis.zrange(key(:lock), 0, -1)
+    @all_tippers ||=
+      TipBot.redis.zrange(key(:lock), 0, -1).map { |u| TipBot::User.new(username: u) }
   end
 
   # Stores id of bot's message with tip button for future references

@@ -1,10 +1,7 @@
 # Tip button press handler
 class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
   def call
-    return can_not_tip_twice if already_tipped?
-    return can_not_tip_yourself if himself?
-    return can_not_tip_often if locked?
-    return if empty_username?
+    return answer_callback_query(policy.errors.messages.first) unless policy.valid?
 
     call_tip_message_and_lock
     update_tip_menu
@@ -20,36 +17,12 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
     subject.from.username
   end
 
-  def locked?
-    tipper_user.locked?
-  end
-
-  def himself?
-    message.reply_to_message.from.id == subject.from.id
-  end
-
-  def already_tipped?
-    tipped_message.tipped?(username)
-  end
-
-  def can_not_tip_twice
-    bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:can_not_tip_twice))
-  end
-
-  def can_not_tip_yourself
-    bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:can_not_tip_yourself))
-  end
-
-  def can_not_tip_often
-    bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:can_not_tip_often))
-  end
-
   def update_tip_menu
     bot.api.edit_message_text(
       message_id: message_id,
       chat_id: chat.id,
-      text: tip_heading,
-      reply_markup: TipBot::Telegram::TipKbMarkup.call(tipped_message.count)
+      text: button_message.heading_text,
+      reply_markup: button_message.button_layout
     )
   end
 
@@ -62,41 +35,12 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
     bot.api.answer_callback_query(callback_query_id: subject.id, text: t(:error))
   end
 
-  def tip_heading
-    all_tippers.size > 3 ? say_many_tippers : say_tippers
-  end
-
-  def all_tippers
-    @all_tippers ||= tipped_message.all_tippers.map { |nick| "@#{nick}" }
-  end
-
-  def say_many_tippers
-    t(
-      :heading_for_many_tippers,
-      usernames: all_tippers.last(3).join(", "),
-      amount: tipped_message.balance,
-      more: all_tippers.size - 3,
-      recipient: tipped_message.author.display_name,
-      recipient_total: tipped_message.author.balance
-    )
-  end
-
-  def say_tippers
-    t(
-      :heading,
-      usernames: all_tippers.join(", "),
-      amount: tipped_message.balance,
-      recipient: tipped_message.author.display_name,
-      recipient_total: tipped_message.author.balance
-    )
-  end
-
   def tipped_message
     @tipped_message ||= TipBot::TippedMessage.new(message.reply_to_message)
   end
 
-  def user
-    @user ||= TipBot::User.new(message.reply_to_message.from)
+  def button_message
+    @button_message ||= TipBot::TipButtonMessage.new(tipped_message)
   end
 
   def tipper_user
@@ -108,5 +52,12 @@ class TipBot::Telegram::Command::Tip < TipBot::Telegram::Command::Base
       subject.message.reply_to_message,
       TipBot::User.new(subject.from)
     )
+  end
+
+  def policy
+    ::TipCommandValidnessPolicy[
+      message_to_tip: message.reply_to_message,
+      tipper: tipper_user
+    ]
   end
 end

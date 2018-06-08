@@ -16,29 +16,41 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
 
   private
 
+  def update_tip_menu
+    bot.api.edit_message_text(
+      message_id: tipped_message.button_message_id,
+      chat_id: chat.id,
+      text: button_message.heading_text,
+      reply_markup: button_message.button_layout
+    )
+  end
+
   def error_insufficient_funds
     reply(t(:insufficient_funds))
   end
 
   def handle_already_tipped_message
     return forward_existing_keyboard if amount.nil?
+
+    call_service
+    update_tip_menu
+    reply(t(:tip_accepted, link: button_message_link))
   end
 
   def forward_existing_keyboard
-    reply(
-      t(
-        :already_tipped_message,
-        link: "t.me/#{chat.username}/#{tipped_message.button_message_id}"
-      )
-    )
+    reply(t(:already_tipped_message, link: button_message_link))
+  end
+
+  def button_message_link
+    "t.me/#{chat.username}/#{tipped_message.button_message_id}".freeze
   end
 
   def send_tip_button
     response = api.send_message(
       chat_id: chat.id,
-      text: tip_heading,
+      text: button_message.heading_text,
       reply_to_message_id: reply_to_message.message_id,
-      reply_markup: TipBot::Telegram::TipKbMarkup.call(tipped_message.count)
+      reply_markup: button_message.button_layout
     )
     tipped_message.attach_button(response.dig("result", "message_id"))
   end
@@ -47,19 +59,12 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
     tipped_message.count.positive?
   end
 
-  def tip_heading
-    t(
-      :heading,
-      usernames: "@#{message.from.username}",
-      count: 1,
-      amount: tipped_message.balance,
-      recipient: tipped_message.author.display_name,
-      recipient_total: tipped_message.author.balance
-    )
-  end
-
   def tipped_message
     @tipped_message ||= TipBot::TippedMessage.new(reply_to_message)
+  end
+
+  def button_message
+    @button_message ||= TipBot::TipButtonMessage.new(tipped_message)
   end
 
   def command_scope

@@ -3,10 +3,10 @@ RSpec.describe TipBot::Telegram::Command::Tip do
   let(:bot) { instance_double("Telegram::Bot::Client") }
   let(:message_args) do
     {
-      text: "Cool remark",
       from: { id: 562, username: "jack_black" },
       chat: { id: 312 },
       reply_to_message: Telegram::Bot::Types::Message.new(
+        text: "Cool remark",
         from: { id: 235, username: "frank_sinatra" },
         chat: { id: 312 }
       )
@@ -17,7 +17,7 @@ RSpec.describe TipBot::Telegram::Command::Tip do
   let(:subj) do
     Telegram::Bot::Types::CallbackQuery.new(id: 11, from: tipper, message: bot_message)
   end
-  let(:tip_message) { TipBot::TippedMessage.new(bot_message) }
+  let(:tip_message) { TipBot::TippedMessage.new(bot_message.reply_to_message) }
   let(:user) { TipBot::User.new(Telegram::Bot::Types::User.new(tipper)) }
 
   before do
@@ -34,7 +34,7 @@ RSpec.describe TipBot::Telegram::Command::Tip do
       it "renders error message" do
         expect(bot.api).to \
           receive(:answer_callback_query)
-          .with(callback_query_id: subj.id, text: "You cannot tip twice the same message!")
+          .with(callback_query_id: subj.id, text: "You tipped this message already")
 
         subject.call
       end
@@ -49,88 +49,6 @@ RSpec.describe TipBot::Telegram::Command::Tip do
           .with(callback_query_id: subj.id, text: "You can not tip twice within an hour!")
 
         subject.call
-      end
-    end
-
-    context "when user didn't tip this message before" do
-      describe "successful scenario" do
-        context "when user is a first tipper" do
-          let(:expected_text) do
-            I18n.t(
-              :heading,
-              usernames: "@#{tipper[:username]}",
-              amount: TipBot.tip_rate,
-              asset: Mobius::Client.stellar_asset.code,
-              recipient: "@frank_sinatra",
-              recipient_total: 1.0,
-              scope: command_i18n_scope
-            )
-          end
-
-          it "shows user's nickname in bot's message" do
-            expect(bot.api).to receive(:edit_message_text).with(
-              message_id: bot_message.message_id,
-              chat_id: bot_message.chat.id,
-              text: expected_text,
-              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
-            )
-            subject.call
-          end
-        end
-
-        context "when user is a second tipper" do
-          let(:expected_text) do
-            I18n.t(
-              :heading,
-              usernames: "@peter_parker, @#{tipper[:username]}",
-              amount: 2 * TipBot.tip_rate,
-              asset: Mobius::Client.stellar_asset.code,
-              recipient: "@frank_sinatra",
-              recipient_total: 1.0,
-              scope: command_i18n_scope
-            )
-          end
-
-          before { tip_message.tip("peter_parker") }
-
-          it "shows both nicknames in bot's message" do
-            expect(bot.api).to receive(:edit_message_text).with(
-              message_id: bot_message.message_id,
-              chat_id: bot_message.chat.id,
-              text: expected_text,
-              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
-            )
-            subject.call
-          end
-        end
-
-        context "when there were a lot of tippers" do
-          let(:tippers) { %w[peter_parker jack_black jim_morrison robert_plant tony_iommi] }
-          let(:expected_text) do
-            I18n.t(
-              :heading_for_many_tippers,
-              usernames: "@robert_plant, @tony_iommi, @#{tipper[:username]}",
-              amount: (tippers.size + 1) * TipBot.tip_rate,
-              asset: Mobius::Client.stellar_asset.code,
-              recipient: "@frank_sinatra",
-              recipient_total: 1.0,
-              more: 3,
-              scope: command_i18n_scope
-            )
-          end
-
-          before { tippers.each { |u| tip_message.tip(u) } }
-
-          it "shows only last 3 tippers nicknames in bot's message" do
-            expect(bot.api).to receive(:edit_message_text).with(
-              message_id: bot_message.message_id,
-              chat_id: bot_message.chat.id,
-              text: expected_text,
-              reply_markup: kind_of(Telegram::Bot::Types::InlineKeyboardMarkup)
-            )
-            subject.call
-          end
-        end
       end
     end
   end

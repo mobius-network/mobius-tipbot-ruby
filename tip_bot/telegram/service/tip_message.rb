@@ -14,7 +14,7 @@ class TipBot::Telegram::Service::TipMessage
   # @!scope instance
   param :message
   param :tipper
-  param :amount
+  param :amount, optional: true
 
   def call
     return if tipper.locked?

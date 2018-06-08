@@ -18,6 +18,7 @@ autoload :BalanceAlertJob, "./tip_bot/jobs/balance_alert_job"
 module TipBot
   autoload :User,          "./tip_bot/user"
   autoload :TippedMessage, "./tip_bot/tipped_message"
+  autoload :TipButtonMessage, "./tip_bot/tip_button_message"
 
   module Telegram
     module Command
@@ -142,6 +143,10 @@ module TipBot
 
     def development?
       ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
+    end
+
+    def t(key, **params)
+      I18n.t(key, { asset: Mobius::Client.asset_code }.merge(params))
     end
 
     private

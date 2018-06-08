@@ -28,10 +28,14 @@ class TipBot::Telegram::Command::Base
     api.send_message(chat_id: chat.id, text: text, reply_to_message_id: message_id)
   end
 
+  def answer_callback_query(text)
+    api.answer_callback_query(callback_query_id: subject.id, text: text)
+  end
+
   protected
 
   def t(key, **options)
-    I18n.t(key, { asset: Mobius::Client.asset_code, scope: command_scope }.merge(options))
+    TipBot.t(key, { scope: command_scope }.merge(options))
   end
 
   def direct_message?

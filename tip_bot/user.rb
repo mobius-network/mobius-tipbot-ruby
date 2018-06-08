@@ -1,12 +1,19 @@
 # Tip storage
 class TipBot::User
-  extend Dry::Initializer
   extend Forwardable
 
-  # @!method initialize(telegram_user)
-  # @param telegram_user [Telegram::Bot::Types::User] telegram user
-  # @!scope instance
-  param :telegram_user
+  attr_reader :telegram_user
+
+  # @param telegram_user [Telegram::Bot::Types::User, Hash] telegram user
+  def initialize(object)
+    if object.is_a?(Telegram::Bot::Types::User)
+      @telegram_user = object
+    elsif object.is_a?(Hash)
+      @telegram_user = Telegram::Bot::Types::User.new(object)
+    else
+      raise ArgumentError "object must be Telegram::Bot::Types::User or Hash, #{object.class} given"
+    end
+  end
 
   def_delegators :telegram_user, :id, :username, :first_name, :last_name
 

@@ -37,48 +37,6 @@ RSpec.describe TipBot::Telegram::Request do
           end
         end
       end
-
-      describe "/tip" do
-        let(:reply_to_message) do
-          Telegram::Bot::Types::Message.new(
-            from: {id: 653, username: "jack_black", is_bot: from_bot},
-            chat: { id: 321 }
-          )
-        end
-        let(:from_bot) { false }
-        let(:from) { { id: 123, username: "john_doe" } }
-        let(:message_args) do
-          {
-            message_id: message_id,
-            text: "/tip",
-            from: from,
-            chat: { id: 321 },
-            reply_to_message: reply_to_message
-          }
-        end
-
-        context "when tipping is not allowed" do
-          context "when message is not a reply" do
-            let(:reply_to_message) { nil }
-            include_examples "not triggering API"
-          end
-
-          context "when message is reply to itself" do
-            let(:reply_to_message) do
-              Telegram::Bot::Types::Message.new(
-                from: { id: from[:id], username: "jack_black" },
-                chat: { id: 321 }
-              )
-            end
-            include_examples "not triggering API"
-          end
-
-          context "when message is sent by the bot" do
-            let(:from_bot) { true }
-            include_examples "not triggering API"
-          end
-        end
-      end
     end
   end
 end
