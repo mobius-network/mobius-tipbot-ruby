@@ -29,7 +29,8 @@ en:
           Hi, @%{username}, I am Mobius TipBot!
 
 
-          Reply any message with /tip command to create tip menu!
+          Reply any message with /tip <amount> command to create tip menu!
+          You can omit the <amount> to tip with preset amount (%{tip_rate} %{asset})
       balance:
         linked: "You do not have any awaiting tips, all tips are instantly sent to %{address}!"
         value: "Your balance awaiting for withdraw is %{balance} %{asset}, use /withdraw <address> <amount> to get your tips!"

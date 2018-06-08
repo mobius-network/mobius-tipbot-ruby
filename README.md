@@ -40,7 +40,7 @@ Easily transfer small amount of MOBI between team members of your Telegram group
 Add TipBot to your Telegram group. It *must* be supergroup and bot must have privacy mode disabled.
 
 TipBot supports following commands:
-* `/tip` - reply to any message in your chat. This will display keyboard and current tip stats.
+* `/tip <amount>` - reply to any message in your chat. This will display keyboard and current tip stats.
 * `/balance` - this will show your tip balance (works in DM only).
 * `/withdraw <address> <amount>` - this will send <amount> of your collected tips to following Stellar address. If <amount> is omitted, all of your tips will be withdrawn. Works in DM only.
 * `/create <funding_address> <amount>` - create and fund your own Tipping Account to send tips from (no more 1 tip per hour limit!). `<funding_address>` - is your current Stellar account that will be used fund your Tipping Account. `<amount>` - the amount that Tipping Account will be funded with 
