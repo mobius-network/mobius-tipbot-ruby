@@ -12,7 +12,9 @@ class TipCommandValidnessPolicy < Tram::Policy
   validate :not_tipped_already, stop_on_failure: true
   validate :not_tipping_bot, stop_on_failure: true
   validate :not_locked_tipper, stop_on_failure: true
-  validate :valid_amount
+  validate :valid_amount, stop_on_failure: true
+  validate :balance_is_present_for_amount, stop_on_failure: true
+  validate :balance_is_sufficient
 
   def tipper_username_is_present
     return unless tipper.username.nil? || tipper.username == ""
@@ -48,5 +50,15 @@ class TipCommandValidnessPolicy < Tram::Policy
   def valid_amount
     return if amount.nil? || (Float(amount).positive? rescue false)
     errors.add(:invalid_amount, amount: amount)
+  end
+
+  def balance_is_present_for_amount
+    return if amount.nil? || tipper.balance.positive?
+    errors.add(:can_not_tip_custom_amount)
+  end
+
+  def balance_is_sufficient
+    return if amount.nil? || tipper.balance >= amount.to_f
+    errors.add(:insufficient_balance)
   end
 end

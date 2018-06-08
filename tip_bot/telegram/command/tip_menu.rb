@@ -2,10 +2,9 @@
 class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
   def call
     return reply(policy.errors.messages.first) unless policy.valid?
-    return forward_existing_keyboard if message_already_tipped?
+    return handle_already_tipped_message if message_already_tipped?
 
-    TipBot::Telegram::Service::TipMessage.call(reply_to_message, user)
-
+    call_service
     send_tip_button
   rescue Mobius::Client::Error::InsufficientFunds
     error_insufficient_funds
@@ -19,6 +18,10 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
 
   def error_insufficient_funds
     reply(t(:insufficient_funds))
+  end
+
+  def handle_already_tipped_message
+    return forward_existing_keyboard if amount.nil?
   end
 
   def forward_existing_keyboard
@@ -61,6 +64,10 @@ class TipBot::Telegram::Command::TipMenu < TipBot::Telegram::Command::Base
 
   def command_scope
     %i[telegram cmd tip]
+  end
+
+  def call_service
+    TipBot::Telegram::Service::TipMessage.call(reply_to_message, user, amount&.to_f)
   end
 
   def policy

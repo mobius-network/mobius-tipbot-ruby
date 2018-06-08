@@ -84,6 +84,8 @@ en:
         not_in_reply: "Use /tip command in reply to message you want to tip"
         tipper_username_missing: "You should have username set to tip"
         can_not_tip_often: "You can not tip twice within an hour!"
+        can_not_tip_custom_amount: "To tip user with custom amount of money, you should have positive balance, either in TipBot account, either in your linked wallet"
+        insufficient_balance: "You balance is insuficcient to tip this amount of money"
       withdraw_command_validness_policy:
         address_missing: "Provide target address to withdraw!"
         insufficient_balance: "Insufficient balance"

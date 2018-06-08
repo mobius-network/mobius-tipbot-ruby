@@ -1,7 +1,7 @@
 require "tram/policy/rspec"
 
 RSpec.describe TipCommandValidnessPolicy do
-  let(:amount) { 10 }
+  let(:amount) { "10" }
   let(:message_to_tip_author) { { id: 827, is_bot: false } }
   let(:message_args) do
     {
@@ -17,6 +17,8 @@ RSpec.describe TipCommandValidnessPolicy do
       Telegram::Bot::Types::User.new(id: 123, username: tipper_username)
     )
   end
+
+  before { allow(tipper).to receive(:balance).and_return(amount.to_f + 10) }
 
   subject { described_class[message_to_tip: message_to_tip, amount: amount, tipper: tipper] }
 
@@ -66,6 +68,16 @@ RSpec.describe TipCommandValidnessPolicy do
 
   context "when user tipped recently" do
     before { tipper.lock }
+    it { is_expected.to be_invalid }
+  end
+
+  context "when user doesn't have balance" do
+    before { allow(tipper).to receive(:balance).and_return(0) }
+    it { is_expected.to be_invalid }
+  end
+
+  context "when user has insufficient balance" do
+    before { allow(tipper).to receive(:balance).and_return(amount.to_f / 2) }
     it { is_expected.to be_invalid }
   end
 end
