@@ -146,7 +146,7 @@ module TipBot
     end
 
     def t(key, **params)
-      I18n.t(key, { asset: Mobius::Client.asset_code }.merge(params))
+      I18n.t(key, { tip_rate: tip_rate, asset: Mobius::Client.asset_code }.merge(params))
     end
 
     private
@@ -154,9 +154,9 @@ module TipBot
     def validate!
       i18n_args = { scope: :errors, locale: :en }
 
-      raise ArgumentError, I18n.t(:token_missing, i18n_args) if token.nil?
-      raise ArgumentError, I18n.t(:redis_missing, i18n_args) if redis.nil?
-      raise ArgumentError, I18n.t(:dapp_missing, i18n_args) if dapp.nil?
+      raise ArgumentError, t(:token_missing, i18n_args) if token.nil?
+      raise ArgumentError, t(:redis_missing, i18n_args) if redis.nil?
+      raise ArgumentError, t(:dapp_missing, i18n_args) if dapp.nil?
     end
 
     def configure_i18n

@@ -14,7 +14,7 @@ class TipBot::Telegram::TipKbMarkup
   def tip_kb
     @tip_kb ||= [
       button(
-        text: I18n.t(:button_text, count: people_count, scope: i18n_scope),
+        text: TipBot.t(:button_text, count: people_count, scope: i18n_scope),
         callback_data: "tip"
       )
     ]

@@ -11,8 +11,8 @@ class BalanceAlertJob
     Mail.deliver do
       from     "noreply@mobius-tipbot"
       to       ENV["MOBIUS_TIPBOT_ADMIN_EMAIL"]
-      subject  I18n.t("#{message}.subject", i18n_options)
-      body     I18n.t("#{message}.body", i18n_options)
+      subject  TipBot.t("#{message}.subject", i18n_options)
+      body     TipBot.t("#{message}.body", i18n_options)
     end
   end
 

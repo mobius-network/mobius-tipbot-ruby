@@ -63,7 +63,7 @@ class TipBot::Telegram::Request
   def say_chat_not_permitted
     bot.api.send_message(
       chat_id: message.chat.id,
-      text: I18n.t(:chat_is_not_permitted, scope: :telegram)
+      text: TipBot.t(:chat_is_not_permitted, scope: :telegram)
     )
   end
 end

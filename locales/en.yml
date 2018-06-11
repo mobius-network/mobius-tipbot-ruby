@@ -42,7 +42,7 @@ en:
         heading: "%{usernames} ❤️s this message! %{amount} %{asset} tipped so far 🤑"
         heading_for_many_tippers: "%{usernames} and %{more} others ❤s this message. %{amount} %{asset} tipped so far 🤑"
         already_tipped_message: "This message was already tipped. Use this button for tipping it! %{link}"
-        button_text: "Send tip! (%{count})"
+        button_text: "Send %{tip_rate} %{asset} tip! (%{count})"
         no_username: "You should have username set to perform this action"
         tip_accepted: "Your tip was accepted. Somebody already tipped this message, you can check info here %{link}"
       withdraw:
