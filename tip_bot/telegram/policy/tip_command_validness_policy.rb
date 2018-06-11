@@ -1,7 +1,5 @@
 # Policy for validating /tip command invocation
-class TipCommandValidnessPolicy < Tram::Policy
-  root_scope "telegram", "policies"
-
+class TipCommandValidnessPolicy < ApplicationPolicy
   option :amount, optional: true
   option :message_to_tip
   option :tipper

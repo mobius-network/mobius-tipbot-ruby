@@ -1,6 +1,5 @@
 # Policy for validating /create command arguments
-class CreateCommandValidnessPolicy < Tram::Policy
-  root_scope "telegram", "policies"
+class CreateCommandValidnessPolicy < ApplicationPolicy
   param :command
 
   option :source_address, default: -> { command.address }

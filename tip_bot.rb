@@ -8,6 +8,7 @@ require "tram-policy"
 require "mail"
 require "sucker_punch"
 
+autoload :ApplicationPolicy, "./tip_bot/telegram/policy/application_policy"
 autoload :WithdrawCommandValidnessPolicy, "./tip_bot/telegram/policy/withdraw_command_validness_policy"
 autoload :CreateCommandValidnessPolicy, "./tip_bot/telegram/policy/create_command_validness_policy"
 autoload :TipCommandValidnessPolicy, "./tip_bot/telegram/policy/tip_command_validness_policy"
@@ -146,7 +147,10 @@ module TipBot
     end
 
     def t(key, **params)
-      I18n.t(key, { tip_rate: tip_rate, asset: Mobius::Client.asset_code }.merge(params))
+      I18n.t(
+        key,
+        params.merge(tip_rate: tip_rate, asset: Mobius::Client.asset_code)
+      )
     end
 
     private

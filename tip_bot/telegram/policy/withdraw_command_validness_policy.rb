@@ -1,6 +1,5 @@
 # Policy for validating /withdraw command arguments
-class WithdrawCommandValidnessPolicy < Tram::Policy
-  root_scope "telegram", "policies"
+class WithdrawCommandValidnessPolicy < ApplicationPolicy
   param :command
 
   option :destination_address, default: -> { command.address }
