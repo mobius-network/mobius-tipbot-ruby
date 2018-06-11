@@ -29,7 +29,7 @@ class TipBot::Telegram::Request
     case message.text
     when "/start", "/help" then command("Start")
     when "/balance" then command("Balance")
-    when "/tip" then command("TipMenu")
+    when %r(^\/tip) then command("TipMenu")
     when "/my_address" then command("MyAddress")
     when %r(^\/create) then command("Create")
     when %r(^\/unregister) then command("Unregister")

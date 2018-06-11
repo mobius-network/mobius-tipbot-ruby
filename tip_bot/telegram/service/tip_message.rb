@@ -5,15 +5,20 @@ class TipBot::Telegram::Service::TipMessage
   extend Dry::Initializer
   extend ConstructorShortcut[:call]
 
+  class CustomAmountTipWithoutBalanceError < StandardError; end
+
   # @!method initialize(seed)
   # @param message [Telegram::Bot::Types::Message] Message to be tipped
   # @param tipper_user [TipBot::User] tipper
+  # @param amount [Float] amount of money to tip
   # @!scope instance
   param :message
   param :tipper
+  param :amount, optional: true
 
   def call
     return if tipper.locked?
+    raise CustomAmountTipWithoutBalanceError if amount && tipper.balance <= tip_amount
     tip
   rescue Mobius::Client::Error::InsufficientFunds
     BalanceAlertJob.perform_async(:exhausted)
@@ -33,7 +38,7 @@ class TipBot::Telegram::Service::TipMessage
       tip_via_dapp
     end
 
-    TipBot::TippedMessage.new(message).tip(tipper.username)
+    TipBot::TippedMessage.new(message).tip(tipper.username, amount)
   end
 
   def tip_via_dapp
@@ -73,6 +78,6 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip_amount
-    TipBot.tip_rate
+    amount || TipBot.tip_rate
   end
 end

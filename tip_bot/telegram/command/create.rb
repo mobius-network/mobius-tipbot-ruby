@@ -28,27 +28,27 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
 
   def register_address
     policy = ::CreateCommandValidnessPolicy[self]
-    return reply(policy.errors.messages.first) unless policy.valid?
+    return respond(policy.errors.messages.first) unless policy.valid?
 
     say_url_and_button
   end
 
   def say_no_username
-    reply(t(:no_username))
+    respond(t(:no_username))
   end
 
   def say_account_is_missing
-    reply(t(:account_missing, address: address))
+    respond(t(:account_missing, address: address))
   end
 
   def say_no_trustline
-    reply(
+    respond(
       t(:trustline_missing, address: address, code: Mobius::Client.stellar_asset)
     )
   end
 
   def say_registered_address
-    reply(t(:registered_address, address: user.address))
+    respond(t(:registered_address, address: user.address))
   end
 
   def say_url_and_button
@@ -63,7 +63,7 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   end
 
   def say_invalid_address
-    reply(t(:invalid_address, address: address))
+    respond(t(:invalid_address, address: address))
   end
 
   def acknowledge_button
