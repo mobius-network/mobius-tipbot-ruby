@@ -18,6 +18,7 @@ group :development, :test do
   gem "bundle-audit"
   gem "pry-byebug"
   gem "rubocop", "~> 0.53"
+  gem "dotenv"
 end
 
 group :development do

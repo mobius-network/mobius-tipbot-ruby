@@ -1,9 +1,13 @@
+if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
+  require "pry-byebug"
+  require "dotenv/load"
+end
+
 require "redis"
 require "dry-initializer"
 require "constructor_shortcut"
 require "redis-namespace"
 require "mobius/client"
-require "pry-byebug" if ENV["MOBIUS_TIPBOT_ENVIRONMENT"] == "development"
 require "tram-policy"
 require "mail"
 require "sucker_punch"

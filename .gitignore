@@ -1,4 +1,5 @@
 .rspec_status
 .yardoc
+.env
 /coverage/
 /doc/

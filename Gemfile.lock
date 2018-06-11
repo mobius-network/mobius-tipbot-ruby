@@ -58,6 +58,7 @@ GEM
     diff-lcs (1.3)
     digest-crc (0.4.1)
     docile (1.3.0)
+    dotenv (2.4.0)
     dry-initializer (2.4.0)
     equalizer (0.0.11)
     excon (0.44.4)
@@ -215,6 +216,7 @@ DEPENDENCIES
   bundle-audit
   celluloid-io
   constructor_shortcut
+  dotenv
   dry-initializer
   i18n
   mail (~> 2.7.0)
@@ -238,4 +240,4 @@ DEPENDENCIES
   yard (~> 0.9, >= 0.9.12)
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

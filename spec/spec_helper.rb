@@ -5,9 +5,7 @@ require "simplecov"
 require "simplecov-console"
 require "vcr"
 require "pry-byebug"
-
-ENV["MOBIUS_TIPBOT_APP_PRIVATE_KEY"] = "SBPC3QY625XDUTAMF235EU3UNAZYZLKTL5UMJVX2PURW6SMZTYSPEJE6"
-ENV["MOBIUS_TIPBOT_CREDIT_ADDRESS"] = "GCJYXHZFOT673V4UIRMZWKPWWWXL36UGAG7G4VYYJEWQOLM4K6VJLHIX"
+require "dotenv/load"
 
 SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
 SimpleCov.start do

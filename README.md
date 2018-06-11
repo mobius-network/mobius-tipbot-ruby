@@ -52,6 +52,21 @@ TipBot supports following commands:
 
 TipBot allows you to use custom Stellar asset instead of MOBI for tips. To achieve this set env variables `MOBIUS_TIPBOT_ASSET_CODE` and `MOBIUS_TIPBOT_ASSET_ISSUER`, and don't forget to create trustlines for your asset in source pool account and TipBot account
 
+## Developing
+
+1. Rename `.env.example` to `.env` and fill it out with your settings
+1. Set env variable `MOBIUS_TIPBOT_ENVIRONMENT` to "development"
+1. Launch `bin/telegram` to start polling for updates
+
+```
+export MOBIUS_TIPBOT_ENVIRONMENT=development
+bin/telegram
+
+# or
+
+MOBIUS_TIPBOT_ENVIRONMENT=development bin/telegram
+```
+
 ## Deploy
 
 Just press this button for deploying app into Heroku
