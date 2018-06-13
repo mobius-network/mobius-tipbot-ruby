@@ -22,7 +22,7 @@ RSpec.describe TipBot::Telegram::Command::Start do
           have_received(:send_message)
           .with(
             chat_id: message.from.id,
-            text: I18n.t(:private, username: username, scope: command_i18n_scope)
+            text: TipBot.t(:private, username: username, scope: command_i18n_scope)
           )
       end
     end
@@ -38,7 +38,7 @@ RSpec.describe TipBot::Telegram::Command::Start do
           have_received(:send_message)
           .with(
             chat_id: message.chat.id,
-            text: I18n.t(:public, username: username, scope: command_i18n_scope)
+            text: TipBot.t(:public, username: username, scope: command_i18n_scope)
           )
       end
     end

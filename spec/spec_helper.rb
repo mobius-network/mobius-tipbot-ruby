@@ -7,6 +7,8 @@ require "vcr"
 require "pry-byebug"
 require "dotenv/load"
 
+ENV["MOBIUS_TIPBOT_ENVIRONMENT"] = "test"
+
 SimpleCov.formatter = SimpleCov::Formatter::Console if ENV["CC_TEST_REPORTER_ID"]
 SimpleCov.start do
   add_filter "spec"
