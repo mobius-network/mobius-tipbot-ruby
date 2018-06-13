@@ -78,6 +78,6 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip_amount
-    amount || TipBot.tip_rate
+    amount || TipBot.config.rate
   end
 end

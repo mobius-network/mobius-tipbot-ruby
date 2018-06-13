@@ -17,8 +17,8 @@ class TipBot::TippedMessage
   # @param nickname [String] tipper's nickname
   # @param value [Numeric] tip's value
   # @return [Integer] 1 if tip was successful
-  def tip(nickname, value = TipBot.tip_rate)
-    TipBot.redis.incrbyfloat(key(:balance), value || TipBot.tip_rate)
+  def tip(nickname, value = TipBot.config.rate)
+    TipBot.redis.incrbyfloat(key(:balance), value || TipBot.config.rate)
     TipBot.redis.zadd(key(:lock), count + 1, nickname)
   end
 

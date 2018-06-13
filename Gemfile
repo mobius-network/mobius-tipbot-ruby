@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "anyway_config"
 gem "celluloid-io"
 gem "constructor_shortcut"
 gem "dry-initializer"
