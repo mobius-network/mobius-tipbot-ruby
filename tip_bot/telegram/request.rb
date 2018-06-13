@@ -54,10 +54,10 @@ class TipBot::Telegram::Request
 
   def chat_is_permitted?
     return true if TipBot.development? ||
-                   TipBot.chats_whitelist.nil? ||
+                   TipBot.config.chats_whitelist.nil? ||
                    message.chat.type == "private"
 
-    TipBot.chats_whitelist.include?(message.chat.id)
+    TipBot.config.chats_whitelist.include?(message.chat.id)
   end
 
   def say_chat_not_permitted

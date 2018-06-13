@@ -6,7 +6,7 @@ require "./tip_bot"
 
 TipBot.configure!
 
-Telegram::Bot::Client.run(TipBot.token, logger: TipBot.logger) do |bot|
+Telegram::Bot::Client.run(TipBot.config.token, logger: TipBot.logger) do |bot|
   bot.listen do |message|
     begin
       TipBot::Telegram::Request.call(bot, message)

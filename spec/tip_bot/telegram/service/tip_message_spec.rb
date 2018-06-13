@@ -1,5 +1,3 @@
-# All Stellar accounts used here were created manually, with all required
-# trustlines, cosigners etc.
 RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
   let(:message) do
     Telegram::Bot::Types::Message.new(
@@ -25,11 +23,11 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
 
   RSpec.shared_examples "tipper zero balance" do
     it "transfers money to developer acc, locks tipper" do
-      expect(TipBot.dapp).to have_received(:pay).with(TipBot.tip_rate)
+      expect(TipBot.dapp).to have_received(:pay).with(TipBot.config.rate)
     end
 
     it "increases message author balance" do
-      expect(message_author.balance).to eq(TipBot.tip_rate)
+      expect(message_author.balance).to eq(TipBot.config.rate)
     end
 
     it "locks tipper" do
@@ -55,8 +53,8 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
       end
 
       it "transfer balances" do
-        expect(tipper_user.reload_balance).to eq(100 - TipBot.tip_rate)
-        expect(message_author.reload_balance).to eq(TipBot.tip_rate)
+        expect(tipper_user.reload_balance).to eq(100 - TipBot.config.rate)
+        expect(message_author.reload_balance).to eq(TipBot.config.rate)
       end
 
       it "doesn't lock tipper" do
@@ -92,11 +90,11 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
 
         it "transfers money from user's account to developer account" do
           expect(tipper_user.user_dapp).to \
-            have_received(:transfer).with(TipBot.tip_rate, TipBot.app_keypair.address)
+            have_received(:transfer).with(TipBot.config.rate, TipBot.app_keypair.address)
         end
 
         it "increments message author balance" do
-          expect(message_author.balance).to eq(TipBot.tip_rate)
+          expect(message_author.balance).to eq(TipBot.config.rate)
         end
 
         it "doesn't lock tipper" do
@@ -117,7 +115,7 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
 
         it "transfers money from pool to author's address" do
           expect(TipBot.dapp).to \
-            have_received(:pay).with(TipBot.tip_rate, target_address: message_author.address)
+            have_received(:pay).with(TipBot.config.rate, target_address: message_author.address)
         end
 
         it "locks tipper" do
@@ -131,7 +129,7 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
 
         it "transfers money from tippers's account to author's account" do
           expect(tipper_user.user_dapp).to \
-            have_received(:transfer).with(TipBot.tip_rate, message_author.address)
+            have_received(:transfer).with(TipBot.config.rate, message_author.address)
         end
 
         it "doesn't lock tipper" do
@@ -142,9 +140,9 @@ RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
   end
 
   context "when bot has low balance" do
-    let(:current_balance) { TipBot.balance_alert_threshold.fdiv(2) }
+    let(:current_balance) { TipBot.config.app_balance_alert_threshold.fdiv(2) }
     before do
-      allow(TipBot).to receive(:balance_alert_threshold).and_return(3.0)
+      allow(TipBot.config).to receive(:app_balance_alert_threshold).and_return(3.0)
       allow(TipBot.dapp).to receive(:balance).and_return(current_balance)
       allow(TipBot.dapp).to receive(:pay)
     end
