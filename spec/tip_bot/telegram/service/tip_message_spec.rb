@@ -1,4 +1,4 @@
-RSpec.describe TipBot::Telegram::Service::TipMessage, order: :defined do
+RSpec.describe TipBot::Telegram::Service::TipMessage do
   let(:message) do
     Telegram::Bot::Types::Message.new(
       text: "You should have buy some bitcoins back then",
