@@ -21,10 +21,6 @@ class TipBot::Telegram::Service::Withdraw
   private
 
   def withdraw_from_user_account
-    StellarHelpers.transfer(
-      from: user.stellar_account,
-      to: destination_address,
-      amount: amount
-    )
+    user.user_dapp.transfer(amount, destination_address)
   end
 end
