@@ -10,7 +10,7 @@ RSpec.describe TipBot::Telegram::Service::Withdraw do
 
   subject { described_class.new(user, destination_address, amount) }
 
-  before { allow(TipBot.dev_dapp).to receive(:transfer) }
+  before { allow(TipBot.dapp).to receive(:payout) }
 
   it "returns withdrawn amount" do
     expect(subject.call).to eq(amount)
@@ -20,7 +20,8 @@ RSpec.describe TipBot::Telegram::Service::Withdraw do
     before { user.increment_balance(user_balance) }
 
     it "withdraws via DAapp" do
-      expect(TipBot.dev_dapp).to receive(:transfer).with(amount, destination_address)
+      expect(TipBot.dapp).to \
+        receive(:payout).with(amount, target_address: destination_address)
       subject.call
     end
 
@@ -34,11 +35,7 @@ RSpec.describe TipBot::Telegram::Service::Withdraw do
     before { user.address = "GDMHQDQZ4NKDIOH3UKKWNLGVUUF2WQX5B5KPZRUIHIP2BJOISZSERZUX" }
 
     it "withdraws from user's account" do
-      expect(StellarHelpers).to receive(:transfer).with(
-        from: user.stellar_account,
-        to: destination_address,
-        amount: amount
-      )
+      expect(user).to receive(:transfer_money).with(amount, destination_address)
       subject.call
     end
   end

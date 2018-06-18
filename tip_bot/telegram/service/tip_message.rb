@@ -53,10 +53,10 @@ class TipBot::Telegram::Service::TipMessage
 
   def tip_via_dapp_to_address(address)
     if tipper.balance >= tip_amount
-      TipBot.dev_dapp.transfer(tip_amount, address)
+      TipBot.dapp.payout(tip_amount, target_address: address)
       tipper.decrement_balance(tip_amount)
     else
-      TipBot.dapp.pay(tip_amount, target_address: address)
+      TipBot.dapp.charge(tip_amount, target_address: address)
       tipper.lock
     end
   end
@@ -65,7 +65,7 @@ class TipBot::Telegram::Service::TipMessage
     if tipper.balance >= tip_amount
       tipper.transfer_from_balance(tip_amount, message_author)
     else
-      TipBot.dapp.pay(tip_amount)
+      TipBot.dapp.charge(tip_amount)
       message_author.increment_balance(tip_amount)
       tipper.lock
     end
@@ -73,7 +73,7 @@ class TipBot::Telegram::Service::TipMessage
 
   def tip_via_user_account
     destination = message_author.address || TipBot.app_keypair.address
-    tipper.user_dapp.transfer(tip_amount, destination)
+    tipper.transfer_money(tip_amount, destination)
     message_author.increment_balance(tip_amount) if message_author.address.nil?
   end
 

@@ -55,7 +55,7 @@ class TipBot::User
   def merge_balances
     return if stellar_account.nil? || redis_balance.zero?
 
-    TipBot.dapp.pay(redis_balance, target_address: stellar_account.keypair.address)
+    TipBot.dapp.charge(redis_balance, target_address: stellar_account.keypair.address)
     TipBot.redis.hdel(REDIS_BALANCE_KEY, id)
   end
 
@@ -92,8 +92,9 @@ class TipBot::User
     end
   end
 
-  def user_dapp
-    @user_dapp ||= Mobius::Client::App.new(TipBot.dapp.seed, address)
+  def transfer_money(amount, destination_address)
+    Mobius::Client::App.new(TipBot.dapp.seed, address)
+      .transfer(amount, destination_address)
   end
 
   def has_funded_address?
