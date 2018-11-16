@@ -117,7 +117,7 @@ GEM
       byebug (~> 10.0)
       pry (~> 0.10)
     public_suffix (3.0.2)
-    rack (2.0.5)
+    rack (2.0.6)
     rainbow (3.0.0)
     rake (12.3.1)
     rbnacl (5.0.0)
@@ -240,4 +240,4 @@ DEPENDENCIES
   yard (~> 0.9, >= 0.9.12)
 
 BUNDLED WITH
-   1.16.2
+   1.16.5
