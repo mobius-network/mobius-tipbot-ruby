@@ -11,6 +11,8 @@ addons:
     packages:
     - libsodium-dev
 cache: bundler
+services:
+  - redis-server
 before_install:
   - gem update --system && gem install --no-document bundler
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
