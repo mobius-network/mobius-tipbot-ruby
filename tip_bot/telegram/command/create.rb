@@ -5,6 +5,7 @@ class TipBot::Telegram::Command::Create < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?
     return say_no_username if empty_username?
+
     register_address
   rescue Mobius::Client::Error::AccountMissing
     say_account_is_missing

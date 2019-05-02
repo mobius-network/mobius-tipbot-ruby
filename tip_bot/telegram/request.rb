@@ -39,13 +39,14 @@ class TipBot::Telegram::Request
 
   def command(klass)
     return say_chat_not_permitted unless chat_is_permitted?
+
     "TipBot::Telegram::Command::#{klass}".constantize.call(bot, message, subject)
   end
 
   def process_callback_query
     case subject.data
     when "tip" then TipBot::Telegram::Command::Tip.call(bot, message, subject)
-    when %r(^reg_ack)
+    when /^reg_ack/
       TipBot::Telegram::Command::CreateAck.call(bot, message, subject)
     when "unreg_ack"
       TipBot::Telegram::Command::UnregisterAck.call(bot, message, subject)

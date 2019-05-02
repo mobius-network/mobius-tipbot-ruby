@@ -19,9 +19,10 @@ gem "tram-policy"
 
 group :development, :test do
   gem "bundler-audit", "~> 0.6", ">= 0.6.1"
-  gem "pry-byebug"
-  gem "rubocop", "~> 0.53"
   gem "dotenv"
+  gem "pry-byebug"
+  gem "rubocop"
+  gem "rubocop-performance"
 end
 
 group :development do

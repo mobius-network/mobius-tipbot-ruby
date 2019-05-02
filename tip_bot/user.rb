@@ -62,6 +62,7 @@ class TipBot::User
   # Blocks user from sending tips for period
   def lock
     return if TipBot.development?
+
     TipBot.redis.set(redis_lock_key, true, nx: true, ex: LOCK_DURATION)
   end
 
@@ -94,10 +95,10 @@ class TipBot::User
 
   def transfer_money(amount, destination_address)
     Mobius::Client::App.new(TipBot.dapp.seed, address)
-      .transfer(amount, destination_address)
+                       .transfer(amount, destination_address)
   end
 
-  def has_funded_address?
+  def funded_address?
     address && balance.positive?
   end
 

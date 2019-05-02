@@ -14,6 +14,7 @@ class CreateCommandValidnessPolicy < ApplicationPolicy
 
   def amount_presence
     return if deposit_amount
+
     errors.add :deposit_amount_missing
   end
 
@@ -24,11 +25,13 @@ class CreateCommandValidnessPolicy < ApplicationPolicy
 
   def amount_is_positive
     return if deposit_amount.to_f.positive?
+
     errors.add :deposit_amount_is_not_positive
   end
 
   def source_address_presence
     return if source_address
+
     errors.add :source_address_missing
   end
 end

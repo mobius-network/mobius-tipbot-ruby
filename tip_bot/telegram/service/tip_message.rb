@@ -19,6 +19,7 @@ class TipBot::Telegram::Service::TipMessage
   def call
     return if tipper.locked?
     raise CustomAmountTipWithoutBalanceError if amount && tipper.balance <= tip_amount
+
     tip
   rescue Mobius::Client::Error::InsufficientFunds
     BalanceAlertJob.perform_async(:exhausted)
@@ -32,7 +33,7 @@ class TipBot::Telegram::Service::TipMessage
   end
 
   def tip
-    if tipper.has_funded_address?
+    if tipper.funded_address?
       tip_via_user_account
     else
       tip_via_dapp

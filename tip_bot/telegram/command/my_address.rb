@@ -1,6 +1,7 @@
 class TipBot::Telegram::Command::MyAddress < TipBot::Telegram::Command::Base
   def call
     return unless direct_message?
+
     bot.api.send_message(chat_id: from.id, text: reply)
   end
 

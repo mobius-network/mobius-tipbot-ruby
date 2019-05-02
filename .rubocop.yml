@@ -1,26 +1,25 @@
 ---
-# require: rubocop-rspec
-
-AllCops:
-  Include:
-    - ./Gemfile
-  Exclude:
-    - bin/*
-    - tmp/**/*
-  TargetRubyVersion: 2.5
+require: rubocop-performance
 
 Documentation:
-  Enabled: true
+  Enabled: false
+
+Metrics/BlockLength:
   Exclude:
-    - tip_bot.rb
+    - "spec/**/*.*"
 
 Metrics/LineLength:
   Max: 120
 
-Naming/FileName:
+Metrics/MethodLength:
+  Max: 12
+
+Metrics/AbcSize:
+  Max: 17.5
+
+Metrics/CyclomaticComplexity:
   Exclude:
-    - Gemfile
-    - Rakefile
+    - tip_bot/telegram/request.rb
 
 # RSpec/FilePath:
 #   Enabled: false
@@ -42,9 +41,6 @@ Style/AsciiComments:
 
 Style/BlockComments:
   Enabled: false
-
-Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
 
 Style/DoubleNegation:
   Enabled: false
@@ -72,7 +68,3 @@ Style/SingleLineBlockParams:
 
 Style/ClassAndModuleChildren:
   Enabled: false
-
-Metrics/BlockLength:
-  Exclude:
-    - "spec/**/*.*"

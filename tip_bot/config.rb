@@ -16,6 +16,6 @@ class TipBot::Config < Anyway::Config
     :asset_issuer,
     network: :test,
     locale: :en,
-    rate: 1.0,
+    rate: 1.0
   )
 end

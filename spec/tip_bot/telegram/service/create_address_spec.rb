@@ -14,4 +14,3 @@ RSpec.describe TipBot::Telegram::Service::CreateAddress do
     end
   end
 end
-

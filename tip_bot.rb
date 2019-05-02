@@ -33,7 +33,7 @@ module TipBot
       autoload :Start,    "./tip_bot/telegram/command/start"
       autoload :Tip,      "./tip_bot/telegram/command/tip"
       autoload :TipCustomAmount, "./tip_bot/telegram/command/tip_custom_amount"
-      autoload :TipMenu,  "./tip_bot/telegram/command/tip_menu"
+      autoload :TipMenu, "./tip_bot/telegram/command/tip_menu"
       autoload :MyAddress, "./tip_bot/telegram/command/my_address"
       autoload :Create, "./tip_bot/telegram/command/create"
       autoload :CreateAck, "./tip_bot/telegram/command/create_ack"
