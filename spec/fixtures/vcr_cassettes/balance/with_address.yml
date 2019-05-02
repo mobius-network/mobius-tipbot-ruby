@@ -16,33 +16,28 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Date:
-      - Wed, 06 Jun 2018 08:57:13 GMT
-      Content-Type:
-      - application/hal+json; charset=utf-8
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - __cfduid=d8fb53bf84227b8edad39e585ec6de2841528275432; expires=Thu, 06-Jun-19
-        08:57:12 GMT; path=/; domain=.stellar.org; HttpOnly
+      Cache-Control:
+      - no-cache, no-store, max-age=0
       Content-Disposition:
       - inline
+      Content-Type:
+      - application/hal+json; charset=utf-8
+      Date:
+      - Thu, 02 May 2019 00:29:02 GMT
       Vary:
       - Origin
       X-Ratelimit-Limit:
-      - '17200'
+      - '101'
       X-Ratelimit-Remaining:
-      - '17199'
+      - '100'
       X-Ratelimit-Reset:
-      - '3600'
-      Expect-Ct:
-      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 4269ab8e3a979041-DME
+      - '1'
+      Content-Length:
+      - '1619'
+      Connection:
+      - keep-alive
     body:
-      encoding: UTF-8
+      encoding: ASCII-8BIT
       string: |-
         {
           "_links": {
@@ -59,14 +54,14 @@ http_interactions:
               "templated": true
             },
             "friendbot": {
-              "href": "https://horizon-testnet.stellar.org/friendbot{?addr}",
+              "href": "https://friendbot.stellar.org/{?addr}",
               "templated": true
             },
             "metrics": {
               "href": "https://horizon-testnet.stellar.org/metrics"
             },
             "order_book": {
-              "href": "https://horizon-testnet.stellar.org/order_book{?selling_asset_type,selling_asset_code,selling_issuer,buying_asset_type,buying_asset_code,buying_issuer,limit}",
+              "href": "https://horizon-testnet.stellar.org/order_book{?selling_asset_type,selling_asset_code,selling_asset_issuer,buying_asset_type,buying_asset_code,buying_asset_issuer,limit}",
               "templated": true
             },
             "self": {
@@ -81,16 +76,17 @@ http_interactions:
               "templated": true
             }
           },
-          "horizon_version": "snapshot-1bf713b",
-          "core_version": "stellar-core 9.2.0rc6 (b0923f153b86d394a83b2a619db6b23f07ed0700)",
-          "history_latest_ledger": 9354439,
+          "horizon_version": "0.17.6-58c4e8986d24e4b6946824c37cf0ca16bc3f5f1c",
+          "core_version": "stellar-core 11.0.0 (236f831521b6724c0ae63906416faa997ef27e19)",
+          "history_latest_ledger": 126411,
           "history_elder_ledger": 1,
-          "core_latest_ledger": 9354439,
+          "core_latest_ledger": 126411,
           "network_passphrase": "Test SDF Network ; September 2015",
-          "protocol_version": 9
+          "current_protocol_version": 10,
+          "core_supported_protocol_version": 11
         }
     http_version: 
-  recorded_at: Wed, 06 Jun 2018 08:57:13 GMT
+  recorded_at: Thu, 02 May 2019 00:29:02 GMT
 - request:
     method: get
     uri: https://horizon-testnet.stellar.org/accounts/GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART
@@ -107,33 +103,28 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Date:
-      - Wed, 06 Jun 2018 08:57:16 GMT
-      Content-Type:
-      - application/hal+json; charset=utf-8
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - __cfduid=dd25cb5c102e5e44632249100d2090e491528275435; expires=Thu, 06-Jun-19
-        08:57:15 GMT; path=/; domain=.stellar.org; HttpOnly
+      Cache-Control:
+      - no-cache, no-store, max-age=0
       Content-Disposition:
       - inline
+      Content-Type:
+      - application/hal+json; charset=utf-8
+      Date:
+      - Thu, 02 May 2019 00:29:02 GMT
       Vary:
       - Origin
       X-Ratelimit-Limit:
-      - '17200'
+      - '101'
       X-Ratelimit-Remaining:
-      - '17199'
+      - '100'
       X-Ratelimit-Reset:
-      - '3600'
-      Expect-Ct:
-      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 4269aba28dea8e55-DME
+      - '1'
+      Content-Length:
+      - '2713'
+      Connection:
+      - keep-alive
     body:
-      encoding: UTF-8
+      encoding: ASCII-8BIT
       string: |-
         {
           "_links": {
@@ -172,8 +163,9 @@ http_interactions:
           "id": "GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART",
           "paging_token": "",
           "account_id": "GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART",
-          "sequence": "39494255806251009",
+          "sequence": "541818714324993",
           "subentry_count": 1,
+          "last_modified_ledger": 126163,
           "thresholds": {
             "low_threshold": 0,
             "med_threshold": 0,
@@ -181,24 +173,30 @@ http_interactions:
           },
           "flags": {
             "auth_required": false,
-            "auth_revocable": false
+            "auth_revocable": false,
+            "auth_immutable": false
           },
           "balances": [
             {
               "balance": "1000.0000000",
-              "limit": "922337203685.0000000",
+              "limit": "922337203685.4775807",
+              "buying_liabilities": "0.0000000",
+              "selling_liabilities": "0.0000000",
+              "last_modified_ledger": 126178,
+              "is_authorized": true,
               "asset_type": "credit_alphanum4",
               "asset_code": "MOBI",
               "asset_issuer": "GDRWBLJURXUKM4RWDZDTPJNX6XBYFO3PSE4H4GPUL6H6RCUQVKTSD4AT"
             },
             {
               "balance": "9999.9999900",
+              "buying_liabilities": "0.0000000",
+              "selling_liabilities": "0.0000000",
               "asset_type": "native"
             }
           ],
           "signers": [
             {
-              "public_key": "GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART",
               "weight": 1,
               "key": "GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART",
               "type": "ed25519_public_key"
@@ -207,5 +205,5 @@ http_interactions:
           "data": {}
         }
     http_version: 
-  recorded_at: Wed, 06 Jun 2018 08:57:16 GMT
+  recorded_at: Thu, 02 May 2019 00:29:02 GMT
 recorded_with: VCR 3.0.3

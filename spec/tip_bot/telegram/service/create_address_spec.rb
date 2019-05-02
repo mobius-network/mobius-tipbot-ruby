@@ -1,6 +1,6 @@
 RSpec.describe TipBot::Telegram::Service::CreateAddress do
-  let (:user) { TipBot::User.new(id: 3242, username: "john_doe") }
-  let(:address) { "GC2PDSGZRZJ66H2F5TO7BGF6AZ5VQJZMTDWBQHKJX52FDH7TYW4CEMBP" }
+  let(:user) { TipBot::User.new(id: 3242, username: "john_doe") }
+  let(:address) { "GD5HCGTPNJIKSAAKUYQCOFOHL2YJVPQTUNKWDOLOQJLPDN6LWNVY6ART" }
   let(:amount) { 10 }
 
   describe ".call" do

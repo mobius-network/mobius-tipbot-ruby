@@ -1,12 +1,14 @@
 source "https://rubygems.org"
 
+ruby "~> 2.6.3"
+
 gem "anyway_config"
 gem "celluloid-io"
 gem "constructor_shortcut"
 gem "dry-initializer"
 gem "i18n"
 gem "mail", "~> 2.7.0"
-gem "mobius-client", "~> 0.3"
+gem "mobius-client", "~> 0.7", ">= 0.7.1"
 gem "multi_json"
 gem "rack"
 gem "redis"
@@ -16,7 +18,7 @@ gem "telegram-bot-ruby"
 gem "tram-policy"
 
 group :development, :test do
-  gem "bundle-audit"
+  gem "bundler-audit", "~> 0.6", ">= 0.6.1"
   gem "pry-byebug"
   gem "rubocop", "~> 0.53"
   gem "dotenv"
@@ -30,8 +32,8 @@ end
 group :test do
   gem "rspec", "~> 3.0"
   gem "rubocop-rspec", "~> 1.23"
-  gem "simplecov", "~> 0.16.1"
-  gem "simplecov-console", "~> 0.4.2"
+  gem "simplecov", "~> 0.16", ">= 0.16.1"
+  gem "simplecov-console", "~> 0.4", ">= 0.4.2"
   gem "vcr", "~> 3.0", ">= 3.0.3"
   gem "webmock", "~> 3.3"
 end
