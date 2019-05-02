@@ -19,6 +19,8 @@ class TipBot::Telegram::Request
 
   # Parses message text and calls desired command
   def call
+    TipBot.logger.info("Got message: #{subject.inspect}")
+
     process_callback_query if subject.is_a?(Telegram::Bot::Types::CallbackQuery)
     dispatch if subject.is_a?(Telegram::Bot::Types::Message)
   end
@@ -58,7 +60,7 @@ class TipBot::Telegram::Request
                    TipBot.config.chats_whitelist.nil? ||
                    message.chat.type == "private"
 
-    TipBot.config.chats_whitelist.include?(message.chat.id)
+    TipBot.config.chats_whitelist.include?(message.chat.id.to_s)
   end
 
   def say_chat_not_permitted
